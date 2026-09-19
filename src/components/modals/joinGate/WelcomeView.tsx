@@ -1,6 +1,7 @@
-import React from 'react';
-import { ShieldCheck, GraduationCap, ChevronRight, Users } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, GraduationCap, ChevronRight, Users, Lock, Eye, EyeOff, Crown, Loader2, X } from 'lucide-react';
 import { Classroom, User } from '@/types';
+import { verifyPassword } from '@/lib/security/passwordUtils';
 
 interface WelcomeViewProps {
   onCreateRoom: () => void;
@@ -19,14 +20,116 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
   existingStudents = [],
   onLoginStudent,
 }) => {
+  const [showCRModal, setShowCRModal] = useState(false);
+  const [crPassword, setCRPassword] = useState('');
+  const [showPwd, setShowPwd] = useState(false);
+  const [crError, setCRError] = useState('');
+  const [isChecking, setIsChecking] = useState(false);
+
   const hasActiveClassroom = !!(classroom && (classroom.id || classroom.name));
   const studentCount = existingStudents.length || classroom?.membersCount || 30;
   const adminStudent = existingStudents.find(
     (s) => s.id === classroom?.adminId || s.role === 'admin'
   );
 
+  const handleCRLogin = async () => {
+    if (!crPassword.trim()) {
+      setCRError('Please enter the CR password.');
+      return;
+    }
+    setIsChecking(true);
+    setCRError('');
+    try {
+      const storedHash = classroom?.adminPassword || adminStudent?.password || '';
+      if (!storedHash) {
+        setCRError('No admin credentials configured for this classroom.');
+        setIsChecking(false);
+        return;
+      }
+      const { isValid } = await verifyPassword(crPassword, storedHash);
+      if (isValid && adminStudent && onLoginStudent) {
+        setShowCRModal(false);
+        setCRPassword('');
+        onLoginStudent(adminStudent);
+      } else {
+        setCRError('Incorrect password. Access denied.');
+      }
+    } catch {
+      setCRError('Verification failed. Please try again.');
+    }
+    setIsChecking(false);
+  };
+
   return (
     <div className="space-y-4 animate-in fade-in">
+      {/* CR Password Gate Modal */}
+      {showCRModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] p-5 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400">
+                  <Crown className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-zinc-950 dark:text-white">CR Access</h3>
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Enter Class Rep password to continue</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setShowCRModal(false); setCRPassword(''); setCRError(''); }}
+                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Password Input */}
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+              <input
+                type={showPwd ? 'text' : 'password'}
+                value={crPassword}
+                onChange={(e) => { setCRPassword(e.target.value); setCRError(''); }}
+                onKeyDown={(e) => e.key === 'Enter' && handleCRLogin()}
+                placeholder="CR / Admin password"
+                autoFocus
+                className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-zinc-200 dark:border-[#27272a] bg-zinc-50 dark:bg-[#18181b] text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPwd(!showPwd)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition cursor-pointer"
+              >
+                {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {/* Error */}
+            {crError && (
+              <p className="text-[11px] text-rose-600 dark:text-rose-400 font-semibold px-1">{crError}</p>
+            )}
+
+            {/* Confirm Button */}
+            <button
+              type="button"
+              onClick={handleCRLogin}
+              disabled={isChecking}
+              className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-md shadow-amber-900/20 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {isChecking ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Crown className="w-4 h-4" />
+              )}
+              <span>{isChecking ? 'Verifying…' : 'Enter as Class Rep'}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Active Classroom Spotlight Card */}
       {hasActiveClassroom && (
         <div className="p-4 sm:p-5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] shadow-sm space-y-3 relative overflow-hidden transition-colors">
@@ -72,9 +175,9 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
             {adminStudent && onLoginStudent && (
               <button
                 type="button"
-                onClick={() => onLoginStudent(adminStudent)}
+                onClick={() => setShowCRModal(true)}
                 className="py-2.5 px-3.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-800 dark:text-amber-300 text-xs font-bold border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer flex-shrink-0"
-                title="Direct 1-click access as Class Representative (CR)"
+                title="Enter as Class Representative — requires password"
               >
                 <span>👑 Enter as CR</span>
               </button>

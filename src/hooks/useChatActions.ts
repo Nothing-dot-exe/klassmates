@@ -40,6 +40,7 @@ export function useChatActions({
     content: string;
     autoDelete: AutoDeleteOption;
     imageUrl?: string;
+    videoUrl?: string;
     document?: DocumentItem;
     replyTo?: ChatReplyReference;
   }) => {
@@ -63,6 +64,7 @@ export function useChatActions({
           ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
           : undefined,
       imageUrl: payload.imageUrl,
+      videoUrl: payload.videoUrl,
       document: payload.document,
       reactions: [],
       replyTo: payload.replyTo,
@@ -147,7 +149,7 @@ export function useChatActions({
     });
 
     broadcastMessageDeleted(messageId, classroomId);
-    dbDeleteMessage(messageId);
+    dbDeleteMessage(messageId, classroomId);
   };
 
   const handleDeleteForMe = (messageId: string) => {

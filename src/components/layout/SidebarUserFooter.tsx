@@ -3,8 +3,6 @@ import { Settings, LogOut } from 'lucide-react';
 import { User } from '@/types';
 import { getSafeAvatar } from '@/lib/avatarUtils';
 
-import { ThemeToggle } from '@/components/common/ThemeToggle';
-
 interface SidebarUserFooterProps {
   currentUser: User;
   onOpenSettings?: () => void;
@@ -25,8 +23,8 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
       : (currentUser.name || 'User');
 
   return (
-    <div className="p-3 border-t border-slate-200 dark:border-zinc-800/80 bg-white dark:bg-[#121214] transition-colors">
-      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 dark:bg-[#10172A] border border-slate-200 dark:border-zinc-800/80 gap-2 shadow-sm">
+    <div className="p-3 border-t border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD] dark:bg-[#121214] transition-colors">
+      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-white dark:bg-[#18181b] border border-[#DFD3E7] dark:border-zinc-800/80 gap-2 shadow-sm">
         <button
           type="button"
           onClick={onOpenSettings}
@@ -43,35 +41,23 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
           </div>
 
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition truncate max-w-[100px]">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition truncate">
                 {displayName}
               </span>
-            </div>
-            <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
               {cleanRollNo && (
                 <span
-                  className="font-mono text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-zinc-800 px-1.5 py-0.2 rounded border border-indigo-200 dark:border-zinc-700 truncate max-w-[75px] flex-shrink-0"
+                  className="font-mono text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-indigo-200 dark:border-zinc-700 truncate shrink-0"
                   title={cleanRollNo}
                 >
                   #{cleanRollNo}
                 </span>
               )}
-              <span
-                className={`text-[9.5px] font-mono font-bold uppercase tracking-wider px-2 py-0.2 rounded-full whitespace-nowrap flex items-center gap-1 flex-shrink-0 ${
-                  currentUser.role === 'admin'
-                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 shadow-glow-gold'
-                    : 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40'
-                }`}
-              >
-                {currentUser.role === 'admin' ? '👑 Class Rep' : '🎓 Student'}
-              </span>
             </div>
           </div>
         </button>
 
         <div className="flex items-center gap-0.5 flex-shrink-0">
-          <ThemeToggle className="p-1 text-slate-500 dark:text-zinc-400 hover:text-amber-500" />
           {onOpenSettings && (
             <button
               type="button"

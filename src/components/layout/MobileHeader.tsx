@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, X, LogOut } from 'lucide-react';
 import { Classroom, User } from '@/types';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
+import { getSafeAvatar } from '@/lib/avatarUtils';
 
 interface MobileHeaderProps {
   classroom: Classroom;
@@ -33,31 +34,21 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           {isMobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </button>
 
-        {/* Stitch Brand Monogram */}
-        <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 p-[1px] shadow-glow-purple flex items-center justify-center">
-          <div className="w-full h-full bg-white dark:bg-[#121214] rounded-[7px] flex items-center justify-center">
-            <span className="font-black text-xs bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-300 dark:to-white bg-clip-text text-transparent">m</span>
-          </div>
-        </div>
-
         {/* Live status dot */}
-        <span className="relative flex h-2 w-2">
+        <span className="relative flex h-2 w-2" title="Classroom Live">
           <span className="pulse-dot-ring absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
       </div>
 
       <div className="flex flex-col items-center min-w-0 px-2 text-center">
-        <span className="font-extrabold text-xs tracking-tight text-slate-900 dark:text-white truncate max-w-[130px] sm:max-w-[180px]">
+        <span className="font-extrabold text-xs tracking-tight text-slate-900 dark:text-white truncate max-w-[140px] sm:max-w-[200px]">
           {classroom.name}
         </span>
-        {adminUser && (
-          <button
-            onClick={() => onOpenProfile && onOpenProfile(adminUser)}
-            className="text-[9.5px] text-amber-600 dark:text-amber-400 font-bold truncate max-w-[130px] sm:max-w-[180px] flex items-center gap-0.5 hover:underline cursor-pointer"
-          >
-            👑 CR: {adminUser.name?.includes('@') ? adminUser.name.split('@')[0] : adminUser.name}
-          </button>
+        {(classroom.section || classroom.institution) && (
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-medium truncate max-w-[140px] sm:max-w-[200px]">
+            {classroom.section ? `${classroom.section}${classroom.semester ? ` • Sem ${classroom.semester}` : ''}` : classroom.institution}
+          </span>
         )}
       </div>
 
@@ -71,7 +62,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={currentUser.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser.name}`}
+              src={getSafeAvatar(currentUser.avatar, currentUser.name)}
               alt={currentUser.name}
               className="w-6 h-6 rounded-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 object-cover"
             />

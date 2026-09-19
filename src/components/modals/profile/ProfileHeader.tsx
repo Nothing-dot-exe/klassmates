@@ -7,6 +7,7 @@ interface ProfileHeaderProps {
   isClassRep: boolean;
   isMe: boolean;
   classroom: Classroom;
+  isEditing?: boolean;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -14,6 +15,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   isClassRep,
   isMe,
   classroom,
+  isEditing = false,
 }) => {
   const avatarUrl = getSafeAvatar(user.avatar, user.name);
   const isGif = avatarUrl.includes('.gif') || avatarUrl.includes('data:image/gif');
@@ -82,16 +84,18 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </p>
         </div>
 
-        {/* Bio Box */}
-        <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap leading-relaxed shadow-xs">
-          {user.bio ? (
-            user.bio
-          ) : (
-            <span className="text-zinc-400 dark:text-zinc-500 italic">
-              {isMe ? 'No bio added yet. Tap "Edit Profile & Bio" below to introduce yourself!' : 'No bio provided.'}
-            </span>
-          )}
-        </div>
+        {/* Bio Box (Hidden when editing to prevent duplicate boxes) */}
+        {!isEditing && (
+          <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap leading-relaxed shadow-xs">
+            {user.bio ? (
+              user.bio
+            ) : (
+              <span className="text-zinc-400 dark:text-zinc-500 italic">
+                {isMe ? 'No bio added yet. Tap "Edit Profile & Bio" below to introduce yourself!' : 'No bio provided.'}
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

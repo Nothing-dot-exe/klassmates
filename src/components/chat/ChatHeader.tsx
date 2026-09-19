@@ -3,7 +3,6 @@
 import { Hash, Phone, Trash2, Image as ImageIcon, ArrowLeft } from 'lucide-react';
 import { Channel, User } from '@/types';
 import { getSafeAvatar } from '@/lib/avatarUtils';
-import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 interface ChatHeaderProps {
   currentChannel?: Channel;
@@ -31,7 +30,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onBack,
 }) => {
   return (
-    <div className="h-14 sm:h-16 border-b border-slate-200 dark:border-zinc-800/80 bg-white/90 dark:bg-[#121214]/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
+    <div className="h-14 sm:h-16 border-b border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD]/95 dark:bg-[#121214]/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
       <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
         {onBack && (
           <button
@@ -95,15 +94,15 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           ) : currentRecipient ? (
             <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-zinc-400">
               <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  currentRecipient.status === 'studying'
-                    ? 'bg-slate-500 dark:bg-slate-400'
-                    : currentRecipient.status === 'online'
-                    ? 'bg-emerald-500'
-                    : 'bg-slate-400'
+                className={`w-2 h-2 rounded-full ${
+                  currentRecipient.status === 'online'
+                    ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.7)]'
+                    : 'bg-rose-500 shadow-[0_0_5px_rgba(244,63,94,0.4)]'
                 }`}
               />
-              <span className="capitalize">{currentRecipient.status || 'Active'}</span>
+              <span className="capitalize font-medium">
+                {currentRecipient.status === 'online' ? 'Online' : 'Offline'}
+              </span>
               <span>•</span>
               <span className="text-slate-600 dark:text-zinc-300 font-medium">Private Direct Chat</span>
             </div>
@@ -153,9 +152,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         >
           <Trash2 className="w-4 h-4" />
         </button>
-
-        {/* Theme Toggle */}
-        <ThemeToggle />
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ export interface ClassroomMeta {
   adminPhone?: string;
   adminEmail?: string;
   adminDesignation?: string;
+  adminAvatar?: string;
   institutionName?: string;
 }
 
@@ -39,6 +40,7 @@ export const parseClassroomRow = (d: any): Classroom => {
     adminEmail: d.admin_email || meta.adminEmail || '',
     adminPassword: d.admin_password || meta.adminPassword || '',
     adminDesignation: d.admin_designation || meta.adminDesignation || 'Class Representative (CR)',
+    adminAvatar: d.admin_avatar || meta.adminAvatar || '',
     autoDeleteSetting: d.auto_delete_setting || 'off',
     requireApproval: d.require_approval ?? true,
     membersCount: d.members_count || 1,
@@ -248,6 +250,7 @@ export const dbUpdateClassroom = async (classroomId: string, updates: Partial<Cl
     if (updates.adminName !== undefined) payload.admin_name = updates.adminName;
     if (updates.adminPhone !== undefined) payload.admin_phone = updates.adminPhone;
     if (updates.adminEmail !== undefined) payload.admin_email = updates.adminEmail;
+    if (updates.adminAvatar !== undefined) payload.admin_avatar = updates.adminAvatar;
     if (updates.adminPassword !== undefined) {
       payload.admin_password = updates.adminPassword.startsWith('pbkdf2:')
         ? updates.adminPassword
@@ -262,6 +265,7 @@ export const dbUpdateClassroom = async (classroomId: string, updates: Partial<Cl
       delete payload.admin_name;
       delete payload.admin_phone;
       delete payload.admin_email;
+      delete payload.admin_avatar;
       delete payload.admin_password;
 
       try {
@@ -273,6 +277,7 @@ export const dbUpdateClassroom = async (classroomId: string, updates: Partial<Cl
         if (updates.adminName !== undefined) meta.adminName = updates.adminName;
         if (updates.adminPhone !== undefined) meta.adminPhone = updates.adminPhone;
         if (updates.adminEmail !== undefined) meta.adminEmail = updates.adminEmail;
+        if (updates.adminAvatar !== undefined) meta.adminAvatar = updates.adminAvatar;
         if (updates.adminDesignation !== undefined) meta.adminDesignation = updates.adminDesignation;
         payload.institution = JSON.stringify(meta);
       } catch {}

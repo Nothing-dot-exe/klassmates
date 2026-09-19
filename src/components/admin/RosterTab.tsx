@@ -55,20 +55,20 @@ export const RosterTab: React.FC<RosterTabProps> = ({
   return (
     <div className="space-y-4">
       {/* Search & Filter Toolbar */}
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
-        <div className="relative w-full sm:w-80">
+      <div className="bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-[#27272a] rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-3 shadow-xs">
+        <div className="relative w-full sm:w-72">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
           <input
             type="text"
-            placeholder="Search by name, roll number, or email..."
+            placeholder="Search classmates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl pl-10 pr-4 py-2 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs font-medium"
+            className="w-full bg-white dark:bg-[#18181b] border border-[#DFD3E7] dark:border-[#27272a] rounded-xl pl-9 pr-8 py-2 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs font-medium"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-white"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-white cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -76,33 +76,36 @@ export const RosterTab: React.FC<RosterTabProps> = ({
         </div>
 
         {/* Filter Chips */}
-        <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto no-scrollbar shrink-0">
           <button
             onClick={() => setRoleFilter('all')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${roleFilter === 'all'
-                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/30'
-                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226]'
-              }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
+              roleFilter === 'all'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xs'
+                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-white dark:hover:bg-[#222226]'
+            }`}
           >
             All ({students.length})
           </button>
           <button
             onClick={() => setRoleFilter('student')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${roleFilter === 'student'
-                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/30'
-                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226]'
-              }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
+              roleFilter === 'student'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xs'
+                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-white dark:hover:bg-[#222226]'
+            }`}
           >
             Students
           </button>
           <button
             onClick={() => setRoleFilter('admin')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${roleFilter === 'admin'
-                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-950/30'
-                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226]'
-              }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
+              roleFilter === 'admin'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xs'
+                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-white dark:hover:bg-[#222226]'
+            }`}
           >
-            Class Reps / Admins
+            Admins
           </button>
         </div>
       </div>

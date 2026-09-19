@@ -84,6 +84,7 @@ export interface ChatReplyReference {
   senderRollNo?: string;
   content: string;
   imageUrl?: string;
+  videoUrl?: string;
   hasDocument?: boolean;
 }
 
@@ -101,6 +102,7 @@ export interface ChatMessage {
   autoDelete: AutoDeleteOption;
   expiresAt?: string;
   imageUrl?: string;
+  videoUrl?: string;
   document?: DocumentItem;
   reactions: MessageReaction[];
   replyTo?: ChatReplyReference;
@@ -128,6 +130,7 @@ export interface Classroom {
   adminEmail?: string;
   adminPassword?: string;
   adminDesignation?: string;
+  adminAvatar?: string;
   autoDeleteSetting: AutoDeleteOption;
   requireApproval: boolean;
   membersCount: number;

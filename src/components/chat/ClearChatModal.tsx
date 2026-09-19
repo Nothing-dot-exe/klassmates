@@ -26,7 +26,8 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
       const dateStr = new Date().toISOString().slice(0, 10);
       const lines = messages.map((m) => {
         const replyTag = m.replyTo ? ` [Replying to ${m.replyTo.senderName}: "${m.replyTo.content}"]` : '';
-        return `[${m.timestamp}] ${m.senderName} (${m.senderRollNo})${replyTag}: ${m.content || (m.imageUrl ? '[Photo]' : '[Attachment]')}`;
+        const cleanContent = m.content && m.content !== '📷 Photo snapshot from study session' ? m.content : '';
+        return `[${m.timestamp}] ${m.senderName} (${m.senderRollNo})${replyTag}: ${cleanContent || (m.imageUrl ? '[Photo]' : m.videoUrl ? '[Video]' : '[Attachment]')}`;
       });
 
       const backupContent = `=== CLASSMATE CHAT BACKUP ===\nConversation: ${conversationTitle}\nExport Date: ${new Date().toLocaleString()}\nTotal Messages: ${messages.length}\n=============================\n\n${lines.join('\n')}`;

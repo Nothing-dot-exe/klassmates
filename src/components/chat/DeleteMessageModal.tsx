@@ -70,7 +70,15 @@ export const DeleteMessageModal: React.FC<DeleteMessageModalProps> = ({
 
         {/* Message Snippet Preview */}
         <div className="p-2.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs text-zinc-700 dark:text-zinc-300 line-clamp-2 italic">
-          &ldquo;{message.content || (message.imageUrl ? 'Photo' : 'Attachment')}&rdquo;
+          &ldquo;
+          {message.content && message.content !== '📷 Photo snapshot from study session'
+            ? message.content
+            : message.imageUrl
+            ? 'Photo'
+            : message.videoUrl
+            ? 'Video'
+            : 'Attachment'}
+          &rdquo;
         </div>
 
         {/* Actions */}

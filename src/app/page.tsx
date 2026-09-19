@@ -18,6 +18,8 @@ import { JoinGateModal } from '@/components/modals/JoinGateModal';
 import { MarkdownViewerModal } from '@/components/documents/MarkdownViewerModal';
 import { PdfViewerModal } from '@/components/documents/PdfViewerModal';
 import { StudentProfileModal } from '@/components/modals/StudentProfileModal';
+import { IncomingMessageToast, IncomingNotificationData } from '@/components/common/IncomingMessageToast';
+import { ChatMessage } from '@/types';
 
 export default function Home() {
   const {
@@ -36,6 +38,7 @@ export default function Home() {
     setMessages,
     typingUsers,
     sendTypingStatus,
+    onlineUserIds,
     isDataLoaded,
   } = useClassroomData();
 
@@ -90,6 +93,58 @@ export default function Home() {
     activeView === 'channel'
       ? (messages[selectedChannelId] || [])
       : (messages[currentConversationKey] || (selectedDmUserId ? messages[`dm_${selectedDmUserId}`] : []) || []);
+
+  const [incomingNotification, setIncomingNotification] = useState<IncomingNotificationData | null>(null);
+
+  useEffect(() => {
+    const handleIncoming = (e: CustomEvent<ChatMessage>) => {
+      const msg = e.detail;
+      if (!msg || !currentUser || msg.senderId === currentUser.id) return;
+
+      const isCurrentlyInThisChat =
+        (msg.channelId && activeView === 'channel' && selectedChannelId === msg.channelId) ||
+        (!msg.channelId && activeView === 'dm' && selectedDmUserId === msg.senderId);
+
+      if (isCurrentlyInThisChat) return;
+
+      let contentPreview = msg.content;
+      if (!contentPreview || contentPreview === '📷 Photo snapshot from study session') {
+        if (msg.imageUrl) contentPreview = '📷 Sent a photo';
+        else if (msg.videoUrl) contentPreview = '🎥 Sent a video';
+        else if (msg.document) contentPreview = `📄 ${msg.document.fileName}`;
+        else contentPreview = 'Sent a message';
+      }
+
+      setIncomingNotification({
+        id: msg.id,
+        senderId: msg.senderId,
+        senderName: msg.senderName,
+        senderAvatar: msg.senderAvatar,
+        senderRollNo: msg.senderRollNo,
+        channelId: msg.channelId,
+        content: contentPreview,
+        timestamp: msg.timestamp,
+      });
+    };
+
+    window.addEventListener('classmate:new_incoming_message' as any, handleIncoming);
+    return () => {
+      window.removeEventListener('classmate:new_incoming_message' as any, handleIncoming);
+    };
+  }, [currentUser, activeView, selectedChannelId, selectedDmUserId]);
+
+  const handleOpenNotificationConversation = (notif: IncomingNotificationData) => {
+    if (notif.channelId) {
+      setSelectedChannelId(notif.channelId);
+      setSelectedDmUserId('');
+      setActiveView('channel');
+    } else {
+      setSelectedDmUserId(notif.senderId);
+      setActiveView('dm');
+    }
+    setIncomingNotification(null);
+    setIsMobileSidebarOpen(false);
+  };
 
   const handleOpenProfileById = (userId: string) => {
     const found = students.find((s) => s.id === userId) || (currentUser && userId === currentUser.id ? currentUser : null);
@@ -193,6 +248,8 @@ export default function Home() {
           onOpenSettings={() => setProfileModalUser(currentUser)}
           onOpenProfile={(u) => setProfileModalUser(u)}
           onSignOut={handleSignOut}
+          messages={messages}
+          onlineUserIds={onlineUserIds}
         />
       </div>
 
@@ -384,6 +441,13 @@ export default function Home() {
           onLeaveClassroom={(successorId) => actions.handleLeaveClassroom(currentUser, successorId)}
         />
       )}
+
+      {/* Social Media Style Incoming Message Toast Notification */}
+      <IncomingMessageToast
+        notification={incomingNotification}
+        onDismiss={() => setIncomingNotification(null)}
+        onOpenConversation={handleOpenNotificationConversation}
+      />
     </div>
   );
 }

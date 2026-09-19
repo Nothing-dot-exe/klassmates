@@ -139,7 +139,7 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
         role: 'admin',
         isTeacher: false,
         designation: classroom.adminDesignation || 'Class Representative (CR)',
-        avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(classroom.adminName || 'cr_admin')}`,
+        avatar: classroom.adminAvatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(classroom.adminName || 'cr_admin')}`,
         status: 'online',
         joinedAt: new Date().toISOString().split('T')[0],
         bio: classroom.adminDesignation || 'Class Representative (CR)',

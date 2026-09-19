@@ -8,7 +8,7 @@ import {
   dbDeletePasswordResetRequest, dbUpdateStudentPassword, dbCreateClassroom, dbResetClassroomData,
   dbSendMessage,
 } from '@/lib/databaseService';
-import { broadcastStudentRemoved, broadcastRoomReset, broadcastRequestDeclined, broadcastNewMessage } from '@/lib/realtimeService';
+import { broadcastStudentRemoved, broadcastRoomReset, broadcastRequestDeclined, broadcastNewMessage, broadcastStudentUpdated } from '@/lib/realtimeService';
 import { apiSendApprovalEmail } from '@/lib/emailService';
 
 interface UseAdminActionsParams {
@@ -30,6 +30,7 @@ const persistUserSession = (user: User, adminId?: string) => {
   if (typeof window === 'undefined') return;
   const isAdmin = user.role === 'admin' || (adminId && user.id === adminId);
   localStorage.setItem('classmate_current_user', JSON.stringify(user));
+  sessionStorage.setItem('classmate_current_user', JSON.stringify(user));
   if (isAdmin) {
     sessionStorage.setItem('classmate_admin_session', JSON.stringify(user));
   }
@@ -237,8 +238,60 @@ export function useAdminActions({
     const merged: User = { ...currentUser, ...updated };
     setCurrentUser(merged);
     persistUserSession(merged, classroom.adminId);
-    setStudents((prev) => prev.map((s) => (s.id === currentUser.id ? { ...s, ...updated } : s)));
-    dbUpdateStudent(currentUser.id, updated);
+    
+    // Update students list state
+    setStudents((prev) => {
+      const exists = prev.some((s) => s.id === currentUser.id);
+      if (exists) {
+        return prev.map((s) => (s.id === currentUser.id ? { ...s, ...updated } : s));
+      }
+      return [...prev, merged];
+    });
+
+    // Update avatar and name across loaded chat messages so user's messages immediately reflect new avatar
+    if (updated.avatar || updated.name) {
+      setMessages((prev) => {
+        const next: Record<string, ChatMessage[]> = {};
+        let changed = false;
+        Object.entries(prev).forEach(([channelKey, list]) => {
+          next[channelKey] = list.map((m) => {
+            if (m.senderId === currentUser.id) {
+              changed = true;
+              return {
+                ...m,
+                senderAvatar: updated.avatar || m.senderAvatar,
+                senderName: updated.name || m.senderName,
+              };
+            }
+            return m;
+          });
+        });
+        return changed ? next : prev;
+      });
+    }
+
+    // If currentUser is Admin, update classroom state and database record
+    if (currentUser.id === classroom.adminId || currentUser.role === 'admin') {
+      setClassroom((prev) => ({
+        ...prev,
+        adminName: merged.name || prev.adminName,
+        adminPhone: merged.phone || prev.adminPhone,
+        adminEmail: merged.email || prev.adminEmail,
+        adminAvatar: merged.avatar || prev.adminAvatar,
+      }));
+      dbUpdateClassroom(classroom.id, {
+        adminName: merged.name,
+        adminPhone: merged.phone,
+        adminEmail: merged.email,
+        adminAvatar: merged.avatar,
+      });
+    }
+
+    // Persist to Supabase students table
+    dbUpdateStudent(currentUser.id, updated, classroom.id);
+
+    // Broadcast realtime student update to all connected classmates
+    broadcastStudentUpdated(merged, classroom.id);
   };
 
   const handleRegisterTeacher = (teacher: User) => {

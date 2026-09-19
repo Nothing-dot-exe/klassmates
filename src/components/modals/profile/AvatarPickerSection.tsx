@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Upload, Image as ImageIcon, Sparkles, RotateCcw } from 'lucide-react';
+import { Upload, Image as ImageIcon, Sparkles, RotateCcw, Loader2, AlertCircle } from 'lucide-react';
 import { User } from '@/types';
-import { getSafeAvatar } from '@/lib/avatarUtils';
+import { getSafeAvatar, isVideoSource } from '@/lib/avatarUtils';
+import { uploadClassroomFile } from '@/lib/storageService';
 
 const PRESET_GIFS_AND_AVATARS = [
   { label: 'Vibing Cat GIF', url: 'https://media.giphy.com/media/jpbnoe3UIa8TU8LM13/giphy.gif' },
@@ -29,32 +30,65 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
 }) => {
   const [customUrlInput, setCustomUrlInput] = useState('');
   const [fileError, setFileError] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Reject video files
+    const isVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov|mkv|avi|m4v)$/i.test(file.name);
+    if (isVideo) {
+      setFileError('Video files are not supported as avatars. Only lightweight images (JPG, PNG, WEBP) or animated GIFs (under 2.5MB) are supported.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
     if (file.size > 2.5 * 1024 * 1024) {
       setFileError('File exceeds 2.5MB. Please choose a smaller image or GIF.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
     setFileError(null);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setAvatar(reader.result);
+    setIsUploading(true);
+
+    try {
+      // Upload to Supabase Storage bucket so the database only stores a lightweight URL instead of heavy base64
+      const result = await uploadClassroomFile(file, `avatar_${currentUser.id}_${file.name}`);
+      if (result?.url) {
+        setAvatar(result.url);
+      } else {
+        // Fallback to FileReader
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            setAvatar(reader.result);
+          }
+        };
+        reader.readAsDataURL(file);
       }
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      setFileError('Failed to process image. Please try another image or GIF.');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleApplyUrl = () => {
-    if (customUrlInput.trim()) {
-      setAvatar(customUrlInput.trim());
-      setCustomUrlInput('');
+    const trimmed = customUrlInput.trim();
+    if (!trimmed) return;
+
+    if (isVideoSource(trimmed)) {
+      setFileError('Video links are not supported as avatars. Avatars only support images (JPG, PNG, WEBP, SVG) or animated GIFs.');
+      return;
     }
+
+    setFileError(null);
+    setAvatar(trimmed);
+    setCustomUrlInput('');
   };
 
   const handleResetAvatar = () => {
@@ -103,15 +137,26 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
             />
             <button
               type="button"
+              disabled={isUploading}
               onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-950/20 transition active:scale-95 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-950/20 transition active:scale-95 disabled:opacity-50 cursor-pointer"
             >
-              <Upload className="w-3.5 h-3.5" />
-              <span>Upload Photo / GIF</span>
+              {isUploading ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Uploading...</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Upload Photo / GIF</span>
+                </>
+              )}
             </button>
 
             <button
               type="button"
+              disabled={isUploading}
               onClick={handleResetAvatar}
               className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-[#222226] hover:bg-zinc-100 dark:hover:bg-[#1c2744] border border-zinc-200 dark:border-[#27272a] text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white text-xs font-medium flex items-center gap-1 transition cursor-pointer"
               title="Reset to default avatar"
@@ -122,10 +167,13 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
           </div>
 
           {fileError && (
-            <p className="text-[10px] text-rose-600 font-medium">{fileError}</p>
+            <div className="flex items-center gap-1.5 text-[11px] text-rose-600 dark:text-rose-400 font-medium">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>{fileError}</span>
+            </div>
           )}
           <p className="text-[10px] text-zinc-500 dark:text-zinc-400">
-            Supports animated GIFs, PNG, JPG, or SVG up to 2.5MB.
+            Supports animated GIFs, PNG, JPG, or SVG up to 2.5MB. (Videos are not supported).
           </p>
         </div>
       </div>

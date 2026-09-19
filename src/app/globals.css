@@ -3,11 +3,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Day Mode: Porcelain Ice Canvas */
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-border: #e2e8f0;
+  /* Day Mode: Lavender Mist Canvas requested by user (#F1EBF5) */
+  --background: #F1EBF5;
+  --foreground: #1e1b2e;
+  --card: #FAF7FD;
+  --card-border: #DFD3E7;
   --accent-primary: #4f46e5;
   --accent-secondary: #7c3aed;
   --accent-orange: #ea580c;

@@ -67,7 +67,8 @@ export const dbFetchMessages = async (classroomId: string): Promise<Record<strin
         autoDelete: row.auto_delete,
         expiresAt: row.expires_at || undefined,
         imageUrl: row.image_url || undefined,
-        document: row.document || undefined,
+        videoUrl: (row as any).video_url || (row.document?.fileType === 'video' ? row.document.downloadUrl : undefined),
+        document: row.document?.fileType === 'video' ? undefined : (row.document || undefined),
         reactions: row.reactions || [],
         replyTo: row.reply_to || undefined,
       };
@@ -122,7 +123,20 @@ export const dbSendMessage = async (message: ChatMessage, classroomId: string): 
       auto_delete: message.autoDelete,
       expires_at: message.expiresAt || null,
       image_url: message.imageUrl || null,
-      document: message.document || null,
+      document: message.document || (message.videoUrl ? {
+        id: `vid_${Date.now()}`,
+        title: 'Video',
+        fileName: 'video.mp4',
+        fileType: 'video',
+        fileSize: '',
+        uploadedBy: message.senderId,
+        uploaderName: message.senderName,
+        uploadedAt: message.timestamp,
+        subject: 'Chat Media',
+        source: 'chat',
+        downloadUrl: message.videoUrl,
+        tags: ['video']
+      } : null),
       reactions: message.reactions || [],
       reply_to: message.replyTo || null,
     };

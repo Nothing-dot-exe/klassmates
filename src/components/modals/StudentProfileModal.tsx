@@ -98,6 +98,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             isClassRep={isClassRep}
             isMe={isMe}
             classroom={classroom}
+            isEditing={isEditing}
           />
 
           {/* Edit Form or Action Buttons */}

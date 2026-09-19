@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient';
-import { ChatMessage } from '@/types';
+import { ChatMessage, User } from '@/types';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
 export interface TypingPayload {
@@ -180,6 +180,23 @@ export function broadcastStudentRemoved(studentId: string, classroomId: string) 
         payload: { studentId },
       })
       .catch((err) => console.warn('Realtime student_removed broadcast failed:', err));
+  }
+}
+
+/**
+ * Broadcasts when a student or admin updates their profile (avatar, nickname, name, bio)
+ * so all connected classmates immediately receive the new avatar/name in real-time.
+ */
+export function broadcastStudentUpdated(student: User, classroomId: string) {
+  const channel = getRealtimeChannel(classroomId);
+  if (channel) {
+    channel
+      .send({
+        type: 'broadcast',
+        event: 'student_updated',
+        payload: { student },
+      })
+      .catch((err) => console.warn('Realtime student_updated broadcast failed:', err));
   }
 }
 

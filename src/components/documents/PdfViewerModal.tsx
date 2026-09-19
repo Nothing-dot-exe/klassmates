@@ -146,45 +146,40 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
   if (!isOpen || !document) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-zinc-950/70 dark:bg-black/85 backdrop-blur-md animate-in fade-in transition-colors">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-zinc-950/80 dark:bg-black/90 backdrop-blur-md animate-in fade-in transition-colors">
       <div
-        className={`bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-[#27272a] rounded-3xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 ${isFullscreen
-            ? 'fixed inset-2 sm:inset-3 z-50 max-w-none max-h-none h-[calc(100vh-16px)] sm:h-[calc(100vh-24px)]'
-            : 'w-full max-w-5xl h-[92vh]'
-          }`}
+        className={`bg-white dark:bg-[#09090b] border-0 sm:border border-zinc-200 dark:border-[#27272a] rounded-none sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 ${
+          isFullscreen
+            ? 'fixed inset-0 z-50 rounded-none w-full h-full'
+            : 'w-full sm:max-w-5xl h-full sm:h-[92vh]'
+        }`}
       >
         {/* Header Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 border-b border-zinc-200 dark:border-[#27272a] bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md flex-shrink-0 transition-colors">
+        <div className="flex items-center justify-between gap-2 px-3 sm:px-5 py-2.5 sm:py-3.5 border-b border-zinc-200 dark:border-[#27272a] bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md flex-shrink-0 transition-colors">
           {/* Document Identity */}
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a] flex-shrink-0 shadow-xs">
-              <FileText className="w-5 h-5" />
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <div className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a] flex-shrink-0 shadow-xs">
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-sm font-bold text-zinc-950 dark:text-white truncate max-w-xs sm:max-w-md" title={document.title}>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <h3 className="text-xs sm:text-sm font-bold text-zinc-950 dark:text-white truncate max-w-[180px] sm:max-w-md" title={document.title}>
                   {document.title}
                 </h3>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 flex-shrink-0">
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 sm:px-2 py-0.2 sm:py-0.5 rounded-full bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 flex-shrink-0">
                   PDF
                 </span>
-                {document.fileSize && (
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono flex-shrink-0">
-                    {document.fileSize}
-                  </span>
-                )}
               </div>
-              <div className="flex items-center gap-2 text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 flex-wrap">
+              <div className="flex items-center gap-2 text-[10px] sm:text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">
                 {document.subject && (
-                  <span className="flex items-center gap-1 text-zinc-800 dark:text-zinc-200 font-medium">
-                    <BookOpen className="w-3 h-3 text-indigo-500" />
-                    {document.subject}
+                  <span className="flex items-center gap-1 text-zinc-800 dark:text-zinc-200 font-medium truncate">
+                    <BookOpen className="w-3 h-3 text-indigo-500 flex-shrink-0" />
+                    <span className="truncate">{document.subject}</span>
                   </span>
                 )}
-                {document.uploaderName && (
-                  <span className="flex items-center gap-1">
-                    <UserIcon className="w-3 h-3 text-zinc-400 dark:text-zinc-500" />
-                    {document.uploaderName}
+                {document.fileSize && (
+                  <span className="font-mono text-zinc-400 flex-shrink-0">
+                    • {document.fileSize}
                   </span>
                 )}
               </div>
@@ -192,9 +187,9 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
           </div>
 
           {/* Interactive Toolbar */}
-          <div className="flex items-center gap-1.5 self-end sm:self-auto flex-wrap">
-            {/* Zoom Controls */}
-            <div className="flex items-center bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl p-0.5">
+          <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+            {/* Desktop Zoom Controls */}
+            <div className="hidden sm:flex items-center bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl p-0.5">
               <button
                 onClick={handleZoomOut}
                 disabled={scale <= 0.5}
@@ -220,43 +215,43 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
               </button>
             </div>
 
-            {/* Rotate Button */}
+            {/* Desktop Rotate Button */}
             <button
               onClick={handleRotate}
               title="Rotate 90° Clockwise"
-              className="p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer shadow-xs"
+              className="hidden sm:flex p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer shadow-xs"
             >
               <RotateCw className="w-3.5 h-3.5" />
             </button>
 
-            {/* Fullscreen Toggle */}
+            {/* Desktop Fullscreen Toggle */}
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
               title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-              className="p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer shadow-xs"
+              className="hidden sm:flex p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer shadow-xs"
             >
               {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
             </button>
 
-            {/* Print Button */}
+            {/* Desktop Print Button */}
             <button
               onClick={handlePrint}
               title="Print Document"
-              className="p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer shadow-xs hidden sm:flex"
+              className="hidden sm:flex p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer shadow-xs"
             >
               <Printer className="w-3.5 h-3.5" />
             </button>
 
-            {/* Open in external tab */}
+            {/* Open in external tab / browser viewer */}
             {blobUrl && (
               <a
                 href={blobUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Open in new tab"
-                className="p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition shadow-xs hidden sm:flex"
+                className="p-1.5 sm:p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl hover:bg-zinc-100 dark:hover:bg-[#222226] transition shadow-xs flex items-center justify-center cursor-pointer"
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
               </a>
             )}
 
@@ -264,7 +259,7 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
             <button
               onClick={handleDownload}
               title="Download PDF"
-              className="px-3 py-2 text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl flex items-center gap-1.5 transition cursor-pointer shadow-md shadow-indigo-950/20"
+              className="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl flex items-center gap-1.5 transition cursor-pointer shadow-md shadow-indigo-950/20"
             >
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Download</span>
@@ -273,18 +268,31 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
             {/* Close Button */}
             <button
               onClick={onClose}
-              title="Close viewer (Esc)"
-              className="p-2 text-zinc-400 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] rounded-xl transition cursor-pointer"
+              title="Close viewer"
+              className="p-1.5 sm:p-2 text-zinc-400 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] rounded-xl transition cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5 sm:w-4 sm:h-4" />
             </button>
           </div>
         </div>
 
+        {/* Mobile quick-open helper banner */}
+        {blobUrl && (
+          <div className="sm:hidden flex items-center justify-between px-3 py-1.5 bg-indigo-500/10 border-b border-indigo-500/20 text-[11px] text-indigo-400">
+            <span>Reading on mobile?</span>
+            <button
+              onClick={handleOpenExternal}
+              className="font-bold underline text-indigo-300 hover:text-white"
+            >
+              Open in Phone Reader ↗
+            </button>
+          </div>
+        )}
+
         {/* Viewport Area */}
-        <div className="flex-1 bg-zinc-100 dark:bg-[#09090b] p-2 sm:p-4 overflow-auto flex items-center justify-center relative">
+        <div className="flex-1 bg-zinc-100 dark:bg-[#09090b] p-0 sm:p-4 overflow-hidden flex items-center justify-center relative">
           {loadError || !blobUrl ? (
-            <div className="max-w-md p-8 rounded-3xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] text-center space-y-4 shadow-xl">
+            <div className="max-w-md p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] text-center space-y-4 shadow-xl m-4">
               <div className="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-amber-400 border border-zinc-200 dark:border-[#27272a] flex items-center justify-center mx-auto shadow-xs">
                 <AlertCircle className="w-6 h-6" />
               </div>
@@ -319,14 +327,14 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
               }}
             >
               <object
-                data={`${blobUrl}#toolbar=1&navpanes=1&scrollbar=1`}
+                data={`${blobUrl}#toolbar=1&navpanes=0&scrollbar=1`}
                 type="application/pdf"
-                className="w-full h-full rounded-2xl border border-zinc-200 shadow-xl bg-white"
+                className="w-full h-full border-0 sm:border border-zinc-200 dark:border-zinc-800 sm:rounded-2xl shadow-none sm:shadow-xl bg-white"
               >
                 {/* Fallback iframe */}
                 <iframe
                   src={`${blobUrl}#toolbar=1`}
-                  className="w-full h-full rounded-2xl border-0"
+                  className="w-full h-full border-0 sm:rounded-2xl"
                   title={document.title}
                 >
                   <div className="p-6 text-center text-zinc-700">
@@ -345,10 +353,10 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
         </div>
 
         {/* Footer Meta Strip */}
-        <div className="px-5 py-2.5 border-t border-zinc-200 dark:border-[#27272a] bg-white/95 dark:bg-[#121214]/95 flex items-center justify-between text-[11px] text-zinc-500 dark:text-zinc-400 flex-shrink-0 transition-colors">
-          <div className="flex items-center gap-3 truncate">
-            <span className="font-mono text-zinc-900 dark:text-zinc-200 font-semibold truncate">{document.fileName}</span>
-            {document.uploadedAt && <span>Uploaded {document.uploadedAt}</span>}
+        <div className="px-3 sm:px-5 py-2 sm:py-2.5 border-t border-zinc-200 dark:border-[#27272a] bg-white/95 dark:bg-[#121214]/95 flex items-center justify-between text-[11px] text-zinc-500 dark:text-zinc-400 flex-shrink-0 transition-colors">
+          <div className="flex items-center gap-2 truncate">
+            <span className="font-mono text-zinc-900 dark:text-zinc-200 font-semibold truncate max-w-[200px] sm:max-w-xs">{document.fileName}</span>
+            {document.uploadedAt && <span className="hidden sm:inline">• Uploaded {document.uploadedAt}</span>}
           </div>
 
           <div className="flex items-center gap-2">
@@ -362,7 +370,7 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
                 ))}
               </div>
             )}
-            <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Press ESC to exit</span>
+            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 hidden sm:inline">Press ESC to exit</span>
           </div>
         </div>
       </div>

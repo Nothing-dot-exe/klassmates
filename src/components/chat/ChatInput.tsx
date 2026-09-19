@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Send, Camera, Paperclip, Smile } from 'lucide-react';
+import { Send, Camera, Paperclip } from 'lucide-react';
 import { AutoDeleteOption, DocumentItem, ChatMessage, ChatReplyReference } from '@/types';
-import { EmojiPicker } from './EmojiPicker';
 import { CameraModal } from './CameraModal';
 import { ReplyContextBanner } from './ReplyContextBanner';
 import { uploadClassroomFile } from '@/lib/storageService';
@@ -17,6 +16,7 @@ interface ChatInputProps {
     content: string;
     autoDelete: AutoDeleteOption;
     imageUrl?: string;
+    videoUrl?: string;
     document?: DocumentItem;
     replyTo?: ChatReplyReference;
   }) => void;
@@ -35,7 +35,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 }) => {
   const [text, setText] = useState('');
   const [autoDelete, setAutoDelete] = useState<AutoDeleteOption>(defaultAutoDelete);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showCameraModal, setShowCameraModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -80,6 +79,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           senderRollNo: replyingTo.senderRollNo,
           content: (replyingTo.content || '').slice(0, 120),
           imageUrl: replyingTo.imageUrl,
+          videoUrl: replyingTo.videoUrl,
           hasDocument: Boolean(replyingTo.document),
         }
       : undefined;
@@ -103,22 +103,47 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     }
   };
 
-
-
   const handleCameraCapture = (imageDataUrl: string) => {
     onSendMessage({
-      content: '📷 Photo snapshot from study session',
+      content: text.trim(),
       autoDelete: autoDelete,
       imageUrl: imageDataUrl,
     });
+    if (text) setText('');
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const isImage = file.type.startsWith('image/') || /\.(png|jpe?g|gif|webp|svg)$/i.test(file.name);
+    const isVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov|m4v|ogg)$/i.test(file.name);
     const isMarkdown = file.name.endsWith('.md') || file.type.includes('markdown');
     const isPdf = file.name.endsWith('.pdf') || file.type.includes('pdf');
+
+    const uploadRes = await uploadClassroomFile(file, file.name);
+
+    if (isImage) {
+      onSendMessage({
+        content: text.trim(),
+        autoDelete: autoDelete,
+        imageUrl: uploadRes.url,
+      });
+      if (text) setText('');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    if (isVideo) {
+      onSendMessage({
+        content: text.trim(),
+        autoDelete: autoDelete,
+        videoUrl: uploadRes.url,
+      });
+      if (text) setText('');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
 
     let textContent = '';
     if (isMarkdown) {
@@ -128,8 +153,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         textContent = '';
       }
     }
-
-    const uploadRes = await uploadClassroomFile(file, file.name);
 
     const newDoc: DocumentItem = {
       id: `doc_${Date.now()}`,
@@ -148,10 +171,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     };
 
     onSendMessage({
-      content: `Shared file **${file.name}** (Auto-saved to Document Section)`,
+      content: text.trim(),
       autoDelete: autoDelete,
       document: newDoc,
     });
+    if (text) setText('');
 
     onAddDocumentToHub(newDoc);
 
@@ -161,18 +185,18 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="p-2 sm:p-3 border-t border-slate-200 dark:border-zinc-800/80 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
+    <div className="p-2 sm:p-3 border-t border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD]/95 dark:bg-[#121214]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
       {/* Reply Context Banner when replying */}
       <ReplyContextBanner replyingTo={replyingTo || null} onCancelReply={onCancelReply || (() => {})} />
 
       {/* Input Capsule Row */}
-      <div className="flex items-center gap-1 sm:gap-2 bg-slate-50 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:bg-white dark:focus-within:bg-[#18181b] focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all shadow-xs w-full">
+      <div className="flex items-center gap-1 sm:gap-2 bg-[#F1EBF5] dark:bg-[#18181b] border border-[#DFD3E7] dark:border-zinc-800 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:bg-[#FAF7FD] dark:focus-within:bg-[#18181b] focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all shadow-xs w-full">
         {/* Attachment Options */}
         <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           <input
             ref={fileInputRef}
             type="file"
-            accept=".md,.pdf,.txt,.doc,.docx"
+            accept=".md,.pdf,.txt,.doc,.docx,image/*,video/*"
             onChange={handleFileChange}
             className="hidden"
           />
@@ -205,28 +229,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           onKeyDown={handleKeyDown}
           className="flex-1 min-w-0 bg-transparent border-none text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none px-2 py-1 font-[450]"
         />
-
-        {/* Emoji Button */}
-        <div className="relative flex-shrink-0">
-          <button
-            type="button"
-            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            className="p-1.5 sm:p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 rounded-full transition cursor-pointer"
-            title="Insert Emoji"
-          >
-            <Smile className="w-4 h-4" />
-          </button>
-
-          {showEmojiPicker && (
-            <EmojiPicker
-              onSelect={(emoji) => {
-                setText((prev) => prev + emoji);
-                setShowEmojiPicker(false);
-              }}
-              onClose={() => setShowEmojiPicker(false)}
-            />
-          )}
-        </div>
 
         {/* Send Button with Stitch Gradient */}
         <button

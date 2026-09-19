@@ -22,12 +22,13 @@ interface UseRealtimeSyncParams {
   setPendingRequests: React.Dispatch<React.SetStateAction<PendingRequest[]>>;
   setPasswordResetRequests: React.Dispatch<React.SetStateAction<PasswordResetRequest[]>>;
   setTypingUsers: React.Dispatch<React.SetStateAction<Record<string, { userId: string; userName: string; userAvatar?: string; conversationKey: string }>>>;
+  setOnlineUserIds?: React.Dispatch<React.SetStateAction<Set<string>>>;
   setIsDataLoaded: (loaded: boolean) => void;
 }
 
 export function useRealtimeSync({
   classroom, setClassroom, setStudents, setMessages, setDocuments,
-  setPendingRequests, setPasswordResetRequests, setTypingUsers, setIsDataLoaded,
+  setPendingRequests, setPasswordResetRequests, setTypingUsers, setOnlineUserIds, setIsDataLoaded,
 }: UseRealtimeSyncParams) {
   const typingTimeoutsRef = useRef<Record<string, NodeJS.Timeout>>({});
 
@@ -89,6 +90,11 @@ export function useRealtimeSync({
         });
         return hasNew ? updated : prev;
       });
+
+      // Dispatch social media notification event for app-level banner toast
+      if (typeof window !== 'undefined' && currentSessionUserId && newMsg.senderId !== currentSessionUserId) {
+        window.dispatchEvent(new CustomEvent('classmate:new_incoming_message', { detail: newMsg }));
+      }
     };
 
     const currentSessionUserId = getCurrentSessionUserId();
@@ -135,6 +141,18 @@ export function useRealtimeSync({
     const channel = getRealtimeChannel(classroom.id) || (supabase ? supabase.channel('classmate_realtime') : null);
     if (channel) {
       channel
+        .on('presence', { event: 'sync' }, () => {
+          if (!isMounted || !setOnlineUserIds) return;
+          const presenceState = channel.presenceState();
+          const activeIds = new Set<string>();
+          if (currentSessionUserId) activeIds.add(currentSessionUserId);
+          Object.values(presenceState).forEach((presences) => {
+            (presences as any[]).forEach((p) => {
+              if (p.user_id) activeIds.add(p.user_id);
+            });
+          });
+          setOnlineUserIds(activeIds);
+        })
         .on('broadcast', { event: 'new_message' }, ({ payload }) => {
           const msg = payload as ChatMessage;
           // Public classroom channel only receives messages for group channels, never DMs
@@ -148,6 +166,39 @@ export function useRealtimeSync({
             setStudents((prev) => prev.filter((s) => s.id !== removedId));
             if (typeof window !== 'undefined') {
               window.dispatchEvent(new CustomEvent('classmate:student_removed', { detail: { studentId: removedId } }));
+            }
+          }
+        })
+        .on('broadcast', { event: 'student_updated' }, ({ payload }) => {
+          const updatedStudent = (payload as { student?: User })?.student;
+          if (updatedStudent && isMounted) {
+            setStudents((prev) => {
+              const exists = prev.some((s) => s.id === updatedStudent.id);
+              if (exists) {
+                return prev.map((s) => (s.id === updatedStudent.id ? { ...s, ...updatedStudent } : s));
+              }
+              return [...prev, updatedStudent];
+            });
+
+            if (updatedStudent.avatar || updatedStudent.name) {
+              setMessages((prev) => {
+                const next: Record<string, ChatMessage[]> = {};
+                let changed = false;
+                Object.entries(prev).forEach(([channelKey, list]) => {
+                  next[channelKey] = list.map((m) => {
+                    if (m.senderId === updatedStudent.id) {
+                      changed = true;
+                      return {
+                        ...m,
+                        senderAvatar: updatedStudent.avatar || m.senderAvatar,
+                        senderName: updatedStudent.name || m.senderName,
+                      };
+                    }
+                    return m;
+                  });
+                });
+                return changed ? next : prev;
+              });
             }
           }
         })
@@ -316,7 +367,27 @@ export function useRealtimeSync({
         );
 
       if (channel.state !== 'joined' && channel.state !== 'joining') {
-        channel.subscribe();
+        channel.subscribe(async (status) => {
+          if (status === 'SUBSCRIBED' && currentSessionUserId) {
+            try {
+              await channel.track({
+                user_id: currentSessionUserId,
+                online_at: new Date().toISOString(),
+              });
+            } catch (err) {
+              console.warn('Presence track error:', err);
+            }
+          }
+        });
+      } else if (currentSessionUserId) {
+        try {
+          channel.track({
+            user_id: currentSessionUserId,
+            online_at: new Date().toISOString(),
+          });
+        } catch {
+          // ignore
+        }
       }
 
       // Efficient periodic heartbeat (30s) and immediate window focus resync to prevent excessive database load

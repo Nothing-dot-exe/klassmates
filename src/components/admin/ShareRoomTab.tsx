@@ -1,5 +1,5 @@
 import React from 'react';
-import { QrCode, Download, Sparkles, School, Share2, Check, Copy, Shield } from 'lucide-react';
+import { Download, School, Share2, Check, Copy, QrCode } from 'lucide-react';
 import { Classroom } from '@/types';
 
 interface ShareRoomTabProps {
@@ -24,173 +24,123 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
   onNativeShare,
 }) => {
   return (
-    <div className="space-y-6">
-      {/* Header banner */}
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+    <div className="bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-[#27272a] rounded-3xl p-6 sm:p-8 shadow-sm">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#DFD3E7] dark:border-[#27272a]">
         <div>
           <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 inline-flex items-center gap-1">
             <QrCode className="w-3.5 h-3.5" />
-            Invitation & Card Studio
+            Classroom Invite & QR
           </span>
-          <h3 className="text-xl sm:text-2xl font-black text-zinc-950 dark:text-white mt-1.5">
-            Share Classroom Invite Card
+          <h3 className="text-xl sm:text-2xl font-black text-zinc-950 dark:text-white mt-1">
+            Share Classroom
           </h3>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1 max-w-xl font-medium">
-            Download a high-resolution printable invitation card with your custom QR code, or share direct 1-click links
-            to onboard students in seconds.
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-medium mt-0.5">
+            Scan the QR code to join instantly, download the invite card, or share the direct link.
           </p>
-        </div>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <button
-            onClick={onDownloadCard}
-            disabled={isGeneratingDownload || !qrDataUrl}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-indigo-950/20 transition disabled:opacity-40 flex-1 sm:flex-initial cursor-pointer active:scale-95"
-          >
-            <Download className="w-4 h-4" />
-            {isGeneratingDownload ? 'Rendering...' : 'Download Card (PNG)'}
-          </button>
         </div>
       </div>
 
-      {/* Grid Layout: Card Preview (Left) & Share Options (Right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Visual Printable Card Preview */}
-        <div className="lg:col-span-6 bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-sm">
-          <div className="text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
-            Printable Card Preview
-          </div>
-
-          <div className="w-full max-w-sm rounded-3xl bg-zinc-50 dark:bg-[#18181b] border-2 border-zinc-200 dark:border-indigo-500/30 p-6 text-center shadow-xl space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-[#222226] text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-[#27272a] text-[10px] font-bold uppercase tracking-wider shadow-xs">
-              <School className="w-3 h-3 text-indigo-500" />
-              {classroom.institution}
+      {/* Unified Mixed Grid: QR Preview + Link & Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center mt-6">
+        {/* Left: QR Code & Classroom Card */}
+        <div className="md:col-span-5 flex flex-col items-center">
+          <div className="w-full max-w-[280px] rounded-2xl bg-white dark:bg-[#18181b] border border-[#DFD3E7] dark:border-[#27272a] p-5 text-center shadow-md space-y-3">
+            {/* Institution Badge */}
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#F1EBF5] dark:bg-[#222226] text-zinc-800 dark:text-zinc-200 border border-[#DFD3E7] dark:border-[#27272a] text-[10px] font-bold uppercase tracking-wider truncate max-w-full">
+              <School className="w-3 h-3 text-indigo-500 shrink-0" />
+              <span className="truncate">{classroom.institution}</span>
             </div>
 
             <div>
-              <h4 className="text-lg sm:text-xl font-black text-zinc-950 dark:text-white tracking-tight">{classroom.name}</h4>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5 font-medium">
+              <h4 className="text-base font-black text-zinc-950 dark:text-white tracking-tight truncate">
+                {classroom.name}
+              </h4>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
                 {classroom.section} • {classroom.semester}
               </p>
             </div>
 
-            {/* QR Image Container */}
-            <div className="inline-block p-3.5 bg-white dark:bg-[#222226] rounded-2xl shadow-sm border border-zinc-200 dark:border-[#27272a] ring-4 ring-zinc-100 dark:ring-[#121214]">
+            {/* QR Code */}
+            <div className="p-3 bg-white dark:bg-white rounded-xl shadow-xs border border-zinc-200 inline-block">
               {qrDataUrl ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={qrDataUrl} alt="Classroom QR Code" className="w-48 h-48 mx-auto rounded-lg" />
+                <img
+                  src={qrDataUrl}
+                  alt="Classroom QR Code"
+                  className="w-40 h-40 object-contain mx-auto"
+                />
               ) : (
-                <div className="w-48 h-48 flex items-center justify-center text-xs text-zinc-400">
+                <div className="w-40 h-40 flex items-center justify-center text-xs text-zinc-400">
                   Generating QR...
                 </div>
               )}
             </div>
 
             {/* Class Code Highlight */}
-            <div className="p-3.5 rounded-2xl bg-white dark:bg-[#222226] border border-zinc-200 dark:border-indigo-500/30 max-w-xs mx-auto space-y-1 shadow-xs">
-              <div className="text-[10px] uppercase font-bold text-zinc-600 dark:text-zinc-400">Class Code</div>
-              <div className="font-mono text-2xl font-black text-indigo-600 dark:text-indigo-400 tracking-wider">{classroom.code}</div>
+            <div className="py-2 px-3 rounded-xl bg-[#F1EBF5] dark:bg-[#222226] border border-[#DFD3E7] dark:border-indigo-500/30 text-center">
+              <div className="text-[9px] uppercase font-bold text-zinc-500 dark:text-zinc-400 tracking-wider">
+                Class Code
+              </div>
+              <div className="font-mono text-xl font-black text-indigo-600 dark:text-indigo-400 tracking-wider">
+                {classroom.code}
+              </div>
             </div>
-
-            <p className="text-[11px] text-zinc-600 dark:text-zinc-400 max-w-xs mx-auto font-medium">
-              Scan with phone camera or visit the link to join with your Roll Number!
-            </p>
           </div>
         </div>
 
-        {/* Right Column: Actions, Links, and Guidance */}
-        <div className="lg:col-span-6 space-y-4">
-          {/* 1. Direct Join Link Box */}
-          <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-4 sm:p-6 space-y-3 shadow-sm">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <h4 className="text-sm font-black text-zinc-950 dark:text-white flex items-center gap-2">
-                <Share2 className="w-4 h-4 text-indigo-500" />
-                Direct Share Link
-              </h4>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 font-bold flex-shrink-0">
+        {/* Right: Direct Link & Single Action Controls */}
+        <div className="md:col-span-7 space-y-5">
+          {/* Share Link Input */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-zinc-800 dark:text-zinc-300 flex items-center gap-1.5">
+                <Share2 className="w-3.5 h-3.5 text-indigo-500" />
+                Direct Invite Link
+              </label>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-500/30">
                 Auto-fills Code
               </span>
             </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
-              Send this link directly to students. When clicked on mobile or desktop, the classroom code will be filled
-              in automatically.
-            </p>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
+            <div className="flex items-center gap-2">
               <input
                 type="text"
                 readOnly
                 value={joinUrl}
-                className="flex-1 min-w-0 bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:outline-none truncate shadow-xs"
+                className="flex-1 min-w-0 bg-white dark:bg-[#18181b] border border-[#DFD3E7] dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:outline-none truncate shadow-xs"
               />
               <button
                 onClick={onCopyLink}
-                className="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition flex-shrink-0 shadow-md shadow-indigo-950/20 active:scale-95 cursor-pointer"
+                className="px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shrink-0 shadow-md shadow-indigo-950/20 active:scale-95 cursor-pointer"
               >
-                {copiedLink ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copiedLink ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
-          </div>
-
-          {/* 2. Download Card Action */}
-          <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-4 sm:p-6 space-y-3 shadow-sm">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <h4 className="text-sm font-black text-zinc-950 dark:text-white flex items-center gap-2">
-                <Download className="w-4 h-4 text-indigo-500" />
-                Downloadable Invitation Card
-              </h4>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-[#222226] text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-[#27272a] font-bold flex-shrink-0">
-                1000 × 1250 PNG
-              </span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
-              Creates an ultra-crisp PNG image card containing your institution details, class title, scannable QR code,
-              and class code badge.
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
+              Share this link with students. When opened, it automatically selects your class and fills in the class code.
             </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-2.5 pt-1">
-              <button
-                onClick={onDownloadCard}
-                disabled={isGeneratingDownload || !qrDataUrl}
-                className="w-full sm:flex-1 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-indigo-950/20 transition disabled:opacity-40 cursor-pointer active:scale-95"
-              >
-                <Download className="w-4 h-4" />
-                {isGeneratingDownload ? 'Generating PNG...' : 'Download Card Image (PNG)'}
-              </button>
-
-              <button
-                onClick={onNativeShare}
-                className="w-full sm:w-auto px-4 py-3 rounded-2xl border border-zinc-200 dark:border-[#27272a] bg-zinc-100 dark:bg-[#222226] hover:bg-zinc-200 dark:hover:bg-[#27272a] text-zinc-900 dark:text-white text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs"
-              >
-                <Share2 className="w-4 h-4 text-indigo-500" />
-                Share Card Link
-              </button>
-            </div>
           </div>
 
-          {/* 3. Printing Tips */}
-          <div className="bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-5 space-y-2.5 text-xs text-zinc-700 dark:text-zinc-300">
-            <div className="text-zinc-950 dark:text-white font-black flex items-center gap-1.5 text-xs">
-              <Shield className="w-3.5 h-3.5 text-indigo-500" />
-              Classroom Onboarding Tips
-            </div>
-            <ul className="space-y-1.5 list-disc list-inside text-[11px] text-zinc-700 dark:text-zinc-400 font-medium">
-              <li>
-                <span className="text-zinc-950 dark:text-white font-bold">Classroom Boards:</span> Print the downloaded PNG card and
-                post it on your classroom board, student lounge, or department notice board.
-              </li>
-              <li>
-                <span className="text-zinc-950 dark:text-white font-bold">Group Chats:</span> Share the downloaded image card on
-                WhatsApp or Telegram class groups.
-              </li>
-              <li>
-                <span className="text-zinc-950 dark:text-white font-bold">Approval Control:</span> In Classroom Settings, toggle{' '}
-                <strong className="text-zinc-950 dark:text-white">Require Approval</strong> to manually review each student before
-                admitting them.
-              </li>
-            </ul>
+          {/* Action Buttons: Download Card & Share */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+            <button
+              onClick={onDownloadCard}
+              disabled={isGeneratingDownload || !qrDataUrl}
+              className="w-full sm:flex-1 py-3 px-5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-indigo-950/20 transition disabled:opacity-40 cursor-pointer active:scale-95"
+            >
+              <Download className="w-4 h-4" />
+              {isGeneratingDownload ? 'Rendering Card...' : 'Download Card (PNG)'}
+            </button>
+
+            <button
+              onClick={onNativeShare}
+              className="w-full sm:w-auto py-3 px-5 rounded-xl border border-[#DFD3E7] dark:border-[#27272a] bg-white dark:bg-[#18181b] hover:bg-zinc-50 dark:hover:bg-[#222226] text-zinc-800 dark:text-white text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs active:scale-95"
+            >
+              <Share2 className="w-4 h-4 text-indigo-500" />
+              Share Link
+            </button>
           </div>
         </div>
       </div>

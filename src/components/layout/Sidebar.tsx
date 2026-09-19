@@ -1,18 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   FileText,
   ShieldCheck,
-  Copy,
-  Check,
 } from 'lucide-react';
-import { Channel, Classroom, User } from '@/types';
+import { Channel, Classroom, User, ChatMessage } from '@/types';
 import { CURRENT_USER } from '@/lib/mockData';
 import { ClassRepBanner } from './ClassRepBanner';
 import { SidebarChannels } from './SidebarChannels';
 import { SidebarDirectMessages } from './SidebarDirectMessages';
 import { SidebarUserFooter } from './SidebarUserFooter';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 interface SidebarProps {
   classroom: Classroom;
@@ -30,6 +29,8 @@ interface SidebarProps {
   onOpenSettings?: () => void;
   onSignOut?: () => void;
   onOpenProfile?: (user: User) => void;
+  messages?: Record<string, ChatMessage[]>;
+  onlineUserIds?: Set<string>;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -48,16 +49,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenSettings,
   onSignOut,
   onOpenProfile,
+  messages,
+  onlineUserIds,
 }) => {
-  const [copiedCode, setCopiedCode] = useState(false);
-
-  const handleCopyCode = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigator.clipboard.writeText(classroom.code);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-  };
-
   const otherStudents = students.filter((s) => s.id !== currentUser.id);
   const classRep =
     students.find((s) => s.role === 'admin' || s.id === classroom.adminId) ||
@@ -65,9 +59,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     CURRENT_USER;
 
   return (
-    <aside className="w-64 md:w-72 h-full bg-slate-50/90 dark:bg-[#121214] border-r border-slate-200 dark:border-zinc-800/80 flex flex-col justify-between select-none transition-colors">
+    <aside className="w-64 md:w-72 h-full bg-[#F1EBF5] dark:bg-[#121214] border-r border-[#DFD3E7] dark:border-zinc-800/80 flex flex-col justify-between select-none transition-colors">
       {/* Header Profile / Classroom Title */}
-      <div className="p-4 border-b border-slate-200 dark:border-zinc-800/80 space-y-3">
+      <div className="p-4 border-b border-[#DFD3E7] dark:border-zinc-800/80 space-y-2.5">
         <div className="flex items-center justify-between">
           {/* Live status pill with Stitch pulse-dot-ring */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 shadow-xs">
@@ -80,12 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
           </div>
 
-          {/* App Brand Monogram */}
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 p-[1px] shadow-glow-purple flex items-center justify-center">
-            <div className="w-full h-full bg-white dark:bg-[#121214] rounded-[11px] flex items-center justify-center">
-              <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-300 dark:to-white bg-clip-text text-transparent">m</span>
-            </div>
-          </div>
+          <ThemeToggle className="p-1 text-slate-500 dark:text-zinc-400" />
         </div>
 
         <div>
@@ -96,31 +85,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {classroom.institution || 'Autonomous Classroom Space'}
           </p>
         </div>
-
-        {/* Class Code Pill with 1-click Copy */}
-        <div
-          onClick={handleCopyCode}
-          className="flex items-center justify-between px-3 py-2 bg-white/80 dark:bg-[#10172A]/90 hover:bg-slate-100 dark:hover:bg-[#141D35] transition-colors border border-slate-200 dark:border-zinc-800/80 rounded-xl backdrop-blur-md cursor-pointer group shadow-xs"
-          title="Click to copy Class Code"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 dark:text-zinc-400">Code:</span>
-            <span className="font-mono font-bold text-xs tracking-wide text-slate-900 dark:text-white">{classroom.code}</span>
-          </div>
-          <button
-            type="button"
-            className="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-600/20 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-600/35 border border-indigo-200 dark:border-indigo-500/30 px-2.5 py-0.5 rounded-lg transition-all"
-          >
-            {copiedCode ? <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
-            <span>{copiedCode ? 'Copied' : 'Copy'}</span>
-          </button>
-        </div>
       </div>
 
       {/* Navigation Scrollable Area */}
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5 no-scrollbar">
-        {/* Class Representative / Student Admin Card */}
-        {classRep && classRep.id && (
+        {/* Class Representative / Student Admin Card (for students only) */}
+        {classRep && classRep.id && currentUser.role !== 'admin' && (
           <ClassRepBanner
             admin={classRep}
             currentUserId={currentUser.id}
@@ -199,6 +169,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           activeView={activeView}
           onSelectDm={onSelectDm}
           onOpenProfile={onOpenProfile}
+          messages={messages}
+          currentUserId={currentUser.id}
+          onlineUserIds={onlineUserIds}
         />
       </div>
 

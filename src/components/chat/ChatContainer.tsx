@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Hash, Lock, ShieldCheck, Sparkles, Users } from 'lucide-react';
+import { Hash, Lock, Sparkles } from 'lucide-react';
 import { Channel, ChatMessage, DocumentItem, User, AutoDeleteOption, ChatReplyReference } from '@/types';
 import { getSafeAvatar } from '@/lib/avatarUtils';
 import { MessageItem } from './MessageItem';
@@ -24,6 +24,7 @@ interface ChatContainerProps {
     content: string;
     autoDelete: AutoDeleteOption;
     imageUrl?: string;
+    videoUrl?: string;
     document?: DocumentItem;
     replyTo?: ChatReplyReference;
   }) => void;
@@ -195,82 +196,54 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         style={themedBgStyle}
         className="flex-1 overflow-y-auto p-3 sm:p-4 no-scrollbar transition-all duration-300"
       >
-        {/* Stitch Glassmorphic Pinned Announcement Card for #general */}
+        {/* Slim Pinned Announcement Bar for #general */}
         {currentChannel && currentChannel.name.toLowerCase() === 'general' && (
-          <div className="p-3.5 mb-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-50 to-white dark:from-[#222226] dark:via-[#18181b] dark:to-[#121214] border border-amber-500/30 shadow-md relative overflow-hidden group">
-            <div className="absolute -right-8 -top-8 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
-            <div className="flex items-start justify-between relative z-10 gap-3">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-500 flex-shrink-0">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.2 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold text-[10px] uppercase tracking-wider">
-                      📌 Milestone Notice
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">
-                      • Pinned by Class Rep
-                    </span>
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                    Study Notes, Handouts & Lecture Slides in Document Vault
-                  </h4>
-                  <p className="text-[11px] text-slate-500 dark:text-zinc-400">
-                    Syllabi, cheat sheets, and assignment submissions are organized in the Vault. Upload yours to share with classmates!
-                  </p>
-                </div>
-              </div>
+          <div className="px-3 py-2 sm:px-4 sm:py-2.5 mb-2.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-[#FAF7FD] to-[#F1EBF5] dark:from-amber-500/10 dark:via-[#18181b] dark:to-[#121214] border border-amber-500/30 shadow-xs flex items-center gap-2.5">
+            <span className="p-1 rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400 shrink-0">
+              <Sparkles className="w-3.5 h-3.5" />
+            </span>
+            <div className="text-[11px] sm:text-xs text-zinc-800 dark:text-zinc-200 truncate">
+              <span className="font-bold text-amber-600 dark:text-amber-400">Pinned: </span>
+              Study notes, slides & materials are organized in Document Vault.
             </div>
           </div>
         )}
 
-        {/* Welcome Banner - Tailored for General vs DM */}
+        {/* Welcome Banner - Simple & Responsive */}
         {currentChannel ? (
-          <div className="p-6 my-4 rounded-3xl bg-white dark:bg-[#121214] border border-slate-200 dark:border-zinc-800/80 text-center space-y-2.5 shadow-md transition-colors">
-            <div className="inline-flex p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 shadow-inner">
-              <Hash className="w-6 h-6" />
+          <div className="p-3.5 sm:p-5 my-2 sm:my-3 rounded-2xl bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-zinc-800/80 text-center space-y-1.5 shadow-xs transition-colors">
+            <div className="inline-flex p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30">
+              <Hash className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="flex items-center justify-center gap-2">
-              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight font-display">Welcome to #{currentChannel.name}!</h3>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700">
-                Classroom Hall
-              </span>
-            </div>
-            <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
-              This is the official discussion channel for your classroom. Announcements, class questions, and shared notes posted here are visible to all enrolled classmates.
-            </p>
-            <div className="flex items-center justify-center gap-3 pt-1 text-[11px] text-slate-500 dark:text-zinc-400">
-              <span className="inline-flex items-center gap-1 font-medium text-slate-600 dark:text-zinc-300">
-                <Users className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" /> Class Discussions
-              </span>
-              <span>•</span>
-              <span className="inline-flex items-center gap-1 font-medium text-slate-600 dark:text-zinc-300">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" /> Realtime Sync
-              </span>
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white tracking-tight">
+                Welcome to #{currentChannel.name}!
+              </h3>
+              <p className="text-[11px] sm:text-xs text-slate-500 dark:text-zinc-400 max-w-md mx-auto mt-0.5 leading-normal">
+                Official discussion channel for your classroom. Messages are visible to all enrolled classmates.
+              </p>
             </div>
           </div>
         ) : currentRecipient ? (
-          <div className="p-6 my-4 rounded-3xl bg-white dark:bg-[#121214] border border-slate-200 dark:border-zinc-800/80 text-center space-y-3 shadow-md transition-colors">
+          <div className="p-3.5 sm:p-5 my-2 sm:my-3 rounded-2xl bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-zinc-800/80 text-center space-y-2 shadow-xs transition-colors">
             <div className="relative inline-block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={getSafeAvatar(currentRecipient.avatar, currentRecipient.name)}
                 alt={currentRecipient.name}
-                className="w-16 h-16 rounded-2xl object-cover ring-2 ring-indigo-500/30 mx-auto shadow-sm bg-slate-100 dark:bg-zinc-800"
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover ring-2 ring-indigo-500/30 mx-auto shadow-xs bg-slate-100 dark:bg-zinc-800"
               />
               <span
-                className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-[#121214] ${
-                  currentRecipient.status === 'studying'
-                    ? 'bg-amber-400'
-                    : currentRecipient.status === 'online'
-                    ? 'bg-emerald-500'
-                    : 'bg-slate-400'
+                className={`absolute bottom-0 right-0 w-3 h-3 rounded-full ring-2 ring-white dark:ring-[#121214] ${
+                  currentRecipient.status === 'online'
+                    ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]'
+                    : 'bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.4)]'
                 }`}
+                title={currentRecipient.status === 'online' ? 'Online' : 'Offline'}
               />
             </div>
-            <div className="space-y-1">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2 flex-wrap">
+            <div className="space-y-0.5">
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 flex-wrap">
                 {hasRecipientNickname ? (
                   <>
                     <span>{currentRecipient.nickname?.trim()}</span>
@@ -285,13 +258,13 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                   </span>
                 )}
               </h3>
-              <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-sm mx-auto">
-                {currentRecipient.bio || 'Direct 1-on-1 classmate conversation'}
+              <p className="text-[11px] sm:text-xs text-slate-500 dark:text-zinc-400 max-w-sm mx-auto">
+                {currentRecipient.bio || 'Direct 1-on-1 private classmate conversation'}
               </p>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-[10.5px] text-slate-600 dark:text-zinc-400 font-medium">
-              <Lock className="w-3 h-3 text-slate-400" />
-              <span>End-to-End Direct Chat • Private between you and {currentRecipient.nickname?.trim() || currentRecipient.name}</span>
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-[10px] text-slate-500 dark:text-zinc-400 font-medium">
+              <Lock className="w-2.5 h-2.5 text-slate-400" />
+              <span>Private Chat</span>
             </div>
           </div>
         ) : null}
@@ -380,8 +353,15 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         isOpen={Boolean(deleteTargetMessage)}
         message={deleteTargetMessage}
         canDeleteForEveryone={Boolean(
-          deleteTargetMessage?.senderId === currentUser.id ||
-          currentUser.role === 'admin'
+          deleteTargetMessage &&
+          currentUser &&
+          (
+            deleteTargetMessage.senderId === currentUser.id ||
+            (Boolean(deleteTargetMessage.senderRollNo) && Boolean(currentUser.rollNo) && deleteTargetMessage.senderRollNo.toLowerCase() === currentUser.rollNo.toLowerCase()) ||
+            (Boolean(deleteTargetMessage.senderName) && Boolean(currentUser.name) && deleteTargetMessage.senderName.toLowerCase() === currentUser.name.toLowerCase()) ||
+            currentUser.role === 'admin' ||
+            (adminUser && currentUser.id === adminUser.id)
+          )
         )}
         onClose={() => setDeleteTargetMessage(null)}
         onDeleteForEveryone={(id) => {

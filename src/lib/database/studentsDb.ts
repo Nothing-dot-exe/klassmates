@@ -16,6 +16,7 @@ export interface StudentCredentialMeta {
   designation?: string;
   userBio?: string;
   nickname?: string;
+  avatar?: string;
 }
 
 export const parseStudentRow = (d: any): User => {
@@ -58,7 +59,7 @@ export const parseStudentRow = (d: any): User => {
     role: d.role,
     isTeacher: false,
     designation: d.designation || meta.designation || (isAdmin ? 'Class Representative (CR)' : 'Classmate'),
-    avatar: d.avatar,
+    avatar: d.avatar || meta.avatar || '',
     status: d.status,
     joinedAt: d.joined_at,
     bio: meta.userBio !== undefined ? meta.userBio : (isJsonBio ? '' : (d.bio || '')),
@@ -148,13 +149,34 @@ export const dbCreateStudent = async (student: User, classroomId: string): Promi
   }
 };
 
-export const dbUpdateStudent = async (studentId: string, updates: Partial<User>): Promise<boolean> => {
+export const dbUpdateStudent = async (studentId: string, updates: Partial<User>, classroomId?: string): Promise<boolean> => {
   if (!isSupabaseConfigured() || !supabase) return false;
 
   try {
     // 1. Fetch current student record to preserve credentials and metadata
     const { data: current } = await supabase.from('students').select('*').eq('id', studentId).single();
-    if (!current) return false;
+    if (!current) {
+      // If student not found (e.g. admin or missing record), create it if classroomId is provided
+      if (classroomId && (updates.name || updates.avatar)) {
+        const fallbackStudent: User = {
+          id: studentId,
+          name: updates.name || 'Class Representative',
+          rollNo: updates.rollNo || 'CR-LEAD',
+          email: updates.email || '',
+          phone: updates.phone || '',
+          role: updates.role || 'admin',
+          avatar: updates.avatar || '',
+          status: updates.status || 'online',
+          joinedAt: new Date().toISOString().split('T')[0],
+          bio: updates.bio || '',
+          nickname: updates.nickname,
+          showPhone: updates.showPhone !== false,
+          showEmail: updates.showEmail !== false,
+        };
+        return await dbCreateStudent(fallbackStudent, classroomId);
+      }
+      return false;
+    }
 
     const existing = parseStudentRow(current);
 
@@ -173,6 +195,7 @@ export const dbUpdateStudent = async (studentId: string, updates: Partial<User>)
       designation: updates.designation !== undefined ? updates.designation : existing.designation,
       userBio: updates.bio !== undefined ? updates.bio : (existing.bio || ''),
       nickname: updates.nickname !== undefined ? updates.nickname : existing.nickname,
+      avatar: updates.avatar !== undefined ? updates.avatar : existing.avatar,
     };
 
     const payload: Record<string, unknown> = {

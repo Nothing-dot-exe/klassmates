@@ -31,6 +31,7 @@ export function useClassroomData() {
   const [typingUsers, setTypingUsers] = useState<
     Record<string, { userId: string; userName: string; userAvatar?: string; conversationKey: string }>
   >({});
+  const [onlineUserIds, setOnlineUserIds] = useState<Set<string>>(new Set());
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useRealtimeSync({
@@ -42,6 +43,7 @@ export function useClassroomData() {
     setPendingRequests,
     setPasswordResetRequests,
     setTypingUsers,
+    setOnlineUserIds,
     setIsDataLoaded,
   });
 
@@ -76,6 +78,7 @@ export function useClassroomData() {
     setMessages,
     typingUsers,
     sendTypingStatus,
+    onlineUserIds,
     isDataLoaded,
   };
 }

@@ -50,7 +50,8 @@ export function parseMessageRow(row: any): ChatMessage {
     autoDelete: row.auto_delete,
     expiresAt: row.expires_at || undefined,
     imageUrl: row.image_url || undefined,
-    document: row.document || undefined,
+    videoUrl: (row as any).video_url || (row.document?.fileType === 'video' ? row.document.downloadUrl : undefined),
+    document: row.document?.fileType === 'video' ? undefined : (row.document || undefined),
     reactions: row.reactions || [],
     replyTo: row.reply_to || undefined,
   };

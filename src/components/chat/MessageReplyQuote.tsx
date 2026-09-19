@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Reply, Image as ImageIcon, FileText } from 'lucide-react';
+import { Reply, Image as ImageIcon, Video, FileText } from 'lucide-react';
 import { ChatReplyReference } from '@/types';
 
 interface MessageReplyQuoteProps {
@@ -22,35 +22,36 @@ export const MessageReplyQuote: React.FC<MessageReplyQuoteProps> = ({
     }
   };
 
-  const senderDisplayName = replyTo.senderName?.includes('@')
-    ? replyTo.senderName.split('@')[0]
-    : replyTo.senderName || 'Classmate';
+  const cleanContent =
+    replyTo.content && replyTo.content !== '📷 Photo snapshot from study session'
+      ? replyTo.content
+      : '';
 
   return (
     <button
       type="button"
       onClick={handleClick}
-      className={`w-full text-left mb-1.5 px-2.5 py-1.5 rounded-xl border-l-[3.5px] transition-all duration-150 active:scale-[0.99] cursor-pointer group flex items-start gap-2 ${
+      className={`w-full text-left mb-1.5 p-2 rounded-xl flex items-start gap-2 border transition cursor-pointer select-none ${
         isMine
-          ? 'bg-white/10 hover:bg-white/15 border-white/60 text-white/90'
-          : 'bg-zinc-100/90 hover:bg-zinc-200/80 border-zinc-950 text-zinc-900'
+          ? 'bg-black/20 border-white/20 text-white hover:bg-black/30'
+          : 'bg-zinc-100 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200/70 dark:hover:bg-zinc-800'
       }`}
-      title="Click to view original message"
+      title="Jump to quoted message"
     >
-      <div className={`flex-shrink-0 pt-0.5 group-hover:scale-110 transition-transform ${isMine ? 'text-white/80' : 'text-zinc-900'}`}>
-        <Reply className="w-3.5 h-3.5" />
+      <div className="flex-shrink-0 pt-0.5 opacity-70">
+        <Reply className="w-3.5 h-3.5 scale-x-[-1]" />
       </div>
 
-      <div className="min-w-0 flex-1 overflow-hidden">
+      <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <span
-            className={`text-[11px] font-bold truncate group-hover:underline ${
-              isMine ? 'text-white' : 'text-zinc-950'
+            className={`text-xs font-bold truncate ${
+              isMine ? 'text-white' : 'text-zinc-900 dark:text-zinc-100'
             }`}
           >
-            {senderDisplayName}
+            {replyTo.senderName}
           </span>
-          {replyTo.senderRollNo && !replyTo.senderRollNo.includes('@') && (
+          {replyTo.senderRollNo && (
             <span
               className={`text-[9px] font-mono px-1 py-0.2 rounded ${
                 isMine ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-700 border border-zinc-300'
@@ -64,16 +65,21 @@ export const MessageReplyQuote: React.FC<MessageReplyQuoteProps> = ({
         <div className={`flex items-center gap-1.5 text-[11px] truncate mt-0.5 ${isMine ? 'text-zinc-300' : 'text-zinc-600'}`}>
           {replyTo.imageUrl && (
             <span className="inline-flex items-center gap-0.5 font-medium">
-              <ImageIcon className="w-3 h-3" /> Photo •
+              <ImageIcon className="w-3 h-3" /> Photo {cleanContent ? '•' : ''}
+            </span>
+          )}
+          {replyTo.videoUrl && (
+            <span className="inline-flex items-center gap-0.5 font-medium">
+              <Video className="w-3 h-3" /> Video {cleanContent ? '•' : ''}
             </span>
           )}
           {replyTo.hasDocument && (
             <span className="inline-flex items-center gap-0.5 font-medium">
-              <FileText className="w-3 h-3" /> Attachment •
+              <FileText className="w-3 h-3" /> Attachment {cleanContent ? '•' : ''}
             </span>
           )}
           <span className="truncate italic">
-            {replyTo.content || (replyTo.imageUrl ? 'Photo' : 'Attachment')}
+            {cleanContent || (replyTo.imageUrl ? 'Photo' : replyTo.videoUrl ? 'Video' : 'Attachment')}
           </span>
         </div>
       </div>

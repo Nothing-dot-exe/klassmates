@@ -60,7 +60,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
   return (
     <div className="space-y-4 animate-in fade-in">
       {/* Role Toggle */}
-      <div className="grid grid-cols-2 p-1 rounded-2xl bg-zinc-100 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] transition-colors">
+      <div className="grid grid-cols-2 p-1 rounded-2xl bg-zinc-100 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] transition-colors">
         <button
           type="button"
           onClick={() => setSignInRole('student')}
@@ -93,7 +93,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
         <form onSubmit={onStudentLoginSubmit} autoComplete="off" className="space-y-3.5">
           {/* Quick Member Selector */}
           {existingStudents.length > 0 && (
-            <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] space-y-2">
+            <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[10.5px] font-bold text-zinc-950 dark:text-zinc-300 uppercase tracking-wider">
                   Select Enrolled Member ({existingStudents.length} classmates):
@@ -107,13 +107,13 @@ export const SignInView: React.FC<SignInViewProps> = ({
                   }
                 }}
                 defaultValue=""
-                className="w-full bg-white dark:bg-[#121A2D] border border-zinc-300 dark:border-[#1F2A44] rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500 transition cursor-pointer"
+                className="w-full bg-white dark:bg-[#18181b] border border-zinc-300 dark:border-[#27272a] rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500 transition cursor-pointer"
               >
-                <option value="" disabled className="dark:bg-[#121A2D] dark:text-zinc-400">
+                <option value="" disabled className="dark:bg-[#18181b] dark:text-zinc-400">
                   -- Choose your name from the classroom roster --
                 </option>
                 {existingStudents.map((st) => (
-                  <option key={st.id} value={st.id} className="dark:bg-[#121A2D] dark:text-zinc-200">
+                  <option key={st.id} value={st.id} className="dark:bg-[#18181b] dark:text-zinc-200">
                     {st.name} ({st.rollNo}) {st.role === 'admin' ? '👑 CR' : ''}
                   </option>
                 ))}
@@ -131,7 +131,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
               placeholder="e.g. 1MS21CS042 or student@institution.edu"
               value={loginIdentifier}
               onChange={(e) => setLoginIdentifier(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
+              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
             />
           </div>
 
@@ -153,7 +153,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 placeholder="Enter your account password"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
+                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
               />
               <button
                 type="button"
@@ -179,7 +179,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
       ) : (
         /* Admin Sign In Form */
         <form onSubmit={onAdminLoginSubmit} className="space-y-3.5">
-          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#0E1424] border border-zinc-200 dark:border-amber-500/25 text-left space-y-1">
+          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-amber-500/25 text-left space-y-1">
             <div className="text-xs font-bold text-zinc-950 dark:text-amber-400 flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5 text-amber-500" />
               Class Representative Security Gate
@@ -207,7 +207,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 placeholder="Enter admin password"
                 value={adminPasswordInput}
                 onChange={(e) => setAdminPasswordInput(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono"
+                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono"
               />
               <button
                 type="button"

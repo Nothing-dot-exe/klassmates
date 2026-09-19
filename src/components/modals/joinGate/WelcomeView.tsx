@@ -29,13 +29,13 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
     <div className="space-y-4 animate-in fade-in">
       {/* Active Classroom Spotlight Card */}
       {hasActiveClassroom && (
-        <div className="p-4 sm:p-5 rounded-2xl bg-zinc-50 dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] shadow-sm space-y-3 relative overflow-hidden transition-colors">
+        <div className="p-4 sm:p-5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] shadow-sm space-y-3 relative overflow-hidden transition-colors">
           <div className="flex items-center justify-between gap-2">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] text-zinc-800 dark:text-zinc-300 text-[10px] font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-zinc-800 dark:text-zinc-300 text-[10px] font-bold uppercase tracking-wider">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
               <span>Database Synced</span>
             </div>
-            <span className="font-mono text-xs font-black text-indigo-600 dark:text-indigo-400 px-2.5 py-0.5 rounded-lg bg-indigo-50 dark:bg-[#161F36] border border-indigo-200 dark:border-indigo-500/30 shadow-xs">
+            <span className="font-mono text-xs font-black text-indigo-600 dark:text-indigo-400 px-2.5 py-0.5 rounded-lg bg-indigo-50 dark:bg-[#222226] border border-indigo-200 dark:border-indigo-500/30 shadow-xs">
               {classroom?.code || 'MCA2026'}
             </span>
           </div>
@@ -49,7 +49,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400 pt-1 border-t border-zinc-200 dark:border-[#1F2A44]">
+          <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400 pt-1 border-t border-zinc-200 dark:border-[#27272a]">
             <div className="flex items-center gap-1.5 text-zinc-800 dark:text-zinc-300 font-semibold">
               <Users className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>{studentCount} Enrolled Students</span>
@@ -87,13 +87,13 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
       <button
         type="button"
         onClick={onCreateRoom}
-        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] hover:border-indigo-500/40 dark:hover:border-indigo-500/50 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
+        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] hover:border-indigo-500/40 dark:hover:border-indigo-500/50 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
       >
         <div className="flex items-start justify-between">
-          <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#1F2A44] flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent transition-all">
+          <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a] flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent transition-all">
             <ShieldCheck className="w-5 h-5" />
           </div>
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-[#121A2D] text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-[#1F2A44]">
+          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-[#18181b] text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-[#27272a]">
             Student Lead & CR
           </span>
         </div>
@@ -117,13 +117,13 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
       <button
         type="button"
         onClick={onJoinRoom}
-        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] hover:border-indigo-500/40 dark:hover:border-indigo-500/50 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
+        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] hover:border-indigo-500/40 dark:hover:border-indigo-500/50 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
       >
         <div className="flex items-start justify-between">
-          <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#1F2A44] flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent transition-all">
+          <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a] flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent transition-all">
             <GraduationCap className="w-5 h-5" />
           </div>
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-[#121A2D] text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-[#1F2A44]">
+          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-[#18181b] text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-[#27272a]">
             Student Enrollment
           </span>
         </div>

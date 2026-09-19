@@ -121,14 +121,14 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
       >
         {/* Floating Action Bar on Hover */}
         <div
-          className={`flex items-center gap-0.5 mb-1 bg-white dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-2xl px-1.5 py-0.5 shadow-md z-20 opacity-0 group-hover:opacity-100 transition-all duration-200 scale-95 group-hover:scale-100 ${
+          className={`flex items-center gap-0.5 mb-1 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-2xl px-1.5 py-0.5 shadow-md z-20 opacity-0 group-hover:opacity-100 transition-all duration-200 scale-95 group-hover:scale-100 ${
             isMine ? 'self-end' : 'self-start'
           }`}
         >
           <button
             type="button"
             onClick={() => onReply?.(message)}
-            className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#161F36] transition cursor-pointer"
+            className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
             title="Reply to message"
           >
             <Reply className="w-3.5 h-3.5" />
@@ -137,7 +137,7 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
           <button
             type="button"
             onClick={() => setShowReactionPicker(!showReactionPicker)}
-            className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#161F36] transition cursor-pointer"
+            className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
             title="Add Reaction"
           >
             <SmilePlus className="w-3.5 h-3.5" />
@@ -147,7 +147,7 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
             <button
               type="button"
               onClick={handleDeleteClick}
-              className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:bg-[#161F36] transition cursor-pointer"
+              className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:bg-[#222226] transition cursor-pointer"
               title="Delete message"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -155,7 +155,7 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
           )}
 
           {showReactionPicker && (
-            <div className="flex items-center gap-0.5 pl-1.5 border-l border-zinc-200 dark:border-[#1F2A44]">
+            <div className="flex items-center gap-0.5 pl-1.5 border-l border-zinc-200 dark:border-[#27272a]">
               {QUICK_REACTIONS.map((emoji) => (
                 <button
                   key={emoji}
@@ -163,7 +163,7 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
                     onReact(message.id, emoji);
                     setShowReactionPicker(false);
                   }}
-                  className="text-sm hover:scale-125 transition-transform p-0.5 rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-[#161F36]"
+                  className="text-sm hover:scale-125 transition-transform p-0.5 rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-[#222226]"
                 >
                   {emoji}
                 </button>
@@ -175,11 +175,11 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
         {/* Rich Message Bubble */}
         <div
           className={`relative transition-all duration-300 ${
-            isHighlighted ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-[#080C15] rounded-2xl' : ''
+            isHighlighted ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-[#09090b] rounded-2xl' : ''
           } ${
             isMine
               ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white rounded-2xl rounded-tr-xs shadow-md shadow-indigo-950/20 px-3.5 py-2'
-              : 'bg-white dark:bg-[#0E1424] border border-zinc-200/80 dark:border-[#1F2A44] text-zinc-950 dark:text-zinc-100 rounded-2xl rounded-tl-xs shadow-sm px-3.5 py-2'
+              : 'bg-white dark:bg-[#121214] border border-zinc-200/80 dark:border-[#27272a] text-zinc-950 dark:text-zinc-100 rounded-2xl rounded-tl-xs shadow-sm px-3.5 py-2'
           }`}
         >
           {/* Reply Quote preview inside the bubble */}

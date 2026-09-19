@@ -31,13 +31,13 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onBack,
 }) => {
   return (
-    <div className="h-14 sm:h-16 border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-[#0E1424]/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
+    <div className="h-14 sm:h-16 border-b border-slate-200 dark:border-zinc-800/80 bg-white/90 dark:bg-[#121214]/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
       <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
         {onBack && (
           <button
             type="button"
             onClick={onBack}
-            className="p-1.5 rounded-xl bg-slate-100 dark:bg-[#121A2D] text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-slate-800 transition active:scale-95 cursor-pointer flex-shrink-0"
+            className="p-1.5 rounded-xl bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800 transition active:scale-95 cursor-pointer flex-shrink-0"
             title="Back to Channels"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -47,18 +47,18 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           <button
             type="button"
             onClick={() => onOpenProfileById?.(currentRecipient.id)}
-            className="p-[1.5px] rounded-full border border-slate-200 dark:border-slate-700 hover:scale-105 transition active:scale-95 flex-shrink-0 cursor-pointer"
+            className="p-[1.5px] rounded-full border border-slate-200 dark:border-zinc-700 hover:scale-105 transition active:scale-95 flex-shrink-0 cursor-pointer"
             title={`View ${currentRecipient.name}'s Profile`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getSafeAvatar(currentRecipient.avatar, currentRecipient.name)}
               alt={currentRecipient.name}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover bg-slate-100 dark:bg-[#182032]"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover bg-slate-100 dark:bg-[#18181b]"
             />
           </button>
         ) : (
-          <div className="p-2 rounded-xl bg-slate-100 dark:bg-[#182032] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700/60 flex-shrink-0">
+          <div className="p-2 rounded-xl bg-slate-100 dark:bg-[#18181b] text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700/60 flex-shrink-0">
             <Hash className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
           </div>
         )}
@@ -73,7 +73,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               >
                 <span>{title}</span>
                 {currentRecipient.nickname?.trim() && currentRecipient.nickname.trim() !== currentRecipient.name.trim() && (
-                  <span className="text-xs text-slate-500 dark:text-slate-400 font-normal">({currentRecipient.name})</span>
+                  <span className="text-xs text-slate-500 dark:text-zinc-400 font-normal">({currentRecipient.name})</span>
                 )}
               </button>
             ) : (
@@ -81,7 +81,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             )}
 
             {currentRecipient && currentRecipient.rollNo && (
-              <span className="text-[10px] font-mono bg-slate-100 dark:bg-[#182032] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 px-1.5 py-0.5 rounded flex-shrink-0">
+              <span className="text-[10px] font-mono bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.5 rounded flex-shrink-0">
                 {currentRecipient.rollNo}
               </span>
             )}
@@ -93,7 +93,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               <span>{typingUser.userName} is typing...</span>
             </div>
           ) : currentRecipient ? (
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-zinc-400">
               <span
                 className={`w-1.5 h-1.5 rounded-full ${
                   currentRecipient.status === 'studying'
@@ -105,14 +105,14 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               />
               <span className="capitalize">{currentRecipient.status || 'Active'}</span>
               <span>•</span>
-              <span className="text-slate-600 dark:text-slate-300 font-medium">Private Direct Chat</span>
+              <span className="text-slate-600 dark:text-zinc-300 font-medium">Private Direct Chat</span>
             </div>
           ) : currentChannel ? (
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+            <p className="text-[11px] text-slate-500 dark:text-zinc-400 truncate">
               Official Classroom Discussion • Visible to all enrolled classmates
             </p>
           ) : subtitle ? (
-            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{subtitle}</p>
+            <p className="text-xs text-slate-500 dark:text-zinc-400 truncate">{subtitle}</p>
           ) : null}
         </div>
       </div>
@@ -120,9 +120,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
       {/* Header Right: Channel Admin / Spotify / Wallpaper / Clear Chat / Theme Toggle */}
       <div className="flex items-center gap-2">
         {currentChannel && adminUser && (
-          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-[#182032] border border-slate-200 dark:border-slate-700/60 text-[11px] text-slate-700 dark:text-slate-300">
+          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-700/60 text-[11px] text-slate-700 dark:text-zinc-300">
             <span className="font-bold text-slate-900 dark:text-white">👑 CR:</span>
-            <span className="text-slate-800 dark:text-slate-200 font-semibold">{adminUser.name}</span>
+            <span className="text-slate-800 dark:text-zinc-200 font-semibold">{adminUser.name}</span>
             {adminUser.phone && (
               <a
                 href={`tel:${adminUser.phone}`}
@@ -139,7 +139,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         <button
           type="button"
           onClick={onOpenWallpaper}
-          className="p-1.5 rounded-xl text-slate-400 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+          className="p-1.5 rounded-xl text-slate-400 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition cursor-pointer"
           title="Change Chat Wallpaper & Background"
         >
           <ImageIcon className="w-4 h-4" />
@@ -148,7 +148,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         <button
           type="button"
           onClick={onOpenClearChat}
-          className="p-1.5 rounded-xl text-slate-400 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition cursor-pointer"
+          className="p-1.5 rounded-xl text-slate-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition cursor-pointer"
           title="Clear Chat History (with Backup)"
         >
           <Trash2 className="w-4 h-4" />

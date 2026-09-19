@@ -111,9 +111,9 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Single Add Form */}
-      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl p-4 sm:p-8 shadow-sm">
+      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-4 sm:p-8 shadow-sm">
         <div className="flex items-center gap-2.5 mb-1">
-          <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#1F2A44]">
+          <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a]">
             <UserPlus className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-black text-zinc-950 dark:text-white">Add Individual Student</h3>
@@ -133,7 +133,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
               placeholder="e.g. Priya Sharma"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs font-medium"
+              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs font-medium"
             />
           </div>
 
@@ -148,7 +148,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
                 placeholder="e.g. 22CS095"
                 value={newRollNo}
                 onChange={(e) => setNewRollNo(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs uppercase"
+                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs uppercase"
               />
             </div>
 
@@ -157,7 +157,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value as UserRole)}
-                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-semibold focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs cursor-pointer"
+                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-semibold focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs cursor-pointer"
               >
                 <option value="student">Student</option>
                 <option value="admin">Co-Admin / Class Rep</option>
@@ -175,7 +175,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
                 placeholder="+91 98765..."
                 value={newPhone}
                 onChange={(e) => setNewPhone(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs font-medium"
+                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs font-medium"
               />
             </div>
 
@@ -186,7 +186,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
                 placeholder="student@university.edu"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs font-medium"
+                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs font-medium"
               />
             </div>
           </div>
@@ -200,7 +200,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
               placeholder={`Leave blank to use default (${DEFAULT_TEMP_PASSWORD})`}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition font-mono shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition font-mono shadow-xs"
             />
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1 font-medium">
               If left blank, student must change their password on first login.
@@ -217,10 +217,10 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
       </div>
 
       {/* Bulk Roll Number Import */}
-      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl p-4 sm:p-8 shadow-sm flex flex-col justify-between">
+      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-4 sm:p-8 shadow-sm flex flex-col justify-between">
         <div>
           <div className="flex items-center gap-2.5 mb-1">
-            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#1F2A44]">
+            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a]">
               <Layers className="w-4 h-4" />
             </div>
             <h3 className="text-sm font-black text-zinc-950 dark:text-white">Bulk Roll Number Whitelist</h3>
@@ -234,7 +234,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
             placeholder={'22CS001, 22CS002, 22CS003\n22CS004\n22CS005...'}
             value={bulkRollInput}
             onChange={(e) => setBulkRollInput(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl p-3 text-xs font-mono font-semibold text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs"
+            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl p-3 text-xs font-mono font-semibold text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs"
           />
         </div>
 

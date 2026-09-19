@@ -19,9 +19,9 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
   onVerify,
 }) => {
   return (
-    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] space-y-3 animate-in fade-in shadow-xs">
+    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] space-y-3 animate-in fade-in shadow-xs">
       {/* Informative Email Delivery Notice */}
-      <div className="p-3 rounded-xl bg-white dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] flex items-start gap-2.5">
+      <div className="p-3 rounded-xl bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] flex items-start gap-2.5">
         <Mail className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mt-0.5 shrink-0" />
         <div className="text-xs text-zinc-800 dark:text-zinc-200 leading-relaxed">
           <p className="font-semibold text-zinc-950 dark:text-white">Check your email inbox</p>
@@ -47,7 +47,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
           placeholder="123456"
           value={otpInput}
           onChange={(e) => onOtpInputChange(e.target.value.replace(/\D/g, ''))}
-          className="flex-1 bg-white dark:bg-[#121A2D] border border-zinc-300 dark:border-[#1F2A44] rounded-xl px-3 py-2 text-sm text-zinc-950 dark:text-white text-center font-mono tracking-widest font-extrabold focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+          className="flex-1 bg-white dark:bg-[#18181b] border border-zinc-300 dark:border-[#27272a] rounded-xl px-3 py-2 text-sm text-zinc-950 dark:text-white text-center font-mono tracking-widest font-extrabold focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
         />
         <button
           type="button"

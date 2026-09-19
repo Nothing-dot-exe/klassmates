@@ -47,11 +47,11 @@ export const DeleteMessageModal: React.FC<DeleteMessageModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] p-5 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 transition-colors">
+      <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] p-5 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 transition-colors">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5 text-zinc-900">
-            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#161F36] border border-zinc-200 dark:border-[#1F2A44] text-zinc-900 dark:text-rose-400 shadow-xs">
+            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] text-zinc-900 dark:text-rose-400 shadow-xs">
               <Trash2 className="w-5 h-5" />
             </div>
             <div>
@@ -62,14 +62,14 @@ export const DeleteMessageModal: React.FC<DeleteMessageModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#161F36] transition cursor-pointer"
+            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Message Snippet Preview */}
-        <div className="p-2.5 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] text-xs text-zinc-700 dark:text-zinc-300 line-clamp-2 italic">
+        <div className="p-2.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs text-zinc-700 dark:text-zinc-300 line-clamp-2 italic">
           &ldquo;{message.content || (message.imageUrl ? 'Photo' : 'Attachment')}&rdquo;
         </div>
 
@@ -89,7 +89,7 @@ export const DeleteMessageModal: React.FC<DeleteMessageModalProps> = ({
           <button
             type="button"
             onClick={handleConfirmMe}
-            className="w-full py-2.5 px-3 rounded-2xl bg-zinc-100 dark:bg-[#161F36] hover:bg-zinc-200 dark:hover:bg-[#1c2744] active:scale-95 text-zinc-800 dark:text-zinc-200 text-xs font-semibold transition flex items-center justify-center gap-2 border border-zinc-200 dark:border-[#1F2A44] cursor-pointer shadow-xs"
+            className="w-full py-2.5 px-3 rounded-2xl bg-zinc-100 dark:bg-[#222226] hover:bg-zinc-200 dark:hover:bg-[#1c2744] active:scale-95 text-zinc-800 dark:text-zinc-200 text-xs font-semibold transition flex items-center justify-center gap-2 border border-zinc-200 dark:border-[#27272a] cursor-pointer shadow-xs"
           >
             <EyeOff className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
             <span>Delete for me</span>
@@ -105,7 +105,7 @@ export const DeleteMessageModal: React.FC<DeleteMessageModalProps> = ({
         </div>
 
         {/* Don't ask again toggle */}
-        <div className="pt-2 border-t border-zinc-200 dark:border-[#1F2A44] flex items-center justify-center gap-2">
+        <div className="pt-2 border-t border-zinc-200 dark:border-[#27272a] flex items-center justify-center gap-2">
           <label className="flex items-center gap-2 text-[11px] text-zinc-500 dark:text-zinc-400 cursor-pointer select-none">
             <input
               type="checkbox"

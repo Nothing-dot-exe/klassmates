@@ -16,8 +16,8 @@ export const PublicAdminCard: React.FC<PublicAdminCardProps> = ({ classroom }) =
   const adminEmail = classroom.adminEmail || '';
 
   return (
-    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] shadow-xs space-y-2 text-left animate-in fade-in">
-      <div className="flex items-center justify-between pb-1.5 border-b border-zinc-200 dark:border-[#1F2A44]">
+    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] shadow-xs space-y-2 text-left animate-in fade-in">
+      <div className="flex items-center justify-between pb-1.5 border-b border-zinc-200 dark:border-[#27272a]">
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
           <span className="text-[10px] font-black uppercase tracking-wider text-zinc-800 dark:text-zinc-200 flex items-center gap-1">
@@ -31,7 +31,7 @@ export const PublicAdminCard: React.FC<PublicAdminCardProps> = ({ classroom }) =
       </div>
 
       <div className="flex items-center gap-2.5">
-        <div className="w-9 h-9 rounded-xl bg-white dark:bg-[#161F36] text-zinc-900 dark:text-white border border-zinc-200 dark:border-[#1F2A44] flex items-center justify-center font-bold text-sm shadow-xs">
+        <div className="w-9 h-9 rounded-xl bg-white dark:bg-[#222226] text-zinc-900 dark:text-white border border-zinc-200 dark:border-[#27272a] flex items-center justify-center font-bold text-sm shadow-xs">
           {adminName.slice(0, 2).toUpperCase()}
         </div>
         <div className="min-w-0 flex-1">
@@ -45,7 +45,7 @@ export const PublicAdminCard: React.FC<PublicAdminCardProps> = ({ classroom }) =
       </div>
 
       {/* Direct Public Contacts */}
-      <div className="pt-2 border-t border-zinc-200 dark:border-[#1F2A44] grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+      <div className="pt-2 border-t border-zinc-200 dark:border-[#27272a] grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
         {adminPhone ? (
           <a
             href={`tel:${adminPhone}`}

@@ -60,7 +60,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
   return (
     <form onSubmit={onSubmit} autoComplete="off" className="space-y-4 animate-in fade-in">
       {/* Step 1: Room Code */}
-      <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] space-y-2">
+      <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] space-y-2">
         <label className="block text-xs font-bold text-zinc-950 dark:text-white">
           Enter Class Invite Code
         </label>
@@ -73,7 +73,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
             placeholder="e.g. CS-4891"
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-            className="w-full bg-white dark:bg-[#0E1424] border border-zinc-300 dark:border-[#1F2A44] rounded-xl pl-10 pr-4 py-2.5 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono tracking-widest font-extrabold uppercase transition shadow-xs"
+            className="w-full bg-white dark:bg-[#121214] border border-zinc-300 dark:border-[#27272a] rounded-xl pl-10 pr-4 py-2.5 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono tracking-widest font-extrabold uppercase transition shadow-xs"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
           <span>No classroom found with code <strong className="font-mono text-indigo-600 dark:text-indigo-400">{joinCode}</strong>. Please check the code with your Class Representative.</span>
         </div>
       ) : (
-        <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] text-zinc-600 dark:text-zinc-400 text-xs text-center font-medium">
+        <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-zinc-600 dark:text-zinc-400 text-xs text-center font-medium">
           <span>Enter your class invite code above to load Class Representative details.</span>
         </div>
       )}
@@ -109,7 +109,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
             placeholder="e.g. Aditi Sharma"
             value={studentName}
             onChange={(e) => setStudentName(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
           />
         </div>
 
@@ -125,7 +125,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
               placeholder="e.g. 22CS045"
               value={studentRollNo}
               onChange={(e) => setStudentRollNo(e.target.value.toUpperCase())}
-              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono font-bold transition shadow-xs uppercase"
+              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono font-bold transition shadow-xs uppercase"
             />
           </div>
 
@@ -139,7 +139,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
               placeholder="+91 98765 43210"
               value={studentPhone}
               onChange={(e) => setStudentPhone(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono transition shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono transition shadow-xs"
             />
           </div>
         </div>
@@ -165,11 +165,11 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
               placeholder="student@college.edu"
               value={studentEmail}
               onChange={(e) => setStudentEmail(e.target.value)}
-              className={`flex-1 bg-zinc-50 dark:bg-[#121A2D] border ${
+              className={`flex-1 bg-zinc-50 dark:bg-[#18181b] border ${
                 isStudentEmailVerified
                   ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400'
-                  : 'border-zinc-200 dark:border-[#1F2A44] text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500'
-              } rounded-xl px-3.5 py-2 text-xs focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs`}
+                  : 'border-zinc-200 dark:border-[#27272a] text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500'
+              } rounded-xl px-3.5 py-2 text-xs focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs`}
             />
             {!isStudentEmailVerified && (
               <button
@@ -212,7 +212,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
               placeholder="Min 6 characters"
               value={studentPassword}
               onChange={(e) => setStudentPassword(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono shadow-xs"
             />
             <button
               type="button"

@@ -73,7 +73,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-[#080C15] text-zinc-950 dark:text-zinc-100 transition-colors duration-150" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-[#09090b] text-zinc-950 dark:text-zinc-100 transition-colors duration-150" suppressHydrationWarning>
         <ThemeProvider>
           {children}
         </ThemeProvider>

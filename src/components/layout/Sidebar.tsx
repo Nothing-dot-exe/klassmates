@@ -65,9 +65,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     CURRENT_USER;
 
   return (
-    <aside className="w-64 md:w-72 h-full bg-slate-50/90 dark:bg-[#0E1424] border-r border-slate-200 dark:border-slate-800/80 flex flex-col justify-between select-none transition-colors">
+    <aside className="w-64 md:w-72 h-full bg-slate-50/90 dark:bg-[#121214] border-r border-slate-200 dark:border-zinc-800/80 flex flex-col justify-between select-none transition-colors">
       {/* Header Profile / Classroom Title */}
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800/80 space-y-3">
+      <div className="p-4 border-b border-slate-200 dark:border-zinc-800/80 space-y-3">
         <div className="flex items-center justify-between">
           {/* Live status pill with Stitch pulse-dot-ring */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 shadow-xs">
@@ -82,7 +82,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* App Brand Monogram */}
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 p-[1px] shadow-glow-purple flex items-center justify-center">
-            <div className="w-full h-full bg-white dark:bg-[#0E1424] rounded-[11px] flex items-center justify-center">
+            <div className="w-full h-full bg-white dark:bg-[#121214] rounded-[11px] flex items-center justify-center">
               <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-300 dark:to-white bg-clip-text text-transparent">m</span>
             </div>
           </div>
@@ -92,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <h1 className="text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight" title={classroom.name}>
             {classroom.name}
           </h1>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+          <p className="text-[11px] text-slate-500 dark:text-zinc-400 truncate">
             {classroom.institution || 'Autonomous Classroom Space'}
           </p>
         </div>
@@ -100,11 +100,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Class Code Pill with 1-click Copy */}
         <div
           onClick={handleCopyCode}
-          className="flex items-center justify-between px-3 py-2 bg-white/80 dark:bg-[#10172A]/90 hover:bg-slate-100 dark:hover:bg-[#141D35] transition-colors border border-slate-200 dark:border-slate-800/80 rounded-xl backdrop-blur-md cursor-pointer group shadow-xs"
+          className="flex items-center justify-between px-3 py-2 bg-white/80 dark:bg-[#10172A]/90 hover:bg-slate-100 dark:hover:bg-[#141D35] transition-colors border border-slate-200 dark:border-zinc-800/80 rounded-xl backdrop-blur-md cursor-pointer group shadow-xs"
           title="Click to copy Class Code"
         >
           <div className="flex items-center gap-2">
-            <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">Code:</span>
+            <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 dark:text-zinc-400">Code:</span>
             <span className="font-mono font-bold text-xs tracking-wide text-slate-900 dark:text-white">{classroom.code}</span>
           </div>
           <button
@@ -130,7 +130,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Core Hub Views */}
         <div className="space-y-1.5">
-          <div className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider px-2 pb-0.5">
+          <div className="text-[11px] font-bold text-slate-400 dark:text-zinc-400 uppercase tracking-wider px-2 pb-0.5">
             Classroom Hubs
           </div>
 
@@ -139,19 +139,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className={`w-full group relative overflow-hidden rounded-xl p-3 font-semibold flex items-center justify-between transition-all duration-150 cursor-pointer ${
               activeView === 'documents'
                 ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white shadow-glow-purple active:scale-[0.99]'
-                : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-slate-800/80 text-slate-700 dark:text-slate-300'
+                : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300'
             }`}
           >
             <div className="flex items-center gap-2.5">
               <span className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                activeView === 'documents' ? 'bg-white/20 text-white shadow-inner' : 'bg-slate-200 dark:bg-slate-800 text-indigo-500 dark:text-indigo-400'
+                activeView === 'documents' ? 'bg-white/20 text-white shadow-inner' : 'bg-slate-200 dark:bg-zinc-800 text-indigo-500 dark:text-indigo-400'
               }`}>
                 <FileText className="w-3.5 h-3.5" />
               </span>
               <span className="text-xs font-semibold tracking-wide">Document Vault</span>
             </div>
             <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
-              activeView === 'documents' ? 'bg-white/25 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700'
+              activeView === 'documents' ? 'bg-white/25 text-white' : 'bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-300 dark:border-zinc-700'
             }`}>
               {documentsCount}
             </span>
@@ -163,12 +163,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className={`w-full flex items-center justify-between p-3 rounded-xl transition-all cursor-pointer ${
                 activeView === 'admin'
                   ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white shadow-glow-purple active:scale-[0.99]'
-                  : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                  : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <div className="flex items-center gap-2.5">
                 <span className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                  activeView === 'admin' ? 'bg-white/20 text-white shadow-inner' : 'bg-slate-200 dark:bg-slate-800 text-indigo-500 dark:text-indigo-400'
+                  activeView === 'admin' ? 'bg-white/20 text-white shadow-inner' : 'bg-slate-200 dark:bg-zinc-800 text-indigo-500 dark:text-indigo-400'
                 }`}>
                   <ShieldCheck className="w-3.5 h-3.5" />
                 </span>

@@ -161,12 +161,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="p-2 sm:p-3 border-t border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-[#0E1424]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
+    <div className="p-2 sm:p-3 border-t border-slate-200 dark:border-zinc-800/80 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
       {/* Reply Context Banner when replying */}
       <ReplyContextBanner replyingTo={replyingTo || null} onCancelReply={onCancelReply || (() => {})} />
 
       {/* Input Capsule Row */}
-      <div className="flex items-center gap-1 sm:gap-2 bg-slate-50 dark:bg-[#121A2D] border border-slate-200 dark:border-slate-800 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:bg-white dark:focus-within:bg-[#121A2D] focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all shadow-xs w-full">
+      <div className="flex items-center gap-1 sm:gap-2 bg-slate-50 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:bg-white dark:focus-within:bg-[#18181b] focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all shadow-xs w-full">
         {/* Attachment Options */}
         <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           <input
@@ -179,7 +179,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="p-1.5 sm:p-2 text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 rounded-full transition cursor-pointer"
+            className="p-1.5 sm:p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 rounded-full transition cursor-pointer"
             title="Attach Document or Notes"
           >
             <Paperclip className="w-4 h-4" />
@@ -188,7 +188,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <button
             type="button"
             onClick={() => setShowCameraModal(true)}
-            className="p-1.5 sm:p-2 text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 rounded-full transition cursor-pointer"
+            className="p-1.5 sm:p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 rounded-full transition cursor-pointer"
             title="Take Photo"
           >
             <Camera className="w-4 h-4" />
@@ -211,7 +211,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <button
             type="button"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            className="p-1.5 sm:p-2 text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 rounded-full transition cursor-pointer"
+            className="p-1.5 sm:p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 rounded-full transition cursor-pointer"
             title="Insert Emoji"
           >
             <Smile className="w-4 h-4" />

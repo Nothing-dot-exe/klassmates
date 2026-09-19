@@ -68,7 +68,7 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
   const isGif = previewAvatar.includes('.gif') || previewAvatar.includes('data:image/gif');
 
   return (
-    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] space-y-3">
+    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] space-y-3">
       <div className="flex items-center justify-between">
         <label className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">
           <ImageIcon className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
@@ -83,12 +83,12 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
 
       <div className="flex items-center gap-3.5">
         {/* Avatar Preview */}
-        <div className="relative flex-shrink-0 p-[2px] rounded-full border border-zinc-300 dark:border-[#1F2A44] shadow-2xs">
+        <div className="relative flex-shrink-0 p-[2px] rounded-full border border-zinc-300 dark:border-[#27272a] shadow-2xs">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={previewAvatar}
             alt="Avatar Preview"
-            className="w-16 h-16 rounded-full object-cover bg-zinc-100 dark:bg-[#161F36] ring-2 ring-white dark:ring-[#0E1424]"
+            className="w-16 h-16 rounded-full object-cover bg-zinc-100 dark:bg-[#222226] ring-2 ring-white dark:ring-[#121214]"
           />
         </div>
 
@@ -113,7 +113,7 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
             <button
               type="button"
               onClick={handleResetAvatar}
-              className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-[#161F36] hover:bg-zinc-100 dark:hover:bg-[#1c2744] border border-zinc-200 dark:border-[#1F2A44] text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white text-xs font-medium flex items-center gap-1 transition cursor-pointer"
+              className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-[#222226] hover:bg-zinc-100 dark:hover:bg-[#1c2744] border border-zinc-200 dark:border-[#27272a] text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white text-xs font-medium flex items-center gap-1 transition cursor-pointer"
               title="Reset to default avatar"
             >
               <RotateCcw className="w-3 h-3" />
@@ -131,7 +131,7 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
       </div>
 
       {/* Quick GIF & Avatar Presets */}
-      <div className="pt-2 border-t border-zinc-200 dark:border-[#1F2A44] space-y-1.5">
+      <div className="pt-2 border-t border-zinc-200 dark:border-[#27272a] space-y-1.5">
         <div className="flex items-center gap-1 text-[10px] font-semibold text-zinc-600 dark:text-zinc-400">
           <Sparkles className="w-3 h-3 text-indigo-500" />
           <span>Pick a Quick Animated GIF / Avatar:</span>
@@ -145,7 +145,7 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
               className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition cursor-pointer ${
                 avatar === preset.url
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-transparent shadow-xs'
-                  : 'bg-white dark:bg-[#161F36] border-zinc-200 dark:border-[#1F2A44] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#1c2744]'
+                  : 'bg-white dark:bg-[#222226] border-zinc-200 dark:border-[#27272a] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#1c2744]'
               }`}
             >
               {preset.label}
@@ -161,12 +161,12 @@ export const AvatarPickerSection: React.FC<AvatarPickerSectionProps> = ({
           value={customUrlInput}
           onChange={(e) => setCustomUrlInput(e.target.value)}
           placeholder="Or paste image / GIF link (https://...)"
-          className="flex-1 bg-white dark:bg-[#161F36] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-2.5 py-1.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500"
+          className="flex-1 bg-white dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] rounded-xl px-2.5 py-1.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500"
         />
         <button
           type="button"
           onClick={handleApplyUrl}
-          className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-[#161F36] hover:bg-zinc-200 dark:hover:bg-[#1c2744] border border-zinc-200 dark:border-[#1F2A44] text-zinc-800 dark:text-zinc-200 text-xs font-semibold transition cursor-pointer"
+          className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-[#222226] hover:bg-zinc-200 dark:hover:bg-[#1c2744] border border-zinc-200 dark:border-[#27272a] text-zinc-800 dark:text-zinc-200 text-xs font-semibold transition cursor-pointer"
         >
           Apply
         </button>

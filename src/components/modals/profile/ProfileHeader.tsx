@@ -24,12 +24,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       {/* Instagram Header: Avatar + 3 Stats */}
       <div className="flex items-center gap-4">
         {/* Avatar with subtle monochrome hairline ring */}
-        <div className="relative p-[2px] rounded-full border border-zinc-200 dark:border-[#1F2A44] shadow-xs flex-shrink-0">
+        <div className="relative p-[2px] rounded-full border border-zinc-200 dark:border-[#27272a] shadow-xs flex-shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={avatarUrl}
             alt={user.name}
-            className="w-18 h-18 sm:w-20 sm:h-20 rounded-full object-cover bg-zinc-100 dark:bg-[#121A2D]"
+            className="w-18 h-18 sm:w-20 sm:h-20 rounded-full object-cover bg-zinc-100 dark:bg-[#18181b]"
           />
           {isGif && (
             <span className="absolute bottom-0 right-0 text-[9px] font-extrabold px-1.5 py-0.2 rounded-full bg-zinc-950 text-white border border-white shadow-xs">
@@ -40,14 +40,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
         {/* Stats Row */}
         <div className="flex-1 grid grid-cols-3 text-center gap-1.5">
-          <div className="p-2 rounded-xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44]">
+          <div className="p-2 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
             <div className="text-xs sm:text-sm font-extrabold text-zinc-950 dark:text-white truncate">
               {user.role === 'admin' || isClassRep ? 'Class Rep' : 'Student'}
             </div>
             <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">Role</div>
           </div>
 
-          <div className="p-2 rounded-xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44]">
+          <div className="p-2 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
             <div className="text-xs sm:text-sm font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Active
@@ -55,7 +55,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">Status</div>
           </div>
 
-          <div className="p-2 rounded-xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44]">
+          <div className="p-2 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
             <div className="text-xs sm:text-sm font-extrabold text-zinc-950 dark:text-white truncate">
               {user.joinedAt ? user.joinedAt.slice(0, 7) : '2026'}
             </div>
@@ -83,7 +83,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
 
         {/* Bio Box */}
-        <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap leading-relaxed shadow-xs">
+        <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs text-zinc-800 dark:text-zinc-200 whitespace-pre-wrap leading-relaxed shadow-xs">
           {user.bio ? (
             user.bio
           ) : (

@@ -122,12 +122,12 @@ export default function Home() {
 
   if (!isSessionLoaded) {
     return (
-      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#080C15] flex items-center justify-center transition-colors">
+      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#09090b] flex items-center justify-center transition-colors">
         <div className="flex flex-col items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-indigo-600 dark:bg-indigo-500 animate-pulse flex items-center justify-center text-white font-black text-xl shadow-glow-purple">
             C
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium font-mono">Connecting to Classmate Vault...</p>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium font-mono">Connecting to Classmate Vault...</p>
         </div>
       </div>
     );
@@ -135,7 +135,7 @@ export default function Home() {
 
   if (!currentUser) {
     return (
-      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#080C15] flex items-center justify-center p-3 sm:p-4 overflow-y-auto no-scrollbar transition-colors">
+      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#09090b] flex items-center justify-center p-3 sm:p-4 overflow-y-auto no-scrollbar transition-colors">
         <JoinGateModal
           classroom={classroom}
           existingStudents={students}
@@ -160,7 +160,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-[100dvh] w-screen overflow-hidden bg-[#F8FAFC] dark:bg-[#080C15] text-slate-900 dark:text-slate-100 antialiased font-sans transition-colors">
+    <div className="flex flex-col md:flex-row h-[100dvh] w-screen overflow-hidden bg-[#F8FAFC] dark:bg-[#09090b] text-slate-900 dark:text-zinc-100 antialiased font-sans transition-colors">
       <MobileHeader
         classroom={classroom}
         adminUser={adminUser}
@@ -281,7 +281,7 @@ export default function Home() {
       </main>
 
       {/* Mobile-First Bottom Thumb Dock */}
-      <nav className="md:hidden flex-shrink-0 h-14 bg-white/95 dark:bg-[#121826]/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800/90 px-3 flex items-center justify-around z-30 shadow-lg">
+      <nav className="md:hidden flex-shrink-0 h-14 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md border-t border-slate-200 dark:border-zinc-800/90 px-3 flex items-center justify-around z-30 shadow-lg">
         <button
           type="button"
           onClick={() => {
@@ -291,7 +291,7 @@ export default function Home() {
           className={`flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl transition cursor-pointer ${
             activeView === 'channel' || activeView === 'dm'
               ? 'text-indigo-600 dark:text-indigo-400 font-bold'
-              : 'text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
+              : 'text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           <MessageSquare className="w-4 h-4" />
@@ -307,7 +307,7 @@ export default function Home() {
           className={`relative flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl transition cursor-pointer ${
             activeView === 'documents'
               ? 'text-indigo-600 dark:text-indigo-400 font-bold'
-              : 'text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
+              : 'text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           <FileText className="w-4 h-4" />
@@ -329,7 +329,7 @@ export default function Home() {
             className={`relative flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl transition cursor-pointer ${
               activeView === 'admin'
                 ? 'text-indigo-600 dark:text-indigo-400 font-bold'
-                : 'text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
+                : 'text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
@@ -344,7 +344,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setProfileModalUser(currentUser)}
-            className="flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 transition cursor-pointer"
+            className="flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 transition cursor-pointer"
           >
             <UserIcon className="w-4 h-4" />
             <span className="text-[10px]">Profile</span>

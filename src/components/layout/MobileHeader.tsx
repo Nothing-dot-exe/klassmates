@@ -23,11 +23,11 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   onOpenProfile,
 }) => {
   return (
-    <div className="md:hidden h-14 flex-shrink-0 w-full bg-white/95 dark:bg-[#0E1424]/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800/80 z-30 px-3 flex items-center justify-between transition-colors shadow-xs">
+    <div className="md:hidden h-14 flex-shrink-0 w-full bg-white/95 dark:bg-[#121214]/95 backdrop-blur-xl border-b border-slate-200 dark:border-zinc-800/80 z-30 px-3 flex items-center justify-between transition-colors shadow-xs">
       <div className="flex items-center gap-2 flex-shrink-0">
         <button
           onClick={onToggleSidebar}
-          className="p-1.5 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white rounded-xl bg-slate-100 dark:bg-[#121A2D] border border-slate-200 dark:border-slate-800 transition active:scale-95 cursor-pointer"
+          className="p-1.5 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white rounded-xl bg-slate-100 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 transition active:scale-95 cursor-pointer"
           aria-label="Toggle menu"
         >
           {isMobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -35,7 +35,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
 
         {/* Stitch Brand Monogram */}
         <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 p-[1px] shadow-glow-purple flex items-center justify-center">
-          <div className="w-full h-full bg-white dark:bg-[#0E1424] rounded-[7px] flex items-center justify-center">
+          <div className="w-full h-full bg-white dark:bg-[#121214] rounded-[7px] flex items-center justify-center">
             <span className="font-black text-xs bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-300 dark:to-white bg-clip-text text-transparent">m</span>
           </div>
         </div>
@@ -62,7 +62,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-1.5 flex-shrink-0">
-        <ThemeToggle className="p-1 text-slate-500 dark:text-slate-400" />
+        <ThemeToggle className="p-1 text-slate-500 dark:text-zinc-400" />
         {currentUser && onOpenProfile && (
           <button
             onClick={() => onOpenProfile(currentUser)}
@@ -73,7 +73,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             <img
               src={currentUser.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser.name}`}
               alt={currentUser.name}
-              className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 object-cover"
+              className="w-6 h-6 rounded-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 object-cover"
             />
           </button>
         )}

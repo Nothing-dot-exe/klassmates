@@ -27,10 +27,10 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
   return (
     <div className="space-y-6">
       {/* 1. PASSWORD RESET REQUESTS (HR / ADMIN WORKFLOW) */}
-      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-[#1F2A44]">
+      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-[#27272a]">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-amber-400 border border-zinc-200 dark:border-[#1F2A44]">
+            <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-amber-400 border border-zinc-200 dark:border-[#27272a]">
               <KeyRound className="w-5 h-5" />
             </div>
             <div>
@@ -50,8 +50,8 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
         </div>
 
         {passwordResetRequests.length === 0 ? (
-          <div className="text-center py-8 border border-dashed border-zinc-200 dark:border-[#1F2A44] rounded-2xl space-y-2 bg-zinc-50/50 dark:bg-[#080C15]/40">
-            <div className="p-2 bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-emerald-400 rounded-xl inline-block border border-zinc-200 dark:border-[#1F2A44]">
+          <div className="text-center py-8 border border-dashed border-zinc-200 dark:border-[#27272a] rounded-2xl space-y-2 bg-zinc-50/50 dark:bg-[#09090b]/40">
+            <div className="p-2 bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-emerald-400 rounded-xl inline-block border border-zinc-200 dark:border-[#27272a]">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <p className="text-xs font-bold text-zinc-900 dark:text-white">No Password Reset Requests</p>
@@ -65,7 +65,7 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
             {passwordResetRequests.map((pwReq) => (
               <div
                 key={pwReq.id}
-                className="p-4 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-zinc-300 dark:hover:border-indigo-500/40 transition shadow-xs"
+                className="p-4 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-zinc-300 dark:hover:border-indigo-500/40 transition shadow-xs"
               >
                 <div className="space-y-1 min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -73,7 +73,7 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
                       {pwReq.studentName}
                     </span>
                     <span
-                      className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-[#161F36] px-2 py-0.5 rounded border border-zinc-200 dark:border-[#1F2A44] truncate max-w-[160px] sm:max-w-none flex-shrink-0"
+                      className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-[#222226] px-2 py-0.5 rounded border border-zinc-200 dark:border-[#27272a] truncate max-w-[160px] sm:max-w-none flex-shrink-0"
                       title={pwReq.rollNo}
                     >
                       Roll No: {pwReq.rollNo}
@@ -95,7 +95,7 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
                       if (onRejectPasswordReset) onRejectPasswordReset(pwReq.id);
                       showToast(`Declined reset request for ${pwReq.studentName}`);
                     }}
-                    className="flex-1 sm:flex-initial justify-center px-3.5 py-1.5 rounded-xl border border-zinc-200 dark:border-[#1F2A44] bg-white dark:bg-[#161F36] text-zinc-700 dark:text-zinc-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer shadow-xs"
+                    className="flex-1 sm:flex-initial justify-center px-3.5 py-1.5 rounded-xl border border-zinc-200 dark:border-[#27272a] bg-white dark:bg-[#222226] text-zinc-700 dark:text-zinc-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer shadow-xs"
                   >
                     <XCircle className="w-4 h-4" />
                     Decline
@@ -122,8 +122,8 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
       </div>
 
       {/* 2. OUTSIDE STUDENT ACCESS REQUESTS */}
-      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-[#1F2A44]">
+      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-[#27272a]">
           <div>
             <h3 className="text-sm font-black text-zinc-950 dark:text-white">Pending Outside Join Requests</h3>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
@@ -146,8 +146,8 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
         </div>
 
         {pendingRequests.length === 0 ? (
-          <div className="text-center py-12 border border-dashed border-zinc-200 dark:border-[#1F2A44] rounded-2xl space-y-3 bg-zinc-50/50 dark:bg-[#080C15]/40">
-            <div className="p-3 bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-emerald-400 rounded-2xl inline-block border border-zinc-200 dark:border-[#1F2A44]">
+          <div className="text-center py-12 border border-dashed border-zinc-200 dark:border-[#27272a] rounded-2xl space-y-3 bg-zinc-50/50 dark:bg-[#09090b]/40">
+            <div className="p-3 bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-emerald-400 rounded-2xl inline-block border border-zinc-200 dark:border-[#27272a]">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <p className="text-sm font-bold text-zinc-950 dark:text-white">No Pending Requests</p>
@@ -161,7 +161,7 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
             {pendingRequests.map((req) => (
               <div
                 key={req.id}
-                className="p-4 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-zinc-300 dark:hover:border-indigo-500/40 transition shadow-xs"
+                className="p-4 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-zinc-300 dark:hover:border-indigo-500/40 transition shadow-xs"
               >
                 <div className="space-y-1 min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -169,7 +169,7 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
                       {req.name}
                     </span>
                     <span
-                      className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-[#161F36] px-2 py-0.5 rounded border border-zinc-200 dark:border-[#1F2A44] truncate max-w-[160px] sm:max-w-none flex-shrink-0"
+                      className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-[#222226] px-2 py-0.5 rounded border border-zinc-200 dark:border-[#27272a] truncate max-w-[160px] sm:max-w-none flex-shrink-0"
                       title={req.rollNo}
                     >
                       Roll No: {req.rollNo}
@@ -188,7 +188,7 @@ export const PendingRequestsTab: React.FC<PendingRequestsTabProps> = ({
                       onRejectRequest(req.id);
                       showToast(`Declined request from ${req.name}`);
                     }}
-                    className="flex-1 sm:flex-initial justify-center px-3.5 py-1.5 rounded-xl border border-zinc-200 dark:border-[#1F2A44] bg-white dark:bg-[#161F36] text-zinc-700 dark:text-zinc-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer shadow-xs"
+                    className="flex-1 sm:flex-initial justify-center px-3.5 py-1.5 rounded-xl border border-zinc-200 dark:border-[#27272a] bg-white dark:bg-[#222226] text-zinc-700 dark:text-zinc-300 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer shadow-xs"
                   >
                     <XCircle className="w-4 h-4" />
                     Decline

@@ -15,11 +15,11 @@
 }
 
 .dark {
-  /* Night Mode: Stitch Obsidian Void & Midnight Slate */
-  --background: #080c15;
-  --foreground: #f8fafc;
-  --card: #0e1424;
-  --card-border: #1f2a44;
+  /* True Neutral Dark Mode: Deep Neutral Charcoal & Obsidian (No Blue Tint) */
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --card: #121214;
+  --card-border: #27272a;
   --accent-primary: #6366f1;
   --accent-secondary: #4f46e5;
   --accent-orange: #f59e0b;
@@ -53,8 +53,8 @@ body {
 }
 
 .dark body {
-  background: #080c15;
-  color: #f8fafc;
+  background: #09090b;
+  color: #f4f4f5;
 }
 
 /* Animated subtle pulse for live status from Stitch */

@@ -1,0 +1,170 @@
+import { useState, useEffect } from 'react';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
+import { sendEmailOtp, verifyEmailOtp } from '@/lib/authService';
+
+export const useJoinGateOtp = (
+  newAdminEmail: string,
+  studentEmail: string,
+  setErrorMessage: (v: string) => void,
+  setSuccessMessage: (v: string) => void
+) => {
+  // Admin OTP State
+  const [isAdminEmailVerified, setIsAdminEmailVerified] = useState(false);
+  const [adminOtpSent, setAdminOtpSent] = useState(false);
+  const [adminOtpInput, setAdminOtpInput] = useState('');
+  const [adminOtpCountdown, setAdminOtpCountdown] = useState(0);
+  const [isAdminSendingOtp, setIsAdminSendingOtp] = useState(false);
+  const [isAdminVerifyingOtp, setIsAdminVerifyingOtp] = useState(false);
+
+  // Student OTP State
+  const [isStudentEmailVerified, setIsStudentEmailVerified] = useState(false);
+  const [studentOtpSent, setStudentOtpSent] = useState(false);
+  const [studentOtpInput, setStudentOtpInput] = useState('');
+  const [studentOtpCountdown, setStudentOtpCountdown] = useState(0);
+  const [isStudentSendingOtp, setIsStudentSendingOtp] = useState(false);
+  const [isStudentVerifyingOtp, setIsStudentVerifyingOtp] = useState(false);
+
+  // Timers
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    if (adminOtpCountdown > 0) {
+      timer = setInterval(() => setAdminOtpCountdown((prev) => prev - 1), 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [adminOtpCountdown]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    if (studentOtpCountdown > 0) {
+      timer = setInterval(() => setStudentOtpCountdown((prev) => prev - 1), 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [studentOtpCountdown]);
+
+  // Supabase Auth link confirmation listener
+  useEffect(() => {
+    if (!isSupabaseConfigured() || !supabase) return;
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user?.email) {
+        const confirmedEmail = session.user.email.toLowerCase();
+        if (newAdminEmail && confirmedEmail === newAdminEmail.trim().toLowerCase()) {
+          setIsAdminEmailVerified(true);
+          setAdminOtpSent(false);
+          setSuccessMessage(`Email ${confirmedEmail} verified via secure email link!`);
+        }
+        if (studentEmail && confirmedEmail === studentEmail.trim().toLowerCase()) {
+          setIsStudentEmailVerified(true);
+          setStudentOtpSent(false);
+          setSuccessMessage(`Email ${confirmedEmail} verified via secure email link!`);
+        }
+      }
+    });
+
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
+  }, [newAdminEmail, studentEmail, setSuccessMessage]);
+
+  const handleSendAdminOtp = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!newAdminEmail.trim() || !newAdminEmail.includes('@')) {
+      setErrorMessage('Please enter a valid administrator email address first.');
+      return;
+    }
+    setIsAdminSendingOtp(true);
+    const res = await sendEmailOtp(newAdminEmail);
+    setIsAdminSendingOtp(false);
+    if (res.success) {
+      setAdminOtpSent(true);
+      setAdminOtpCountdown(60);
+      setSuccessMessage(res.message);
+    } else {
+      setErrorMessage(res.message);
+    }
+  };
+
+  const handleVerifyAdminOtp = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!adminOtpInput.trim() || adminOtpInput.trim().length < 6) {
+      setErrorMessage('Please enter the complete 6-digit verification code.');
+      return;
+    }
+    setIsAdminVerifyingOtp(true);
+    const res = await verifyEmailOtp(newAdminEmail, adminOtpInput);
+    setIsAdminVerifyingOtp(false);
+    if (res.success) {
+      setIsAdminEmailVerified(true);
+      setAdminOtpSent(false);
+      setSuccessMessage('Administrator email verified successfully! You can now launch your classroom.');
+    } else {
+      setErrorMessage(res.message);
+    }
+  };
+
+  const handleSendStudentOtp = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!studentEmail.trim() || !studentEmail.includes('@')) {
+      setErrorMessage('Please enter a valid student email address first.');
+      return;
+    }
+    setIsStudentSendingOtp(true);
+    const res = await sendEmailOtp(studentEmail);
+    setIsStudentSendingOtp(false);
+    if (res.success) {
+      setStudentOtpSent(true);
+      setStudentOtpCountdown(60);
+      setSuccessMessage(res.message);
+    } else {
+      setErrorMessage(res.message);
+    }
+  };
+
+  const handleVerifyStudentOtp = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!studentOtpInput.trim() || studentOtpInput.trim().length < 6) {
+      setErrorMessage('Please enter the complete 6-digit verification code.');
+      return;
+    }
+    setIsStudentVerifyingOtp(true);
+    const res = await verifyEmailOtp(studentEmail, studentOtpInput);
+    setIsStudentVerifyingOtp(false);
+    if (res.success) {
+      setIsStudentEmailVerified(true);
+      setStudentOtpSent(false);
+      setSuccessMessage('Student email verified successfully!');
+    } else {
+      setErrorMessage(res.message);
+    }
+  };
+
+  return {
+    isAdminEmailVerified,
+    adminOtpSent,
+    adminOtpInput,
+    adminOtpCountdown,
+    isAdminSendingOtp,
+    isAdminVerifyingOtp,
+    setAdminOtpInput,
+    handleSendAdminOtp,
+    handleVerifyAdminOtp,
+
+    isStudentEmailVerified,
+    studentOtpSent,
+    studentOtpInput,
+    studentOtpCountdown,
+    isStudentSendingOtp,
+    isStudentVerifyingOtp,
+    setStudentOtpInput,
+    handleSendStudentOtp,
+    handleVerifyStudentOtp,
+  };
+};

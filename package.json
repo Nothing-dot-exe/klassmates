@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:db": "node scripts/test-database.mjs",
-    "qr": "node scripts/show-qr.mjs"
+    "link": "node scripts/show-link.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

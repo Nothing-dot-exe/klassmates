@@ -23,7 +23,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   onAddStudent, onBulkAddStudents, onRemoveStudent, onUpdateStudent,
   onApproveRequest, onApproveAllRequests, onRejectRequest, onUpdateClassroom,
   onApprovePasswordReset, onRejectPasswordReset, onAdminResetPassword, onResetRoomData,
-  onDeleteDocument,
+  onDeleteDocument, onBack,
 }) => {
   const [activeTab, setActiveTab] = useState<AdminTab>('roster');
   const [copiedCode, setCopiedCode] = useState(false);
@@ -175,9 +175,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-zinc-100/70 dark:bg-[#1e1e1e] overflow-y-auto no-scrollbar relative transition-colors">
+    <div className="flex-1 flex flex-col h-full bg-slate-100/70 dark:bg-[#080C15] overflow-y-auto no-scrollbar relative transition-colors">
       {toastMessage && (
-        <div className="fixed bottom-6 right-4 sm:right-6 left-4 sm:left-auto z-50 max-w-sm sm:max-w-md bg-zinc-950 dark:bg-[#007acc] text-white px-5 py-3 rounded-2xl shadow-2xl border border-zinc-800 dark:border-[#007acc] flex items-center gap-2.5 text-xs font-semibold animate-in fade-in slide-in-from-bottom-4 duration-200">
+        <div className="fixed bottom-6 right-4 sm:right-6 left-4 sm:left-auto z-50 max-w-sm sm:max-w-md bg-slate-900 dark:bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-glow-purple border border-slate-800 dark:border-indigo-500/50 flex items-center gap-2.5 text-xs font-semibold animate-in fade-in slide-in-from-bottom-4 duration-200">
           <Sparkles className="w-4 h-4 text-white flex-shrink-0" />
           <span className="truncate sm:whitespace-normal">{toastMessage}</span>
         </div>
@@ -192,6 +192,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         setActiveTab={setActiveTab}
         copiedCode={copiedCode}
         onCopyCode={handleCopyCode}
+        onBack={onBack}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">

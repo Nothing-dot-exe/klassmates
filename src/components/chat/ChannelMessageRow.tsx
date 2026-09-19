@@ -88,7 +88,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
       id={`msg-${message.id}`}
       {...(!isMine ? touchHandlers : {})}
       className={`group relative flex w-full pt-1.5 pb-1 px-2 sm:px-4 transition-all ${
-        isHighlighted ? 'bg-zinc-100 dark:bg-[#252526] ring-1 ring-zinc-300 dark:ring-[#007acc] rounded-2xl' : ''
+        isHighlighted ? 'bg-indigo-500/10 dark:bg-indigo-500/15 ring-1 ring-indigo-400/50 dark:ring-indigo-500/60 rounded-2xl' : ''
       }`}
     >
       {/* Swipe reply indicator on mobile */}
@@ -104,10 +104,10 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
       {/* Reddit Discussion Card Container */}
       <div
         style={{ transform: !isMine && dragX > 0 ? `translateX(${dragX}px)` : undefined }}
-        className="w-full flex items-start gap-2.5 sm:gap-3 bg-white dark:bg-[#252526] hover:bg-zinc-50/70 dark:hover:bg-[#2a2d2e] border border-zinc-200 dark:border-[#2d2d2d] hover:border-zinc-300 dark:hover:border-[#3c3c3c] rounded-2xl p-3 sm:p-3.5 transition shadow-2xs"
+        className="w-full flex items-start gap-2.5 sm:gap-3 bg-white dark:bg-[#0E1424] hover:bg-zinc-50/80 dark:hover:bg-[#121A2D] border border-zinc-200/80 dark:border-[#1F2A44] hover:border-zinc-300 dark:hover:border-indigo-500/30 rounded-2xl p-3 sm:p-3.5 transition shadow-sm"
       >
         {/* Left: Reddit Vertical Upvote / Downvote Score Bar */}
-        <div className="flex flex-col items-center justify-start flex-shrink-0 bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-200 dark:border-[#2d2d2d] rounded-xl px-1 py-1 select-none">
+        <div className="flex flex-col items-center justify-start flex-shrink-0 bg-zinc-100/70 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-1 py-1 select-none">
           <button
             type="button"
             onClick={(e) => {
@@ -175,7 +175,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
               <button
                 type="button"
                 onClick={() => onOpenProfile?.(message.senderId)}
-                className="text-xs font-bold text-zinc-950 dark:text-white hover:text-zinc-700 dark:hover:text-[#4fc1ff] hover:underline truncate cursor-pointer"
+                className="text-xs font-bold text-zinc-950 dark:text-white hover:text-zinc-700 dark:hover:text-indigo-400 hover:underline truncate cursor-pointer"
               >
                 u/{senderDisplayName}
               </button>
@@ -188,20 +188,20 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
               )}
 
               {message.senderRollNo && !message.senderRollNo.includes('@') && (
-                <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 flex-shrink-0">
+                <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-[#161F36] text-slate-700 dark:text-indigo-300 border border-slate-200 dark:border-indigo-500/30 flex-shrink-0">
                   #{message.senderRollNo}
                 </span>
               )}
 
-              <span className="text-zinc-400 dark:text-[#555555] text-xs">•</span>
+              <span className="text-zinc-400 dark:text-zinc-600 text-xs">•</span>
 
-              <span className="text-[11px] text-zinc-500 dark:text-[#858585] flex items-center gap-1 select-none">
-                <Clock className="w-3 h-3 text-zinc-400 dark:text-[#858585]" />
+              <span className="text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center gap-1 select-none">
+                <Clock className="w-3 h-3 text-zinc-400 dark:text-zinc-500" />
                 {message.timestamp}
               </span>
 
               <span title="TLS Encrypted • Classroom Secured">
-                <Lock className="w-2.5 h-2.5 text-zinc-400 dark:text-[#858585] inline ml-0.5" />
+                <Lock className="w-2.5 h-2.5 text-zinc-400 dark:text-zinc-500 inline ml-0.5" />
               </span>
             </div>
 
@@ -210,7 +210,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
               <button
                 type="button"
                 onClick={() => setShowReactionPicker(!showReactionPicker)}
-                className="p-1 rounded text-zinc-500 dark:text-[#858585] hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#2a2d2e] transition cursor-pointer"
+                className="p-1 rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#161F36] transition cursor-pointer"
                 title="Add Reaction"
               >
                 <SmilePlus className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
                 <button
                   type="button"
                   onClick={handleDeleteClick}
-                  className="p-1 rounded text-zinc-400 hover:text-rose-600 hover:bg-zinc-100 transition cursor-pointer"
+                  className="p-1 rounded text-zinc-400 hover:text-rose-600 hover:bg-zinc-100 dark:hover:bg-[#161F36] transition cursor-pointer"
                   title="Delete message"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -230,7 +230,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
 
           {/* Quick Reaction Popup */}
           {showReactionPicker && (
-            <div className="flex items-center gap-1 p-1 bg-white dark:bg-[#252526] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl shadow-xl w-fit">
+            <div className="flex items-center gap-1 p-1 bg-white dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl shadow-xl w-fit">
               {QUICK_REACTIONS.map((emoji) => (
                 <button
                   key={emoji}
@@ -238,7 +238,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
                     onReact(message.id, emoji);
                     setShowReactionPicker(false);
                   }}
-                  className="text-sm hover:scale-125 transition-transform p-1 rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-[#2a2d2e]"
+                  className="text-sm hover:scale-125 transition-transform p-1 rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-[#161F36]"
                 >
                   {emoji}
                 </button>
@@ -257,7 +257,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
 
           {/* Formatted Markdown Content with Links & Code Blocks */}
           {message.content && (
-            <div className="text-left text-zinc-900 dark:text-[#cccccc] font-[450]">
+            <div className="text-left text-zinc-900 dark:text-zinc-200 font-[450]">
               <MessageContentRenderer
                 content={message.content}
                 isMine={false}
@@ -294,9 +294,9 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
             <button
               type="button"
               onClick={() => onReply?.(message)}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-semibold transition active:scale-95 cursor-pointer text-xs"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-[#121A2D] hover:bg-zinc-200 dark:hover:bg-[#161F36] text-zinc-800 dark:text-zinc-200 border border-transparent dark:border-[#1F2A44] font-semibold transition active:scale-95 cursor-pointer text-xs"
             >
-              <MessageSquare className="w-3.5 h-3.5 text-zinc-900" />
+              <MessageSquare className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-300" />
               <span>Reply</span>
             </button>
 

@@ -20,4 +20,5 @@ export interface AdminPanelProps {
   onAdminResetPassword?: (studentId: string, tempPassword?: string) => void;
   onResetRoomData?: () => Promise<void>;
   onDeleteDocument?: (docId: string) => void;
+  onBack?: () => void;
 }

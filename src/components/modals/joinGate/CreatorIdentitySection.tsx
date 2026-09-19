@@ -40,106 +40,76 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
 
   return (
     <div className="space-y-3 pt-1">
-      <h4 className="text-[11px] font-black uppercase tracking-wider text-zinc-950 flex items-center gap-1.5">
-        <UserIcon className="w-3.5 h-3.5" />
-        1. Class Representative / Creator Identity
+      <h4 className="text-[11px] font-black uppercase tracking-wider text-zinc-950 dark:text-white flex items-center gap-1.5">
+        <UserIcon className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
+        <span>1. Class Representative / Creator Identity</span>
       </h4>
 
       {/* Student Organizer Identity Banner */}
-      <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-white text-zinc-900 border border-zinc-200 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
+      <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#161F36] text-zinc-900 dark:text-white border border-zinc-200 dark:border-[#1F2A44] flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
           🎒
         </div>
         <div>
-          <div className="text-xs font-bold text-zinc-950 flex items-center gap-1.5">
+          <div className="text-xs font-bold text-zinc-950 dark:text-white flex items-center gap-1.5">
             <span>Student Classroom Organizer</span>
-            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-zinc-200 text-zinc-800">
+            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-[#161F36] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30">
               Peer Lead
             </span>
           </div>
-          <p className="text-[11px] text-zinc-600 leading-tight mt-0.5">
-            Classmate is 100% student-run. You are creating this classroom as the Class Representative (CR) or Student Lead.
+          <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-tight mt-0.5">
+            Designed specifically for student Class Representatives (CRs), batch leads, and study group conveners.
           </p>
         </div>
       </div>
 
-      {/* Step 1B: Title / Designation */}
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between">
-          <label className="text-xs font-medium text-zinc-800">
-            Designation / Role Title <span className="text-zinc-900">*</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
+            CR / Lead Designation <span className="text-rose-500">*</span>
           </label>
-          <span className="text-[10px] text-zinc-500">Shown on profile & roster</span>
+          <input
+            type="text"
+            required
+            placeholder="e.g. Class Representative (CR)"
+            value={creatorDesignation}
+            onChange={(e) => setCreatorDesignation(e.target.value)}
+            className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+          />
         </div>
 
-        <div className="flex flex-wrap gap-1.5">
-          {[
-            'Class Representative (CR)',
-            'Student Coordinator',
-            'Study Group Lead',
-            'Batch Representative',
-            'Classmate',
-          ].map((preset) => (
-            <button
-              key={preset}
-              type="button"
-              onClick={() => setCreatorDesignation(preset)}
-              className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold transition border cursor-pointer ${
-                creatorDesignation === preset
-                  ? 'bg-black text-white border-black shadow-xs'
-                  : 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:text-black hover:bg-zinc-100'
-              }`}
-            >
-              {preset}
-            </button>
-          ))}
+        <div>
+          <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
+            Roll Number / Student ID <span className="text-rose-500">*</span>
+          </label>
+          <input
+            type="text"
+            required
+            placeholder="e.g. 21CS001"
+            value={newAdminRollNo}
+            onChange={(e) => setNewAdminRollNo(e.target.value.toUpperCase())}
+            className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono font-bold uppercase transition shadow-xs"
+          />
         </div>
-
-        <input
-          type="text"
-          required
-          placeholder="e.g. Class Representative (CR)"
-          value={creatorDesignation}
-          onChange={(e) => setCreatorDesignation(e.target.value)}
-          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2 text-xs text-zinc-900 focus:bg-white focus:outline-none focus:border-black transition"
-        />
       </div>
 
-      {/* Step 1C: Student Roll Number / USN */}
       <div>
-        <label className="block text-xs font-medium text-zinc-800 mb-1">
-          Your Student Roll Number / USN <span className="text-zinc-900">*</span>
+        <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
+          Your Full Legal / College Name <span className="text-rose-500">*</span>
         </label>
         <input
           type="text"
           required
-          placeholder="e.g. 1MS21CS042"
-          value={newAdminRollNo}
-          onChange={(e) => setNewAdminRollNo(e.target.value.toUpperCase())}
-          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2 text-xs text-zinc-900 focus:bg-white focus:outline-none focus:border-black transition font-mono uppercase"
-        />
-        <p className="text-[10px] text-zinc-500 mt-1">
-          Your official college roll number or USN for identification.
-        </p>
-      </div>
-
-      <div>
-        <label className="block text-xs font-medium text-zinc-800 mb-1">
-          Your Full Name <span className="text-zinc-900">*</span>
-        </label>
-        <input
-          type="text"
-          required
-          placeholder="e.g. Rahul Verma"
+          placeholder="e.g. Rahul Sharma"
           value={newAdminName}
           onChange={(e) => setNewAdminName(e.target.value)}
-          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2 text-xs text-zinc-900 focus:bg-white focus:outline-none focus:border-black transition"
+          className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-zinc-800 mb-1">
-          Mobile / WhatsApp Number <span className="text-zinc-900">*</span>
+        <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
+          Public Contact Mobile / WhatsApp Number <span className="text-rose-500">*</span>
         </label>
         <input
           type="tel"
@@ -147,17 +117,17 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
           placeholder="+91 98765 43210"
           value={newAdminPhone}
           onChange={(e) => setNewAdminPhone(e.target.value)}
-          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2 text-xs text-zinc-900 focus:bg-white focus:outline-none focus:border-black transition font-mono"
+          className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono transition shadow-xs"
         />
       </div>
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-medium text-zinc-800">
-            Student Email Address <span className="text-zinc-900">*</span>
+          <label className="text-xs font-semibold text-zinc-800 dark:text-zinc-300">
+            Email Address <span className="text-rose-500">*</span>
           </label>
           {isAdminEmailVerified ? (
-            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-full">
               <Check className="w-3 h-3" /> Email Verified
             </span>
           ) : null}
@@ -168,19 +138,21 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
             type="email"
             required
             disabled={isAdminEmailVerified}
-            placeholder="student@institution.edu"
+            placeholder="cr.lead@college.edu"
             value={newAdminEmail}
             onChange={(e) => setNewAdminEmail(e.target.value)}
-            className={`flex-1 bg-zinc-50 border ${
-              isAdminEmailVerified ? 'border-emerald-500 text-emerald-800' : 'border-zinc-200 text-zinc-900'
-            } rounded-xl px-3.5 py-2 text-xs focus:bg-white focus:outline-none focus:border-black transition`}
+            className={`flex-1 bg-zinc-50 dark:bg-[#121A2D] border ${
+              isAdminEmailVerified
+                ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400'
+                : 'border-zinc-200 dark:border-[#1F2A44] text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500'
+            } rounded-xl px-3.5 py-2 text-xs focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs`}
           />
           {!isAdminEmailVerified && (
             <button
               type="button"
               onClick={onSendAdminOtp}
               disabled={isAdminSendingOtp || adminOtpCountdown > 0}
-              className="px-3.5 py-2 rounded-xl bg-black hover:bg-zinc-800 disabled:opacity-50 text-white text-xs font-bold transition whitespace-nowrap shadow-xs"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white text-xs font-bold transition whitespace-nowrap shadow-md shadow-indigo-950/20 active:scale-95 cursor-pointer"
             >
               {isAdminSendingOtp
                 ? 'Sending...'
@@ -206,29 +178,26 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-zinc-800 mb-1">
-          Master Admin Password <span className="text-zinc-900">*</span>
+        <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
+          Master Administrator Password <span className="text-rose-500">*</span>
         </label>
         <div className="relative">
           <input
             type={showPassword ? 'text' : 'password'}
             required
-            placeholder="Enter master password (min 6 characters)"
+            placeholder="Min 6 characters"
             value={newAdminPassword}
             onChange={(e) => setNewAdminPassword(e.target.value)}
-            className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 focus:bg-white focus:outline-none focus:border-black transition font-mono"
+            className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono shadow-xs"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-white cursor-pointer"
           >
             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
-        <p className="text-[10px] text-zinc-500 mt-1">
-          Used to unlock Admin settings, manage students, and approve join requests.
-        </p>
       </div>
     </div>
   );

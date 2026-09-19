@@ -122,9 +122,9 @@ export default function Home() {
 
   if (!isSessionLoaded) {
     return (
-      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#0B0E17] flex items-center justify-center transition-colors">
+      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#080C15] flex items-center justify-center transition-colors">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-600 dark:bg-indigo-500 animate-pulse flex items-center justify-center text-white font-black text-xl shadow-xl shadow-indigo-500/25">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-600 dark:bg-indigo-500 animate-pulse flex items-center justify-center text-white font-black text-xl shadow-glow-purple">
             C
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium font-mono">Connecting to Classmate Vault...</p>
@@ -135,7 +135,7 @@ export default function Home() {
 
   if (!currentUser) {
     return (
-      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#0B0E17] flex items-center justify-center p-3 sm:p-4 overflow-y-auto no-scrollbar transition-colors">
+      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#080C15] flex items-center justify-center p-3 sm:p-4 overflow-y-auto no-scrollbar transition-colors">
         <JoinGateModal
           classroom={classroom}
           existingStudents={students}
@@ -160,7 +160,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-[100dvh] w-screen overflow-hidden bg-[#F8FAFC] dark:bg-[#0B0E17] text-slate-900 dark:text-slate-100 antialiased font-sans transition-colors">
+    <div className="flex flex-col md:flex-row h-[100dvh] w-screen overflow-hidden bg-[#F8FAFC] dark:bg-[#080C15] text-slate-900 dark:text-slate-100 antialiased font-sans transition-colors">
       <MobileHeader
         classroom={classroom}
         adminUser={adminUser}
@@ -218,6 +218,7 @@ export default function Home() {
             onDeleteForMe={actions.handleDeleteForMe}
             onClearChat={actions.handleClearChat}
             onOpenProfileById={handleOpenProfileById}
+            onBack={activeView === 'dm' ? () => { setActiveView('channel'); setSelectedDmUserId(''); } : undefined}
             typingUser={
               Object.values(typingUsers).find(
                 (t) =>
@@ -235,6 +236,7 @@ export default function Home() {
         {activeView === 'documents' && (
           <DocumentHub
             documents={documents}
+            onBack={() => setActiveView('channel')}
             onAddDocument={actions.handleAddDocument}
             onDiscussDoc={(doc) => {
               const matchedChannel = channels.find(
@@ -260,6 +262,7 @@ export default function Home() {
             passwordResetRequests={passwordResetRequests}
             messages={messages}
             documents={documents}
+            onBack={() => setActiveView('channel')}
             onAddStudent={actions.handleAddStudent}
             onBulkAddStudents={actions.handleBulkAddStudents}
             onRemoveStudent={actions.handleRemoveStudent}

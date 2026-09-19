@@ -26,22 +26,22 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
       const dataRows = tableRows.slice(1).filter((r) => !r.every((c) => c.trim().startsWith('-')));
 
       elements.push(
-        <div key={`table-${keyPrefix}`} className="overflow-x-auto my-5 rounded-xl border border-zinc-200 no-scrollbar shadow-2xs">
+        <div key={`table-${keyPrefix}`} className="overflow-x-auto my-5 rounded-xl border border-zinc-200 dark:border-[#1F2A44] no-scrollbar shadow-2xs">
           <table className="w-full text-left text-xs border-collapse">
-            <thead className="bg-zinc-100 text-zinc-900">
+            <thead className="bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-zinc-200">
               <tr>
                 {headers.map((h, i) => (
-                  <th key={i} className="py-2.5 px-4 font-bold border-b border-zinc-200">
+                  <th key={i} className="py-2.5 px-4 font-bold border-b border-zinc-200 dark:border-[#1F2A44]">
                     {h.trim()}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 bg-white">
+            <tbody className="divide-y divide-zinc-200 dark:divide-[#1F2A44] bg-white dark:bg-[#0E1424]">
               {dataRows.map((row, rIdx) => (
-                <tr key={rIdx} className="hover:bg-zinc-50 transition-colors">
+                <tr key={rIdx} className="hover:bg-zinc-50 dark:hover:bg-[#161F36] transition-colors">
                   {row.map((cell, cIdx) => (
-                    <td key={cIdx} className="py-2 px-4 text-zinc-800">
+                    <td key={cIdx} className="py-2 px-4 text-zinc-800 dark:text-zinc-300">
                       {cell.trim()}
                     </td>
                   ))}
@@ -67,7 +67,7 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
         const currentIndex = codeBlockCount++;
 
         elements.push(
-          <div key={`code-${idx}`} className="my-5 rounded-2xl overflow-hidden border border-zinc-200 bg-zinc-950 shadow-xs">
+          <div key={`code-${idx}`} className="my-5 rounded-2xl overflow-hidden border border-zinc-200 dark:border-[#1F2A44] bg-zinc-950 shadow-xs">
             <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-[11px] text-zinc-400">
               <span className="font-mono uppercase font-bold text-zinc-200">{codeLanguage}</span>
               <button
@@ -113,31 +113,31 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 
     if (line.startsWith('# ')) {
       elements.push(
-        <h1 key={idx} className="text-xl sm:text-2xl font-black text-zinc-950 mt-6 mb-3 tracking-tight">
+        <h1 key={idx} className="text-xl sm:text-2xl font-black text-zinc-950 dark:text-white mt-6 mb-3 tracking-tight">
           {line.replace('# ', '')}
         </h1>
       );
     } else if (line.startsWith('## ')) {
       elements.push(
-        <h2 key={idx} className="text-base sm:text-lg font-bold text-zinc-900 mt-5 mb-2">
+        <h2 key={idx} className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 mt-5 mb-2">
           {line.replace('## ', '')}
         </h2>
       );
     } else if (line.startsWith('### ')) {
       elements.push(
-        <h3 key={idx} className="text-sm font-semibold text-zinc-800 mt-4 mb-2">
+        <h3 key={idx} className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 mt-4 mb-2">
           {line.replace('### ', '')}
         </h3>
       );
     } else if (line.startsWith('- ') || line.startsWith('* ')) {
       elements.push(
-        <li key={idx} className="text-xs sm:text-sm text-zinc-700 ml-4 list-disc my-1 leading-relaxed">
+        <li key={idx} className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 ml-4 list-disc my-1 leading-relaxed">
           {line.replace(/^[-*]\s+/, '')}
         </li>
       );
     } else if (line.trim()) {
       elements.push(
-        <p key={idx} className="text-xs sm:text-sm text-zinc-800 leading-relaxed my-2">
+        <p key={idx} className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed my-2">
           {line}
         </p>
       );

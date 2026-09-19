@@ -65,34 +65,55 @@ export const Sidebar: React.FC<SidebarProps> = ({
     CURRENT_USER;
 
   return (
-    <aside className="w-64 md:w-72 h-full bg-zinc-50/90 dark:bg-[#181818] border-r border-zinc-200 dark:border-[#2d2d2d] flex flex-col justify-between select-none transition-colors">
+    <aside className="w-64 md:w-72 h-full bg-slate-50/90 dark:bg-[#0E1424] border-r border-slate-200 dark:border-slate-800/80 flex flex-col justify-between select-none transition-colors">
       {/* Header Profile / Classroom Title */}
-      <div className="p-4 border-b border-zinc-200 dark:border-[#2d2d2d]">
+      <div className="p-4 border-b border-slate-200 dark:border-slate-800/80 space-y-3">
         <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white dark:bg-[#252526] border border-zinc-200 dark:border-[#3c3c3c] text-[10px] font-bold tracking-wider text-zinc-800 dark:text-[#cccccc] uppercase shadow-2xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Classroom Active</span>
+          {/* Live status pill with Stitch pulse-dot-ring */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 shadow-xs">
+            <span className="relative flex h-2 w-2">
+              <span className="pulse-dot-ring absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-[11px] font-bold tracking-wider text-emerald-600 dark:text-emerald-400 uppercase">
+              Classroom Active
+            </span>
+          </div>
+
+          {/* App Brand Monogram */}
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 p-[1px] shadow-glow-purple flex items-center justify-center">
+            <div className="w-full h-full bg-white dark:bg-[#0E1424] rounded-[11px] flex items-center justify-center">
+              <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-300 dark:to-white bg-clip-text text-transparent">m</span>
+            </div>
           </div>
         </div>
 
-        <h1 className="text-base font-black text-zinc-950 dark:text-white truncate mt-2 leading-snug tracking-tight" title={classroom.name}>
-          {classroom.name}
-        </h1>
+        <div>
+          <h1 className="text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight" title={classroom.name}>
+            {classroom.name}
+          </h1>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+            {classroom.institution || 'Autonomous Classroom Space'}
+          </p>
+        </div>
 
         {/* Class Code Pill with 1-click Copy */}
         <div
           onClick={handleCopyCode}
-          className="mt-3 flex items-center justify-between px-3 py-1.5 rounded-xl bg-white dark:bg-[#252526] border border-zinc-200 dark:border-[#3c3c3c] hover:border-zinc-400 dark:hover:border-[#007acc] cursor-pointer transition group shadow-xs"
+          className="flex items-center justify-between px-3 py-2 bg-white/80 dark:bg-[#10172A]/90 hover:bg-slate-100 dark:hover:bg-[#141D35] transition-colors border border-slate-200 dark:border-slate-800/80 rounded-xl backdrop-blur-md cursor-pointer group shadow-xs"
           title="Click to copy Class Code"
         >
           <div className="flex items-center gap-2">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 dark:text-[#858585]">Class Code:</span>
-            <span className="font-mono text-xs font-bold text-zinc-950 dark:text-white">{classroom.code}</span>
+            <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">Code:</span>
+            <span className="font-mono font-bold text-xs tracking-wide text-slate-900 dark:text-white">{classroom.code}</span>
           </div>
-          <span className="text-[10px] text-zinc-500 dark:text-[#858585] group-hover:text-zinc-950 dark:group-hover:text-white flex items-center gap-1">
-            {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          <button
+            type="button"
+            className="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-600/20 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-600/35 border border-indigo-200 dark:border-indigo-500/30 px-2.5 py-0.5 rounded-lg transition-all"
+          >
+            {copiedCode ? <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
             <span>{copiedCode ? 'Copied' : 'Copy'}</span>
-          </span>
+          </button>
         </div>
       </div>
 
@@ -108,24 +129,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         {/* Core Hub Views */}
-        <div className="space-y-1">
-          <div className="text-[10px] font-bold text-zinc-400 dark:text-[#858585] uppercase tracking-wider px-3 pb-1">
+        <div className="space-y-1.5">
+          <div className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider px-2 pb-0.5">
             Classroom Hubs
           </div>
 
           <button
             onClick={() => onSelectView('documents')}
-            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${activeView === 'documents'
-                ? 'bg-zinc-950 dark:bg-[#37373d] text-white dark:border-l-2 dark:border-[#007acc] shadow-xs'
-                : 'text-zinc-600 dark:text-[#cccccc] hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#2a2d2e]'
-              }`}
+            className={`w-full group relative overflow-hidden rounded-xl p-3 font-semibold flex items-center justify-between transition-all duration-150 cursor-pointer ${
+              activeView === 'documents'
+                ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white shadow-glow-purple active:scale-[0.99]'
+                : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-slate-800/80 text-slate-700 dark:text-slate-300'
+            }`}
           >
             <div className="flex items-center gap-2.5">
-              <FileText className={`w-4 h-4 ${activeView === 'documents' ? 'text-white' : 'text-zinc-500 dark:text-[#858585]'}`} />
-              <span>Document Vault</span>
-            </div>
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${activeView === 'documents' ? 'bg-zinc-800 dark:bg-[#007acc] text-white' : 'bg-zinc-100 dark:bg-[#3c3c3c] text-zinc-700 dark:text-[#cccccc]'
+              <span className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                activeView === 'documents' ? 'bg-white/20 text-white shadow-inner' : 'bg-slate-200 dark:bg-slate-800 text-indigo-500 dark:text-indigo-400'
               }`}>
+                <FileText className="w-3.5 h-3.5" />
+              </span>
+              <span className="text-xs font-semibold tracking-wide">Document Vault</span>
+            </div>
+            <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
+              activeView === 'documents' ? 'bg-white/25 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700'
+            }`}>
               {documentsCount}
             </span>
           </button>
@@ -133,17 +160,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {currentUser.role === 'admin' && (
             <button
               onClick={() => onSelectView('admin')}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${activeView === 'admin'
-                  ? 'bg-zinc-950 dark:bg-[#37373d] text-white dark:border-l-2 dark:border-[#007acc] shadow-xs'
-                  : 'text-zinc-600 dark:text-[#cccccc] hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#2a2d2e]'
-                }`}
+              className={`w-full flex items-center justify-between p-3 rounded-xl transition-all cursor-pointer ${
+                activeView === 'admin'
+                  ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white shadow-glow-purple active:scale-[0.99]'
+                  : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+              }`}
             >
               <div className="flex items-center gap-2.5">
-                <ShieldCheck className={`w-4 h-4 ${activeView === 'admin' ? 'text-white' : 'text-zinc-500 dark:text-[#858585]'}`} />
-                <span>Admin Panel</span>
+                <span className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                  activeView === 'admin' ? 'bg-white/20 text-white shadow-inner' : 'bg-slate-200 dark:bg-slate-800 text-indigo-500 dark:text-indigo-400'
+                }`}>
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                </span>
+                <span className="text-xs font-semibold">Admin Panel</span>
               </div>
               {pendingRequestsCount > 0 && (
-                <span className="h-4 px-1.5 rounded-full bg-black dark:bg-[#0e639c] text-white font-bold text-[10px] flex items-center justify-center">
+                <span className="h-4 px-1.5 rounded-full bg-rose-500 text-white font-bold text-[10px] flex items-center justify-center animate-pulse">
                   {pendingRequestsCount}
                 </span>
               )}

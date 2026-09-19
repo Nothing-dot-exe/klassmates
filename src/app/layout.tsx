@@ -1,9 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit, Inter, JetBrains_Mono } from "next/font/google";
+import { Outfit, Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
   variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
   display: "swap",
 });
@@ -43,7 +49,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable} dark h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${outfit.variable} ${inter.variable} ${jetbrainsMono.variable} dark h-full antialiased`}
       data-theme="dark"
       suppressHydrationWarning
     >
@@ -67,7 +73,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-white dark:bg-[#1e1e1e] text-zinc-950 dark:text-[#cccccc] transition-colors duration-150" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-[#080C15] text-zinc-950 dark:text-zinc-100 transition-colors duration-150" suppressHydrationWarning>
         <ThemeProvider>
           {children}
         </ThemeProvider>

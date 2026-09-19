@@ -97,10 +97,10 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
   }, [s.joinCode, classroom]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-zinc-950/40 dark:bg-black/70 backdrop-blur-md overflow-y-auto no-scrollbar animate-in fade-in transition-colors">
-      <div className="bg-white dark:bg-[#252526] border border-zinc-200/90 dark:border-[#2d2d2d] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl shadow-zinc-950/10 dark:shadow-black/60 flex flex-col my-auto max-h-[96dvh] transition-colors">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-zinc-950/60 dark:bg-black/80 backdrop-blur-md overflow-y-auto no-scrollbar animate-in fade-in transition-colors">
+      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200/90 dark:border-[#1F2A44] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl shadow-zinc-950/20 dark:shadow-black/70 flex flex-col my-auto max-h-[96dvh] transition-colors">
         {/* Header */}
-        <div className="p-6 pb-4 border-b border-zinc-200 dark:border-[#2d2d2d] bg-white dark:bg-[#252526] text-center space-y-2 flex-shrink-0 relative">
+        <div className="p-6 pb-4 border-b border-zinc-200 dark:border-[#1F2A44] bg-white dark:bg-[#0E1424] text-center space-y-2 flex-shrink-0 relative">
           {s.navMode !== 'welcome' && !s.isWaitingApproval && !s.forceNewPasswordStudent && (
             <button
               onClick={() => {
@@ -109,20 +109,20 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
                 s.setSuccessMessage('');
                 s.setIsForgotPassword(false);
               }}
-              className="absolute left-5 top-6 text-zinc-500 dark:text-[#858585] hover:text-zinc-950 dark:hover:text-white flex items-center gap-1 text-xs font-semibold transition cursor-pointer"
+              className="absolute left-4 top-4 sm:left-5 sm:top-5 px-2.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1 text-xs font-bold transition shadow-xs cursor-pointer z-10 active:scale-95"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
             </button>
           )}
 
-          {/* Theme Toggle (Day / VS Code Dark) */}
-          <div className="absolute right-5 top-5">
+          {/* Theme Toggle (Day / Dark) */}
+          <div className="absolute right-4 top-4 sm:right-5 sm:top-5 z-10">
             <ThemeToggle />
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-[#3c3c3c] text-zinc-800 dark:text-[#cccccc] border border-zinc-200 dark:border-[#2d2d2d] text-[10px] font-bold uppercase tracking-wider">
-            <School className="w-3.5 h-3.5 text-zinc-900 dark:text-white" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-[#161F36] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 text-[10px] font-bold uppercase tracking-wider">
+            <School className="w-3.5 h-3.5" />
             Classmate Collaboration Hub
           </div>
 
@@ -133,7 +133,7 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
             {s.navMode === 'signin' && 'Sign In to Classmate'}
           </h2>
 
-          <p className="text-xs text-zinc-500 dark:text-[#858585] max-w-sm mx-auto leading-relaxed">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto leading-relaxed">
             {s.navMode === 'welcome' && 'Choose whether you want to set up a new classroom or join an existing batch.'}
             {s.navMode === 'create_room' && 'Launch a private classroom and register as the verified Administrator.'}
             {s.navMode === 'join_room' && 'Enter your class code and request verified enrollment from your Class Representative.'}
@@ -144,15 +144,15 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
         {/* Body */}
         <div className="p-5 sm:p-6 overflow-y-auto no-scrollbar space-y-4">
           {s.errorMessage && (
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 animate-in fade-in">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
+            <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600 dark:text-rose-400" />
               <span>{s.errorMessage}</span>
             </div>
           )}
 
           {s.successMessage && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 animate-in fade-in">
-              <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600" />
+            <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-2 animate-in fade-in">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400" />
               <span>{s.successMessage}</span>
             </div>
           )}

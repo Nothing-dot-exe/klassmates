@@ -15,22 +15,22 @@
 }
 
 .dark {
-  /* Night Mode: Deep Midnight Obsidian */
-  --background: #0b0e17;
+  /* Night Mode: Stitch Obsidian Void & Midnight Slate */
+  --background: #080c15;
   --foreground: #f8fafc;
-  --card: #121826;
-  --card-border: rgba(255, 255, 255, 0.08);
+  --card: #0e1424;
+  --card-border: #1f2a44;
   --accent-primary: #6366f1;
-  --accent-secondary: #8b5cf6;
-  --accent-orange: #f97316;
+  --accent-secondary: #4f46e5;
+  --accent-orange: #f59e0b;
   --accent-emerald: #10b981;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: var(--font-outfit), sans-serif;
+  --font-sans: var(--font-plus-jakarta), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-plus-jakarta), var(--font-outfit), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
@@ -53,8 +53,30 @@ body {
 }
 
 .dark body {
-  background: #0b0e17;
+  background: #080c15;
   color: #f8fafc;
+}
+
+/* Animated subtle pulse for live status from Stitch */
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 0.3; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+.pulse-dot-ring {
+  animation: pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Glow shadow utilities from Stitch */
+.shadow-glow-purple {
+  box-shadow: 0 6px 20px -4px rgba(99, 102, 241, 0.4);
+}
+.shadow-glow-gold {
+  box-shadow: 0 0 16px -2px rgba(245, 158, 11, 0.25);
+}
+.shadow-glow-emerald {
+  box-shadow: 0 0 12px -2px rgba(16, 185, 129, 0.45);
 }
 
 /* Tactile Student Card Architecture */

@@ -142,37 +142,37 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white border border-zinc-200 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] transition-colors">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-zinc-200 bg-zinc-50/80 flex-shrink-0">
+        <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-[#1F2A44] bg-zinc-50/80 dark:bg-[#121A2D] flex-shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-2xl bg-zinc-100 text-zinc-900 border border-zinc-200">
-              {activeTab === 'markdown' ? <BookOpen className="w-5 h-5" /> : <FileText className="w-5 h-5 text-zinc-900" />}
+            <div className="p-2 rounded-2xl bg-zinc-100 dark:bg-[#161F36] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#1F2A44]">
+              {activeTab === 'markdown' ? <BookOpen className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
             </div>
             <div>
-              <h3 className="text-base font-bold text-zinc-950">
+              <h3 className="text-base font-bold text-zinc-950 dark:text-white">
                 {activeTab === 'markdown' ? 'Create Markdown Note' : 'Upload PDF Document'}
               </h3>
-              <p className="text-xs text-zinc-500">Add learning material directly to your student repository</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">Add learning material directly to your student repository</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-zinc-400 hover:text-zinc-900 rounded-xl hover:bg-zinc-100 transition cursor-pointer"
+            className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-xl hover:bg-zinc-100 dark:hover:bg-[#161F36] transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-zinc-200 bg-zinc-50 p-1.5 gap-1.5 flex-shrink-0">
+        <div className="flex border-b border-zinc-200 dark:border-[#1F2A44] bg-zinc-50 dark:bg-[#0E1424] p-1.5 gap-1.5 flex-shrink-0">
           <button
             type="button"
             onClick={() => setActiveTab('markdown')}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer ${activeTab === 'markdown'
-                ? 'bg-zinc-950 text-white shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow-purple'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-white dark:hover:bg-[#121A2D]'
               }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -183,8 +183,8 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
             type="button"
             onClick={() => setActiveTab('pdf')}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer ${activeTab === 'pdf'
-                ? 'bg-zinc-950 text-white shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow-purple'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-white dark:hover:bg-[#121A2D]'
               }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -210,42 +210,42 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
               <div
                 onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-2xl p-6 text-center transition cursor-pointer ${pdfFile
-                    ? 'border-zinc-400 bg-zinc-50'
-                    : 'border-zinc-300 hover:border-zinc-600 hover:bg-zinc-50/80 bg-zinc-50/40'
+                    ? 'border-indigo-500 bg-indigo-50/10 dark:bg-indigo-950/20'
+                    : 'border-zinc-300 dark:border-[#1F2A44] hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-zinc-50/80 dark:hover:bg-[#121A2D] bg-zinc-50/40 dark:bg-[#121A2D]/40'
                   }`}
               >
                 {isReadingPdf ? (
                   <div className="space-y-2">
-                    <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin mx-auto" />
-                    <p className="text-xs text-zinc-600">Processing PDF document...</p>
+                    <div className="w-6 h-6 border-2 border-indigo-600 dark:border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto" />
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400">Processing PDF document...</p>
                   </div>
                 ) : pdfFile ? (
                   <div className="flex items-center justify-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-zinc-100 text-zinc-900 border border-zinc-300">
+                    <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-[#121A2D] text-indigo-600 dark:text-indigo-400 border border-zinc-300 dark:border-[#1F2A44]">
                       <FileText className="w-6 h-6" />
                     </div>
                     <div className="text-left">
-                      <div className="text-xs font-bold text-zinc-950 flex items-center gap-1.5">
+                      <div className="text-xs font-bold text-zinc-950 dark:text-white flex items-center gap-1.5">
                         <span className="truncate max-w-xs">{pdfFile.name}</span>
-                        <span className="text-[10px] text-zinc-900 bg-zinc-100 border border-zinc-300 px-1.5 py-0.2 rounded font-mono font-bold">
+                        <span className="text-[10px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-[#161F36] border border-indigo-200 dark:border-indigo-500/30 px-1.5 py-0.2 rounded font-mono font-bold">
                           Ready
                         </span>
                       </div>
-                      <div className="text-[11px] text-zinc-500 font-mono mt-0.5">
+                      <div className="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono mt-0.5">
                         {pdfFileSize} • Tap to change file
                       </div>
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <div className="w-10 h-10 rounded-2xl bg-zinc-100 text-zinc-600 flex items-center justify-center mx-auto border border-zinc-200">
+                    <div className="w-10 h-10 rounded-2xl bg-zinc-100 dark:bg-[#121A2D] text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto border border-zinc-200 dark:border-[#1F2A44]">
                       <Upload className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-zinc-950">
+                      <p className="text-xs font-bold text-zinc-950 dark:text-white">
                         Click to select or drop your PDF document
                       </p>
-                      <p className="text-[11px] text-zinc-500 mt-0.5">
+                      <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
                         Course syllabus, past papers, lecture slides, or textbooks
                       </p>
                     </div>
@@ -256,8 +256,8 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-800 mb-1">
-              {activeTab === 'markdown' ? 'Note Title' : 'Document Title'} <span className="text-zinc-950">*</span>
+            <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
+              {activeTab === 'markdown' ? 'Note Title' : 'Document Title'} <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
@@ -265,53 +265,53 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
               placeholder={activeTab === 'markdown' ? 'e.g. Computer Networks: OSI 7 Layer Model' : 'e.g. Data Structures & Algorithms Syllabus'}
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-950 focus:bg-white transition"
+              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-zinc-800 mb-1">Course / Subject</label>
+              <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">Course / Subject</label>
               <input
                 type="text"
                 placeholder="e.g. Computer Networks"
                 value={newSubject}
                 onChange={(e) => setNewSubject(e.target.value)}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-950 focus:bg-white transition"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-zinc-800 mb-1">Tags (comma-separated)</label>
+              <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">Tags (comma-separated)</label>
               <input
                 type="text"
                 placeholder="OSI, TCP/IP, Unit-2"
                 value={newTags}
                 onChange={(e) => setNewTags(e.target.value)}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-950 focus:bg-white transition font-mono"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition font-mono shadow-xs"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
             <div>
-              <label className="block text-xs font-semibold text-zinc-800 mb-1">Syllabus Module / Unit</label>
+              <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">Syllabus Module / Unit</label>
               <input
                 type="text"
                 placeholder="e.g. Module 2: OSI Layer or 2024 Midterm"
                 value={newSyllabusModule}
                 onChange={(e) => setNewSyllabusModule(e.target.value)}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-950 focus:bg-white transition"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs"
               />
             </div>
-            <div className="pt-4 sm:pt-5">
-              <label className="flex items-center gap-2.5 cursor-pointer select-none bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/20 px-3.5 py-2 rounded-xl transition">
+            <div className="pt-2 sm:pt-5">
+              <label className="flex items-center gap-2.5 cursor-pointer select-none bg-amber-500/10 hover:bg-amber-500/15 border border-amber-500/30 px-3.5 py-2 rounded-xl transition">
                 <input
                   type="checkbox"
                   checked={isHighExamValue}
                   onChange={(e) => setIsHighExamValue(e.target.checked)}
                   className="rounded text-amber-500 focus:ring-amber-400 w-4 h-4"
                 />
-                <span className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1">
+                <span className="text-xs font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1">
                   ⭐ High Exam Yield (Critical for Midterm/Finals)
                 </span>
               </label>
@@ -320,7 +320,7 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
 
           {activeTab === 'markdown' && (
             <div>
-              <label className="block text-xs font-semibold text-zinc-800 mb-1">
+              <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
                 Markdown Content (Supports # Headers, ```code, tables)
               </label>
               <textarea
@@ -328,23 +328,23 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
                 placeholder="# Chapter Overview&#10;&#10;Key definitions and formulas...&#10;&#10;```python&#10;# Code example&#10;```"
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-xs sm:text-sm font-mono text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-950 focus:bg-white transition"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl p-3 text-xs sm:text-sm font-mono text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs"
               />
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-200">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-200 dark:border-[#1F2A44]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-zinc-500 hover:text-zinc-900 transition cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={activeTab === 'pdf' && !pdfDataUrl}
-              className="px-5 py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-semibold shadow-xs transition active:scale-95 cursor-pointer disabled:opacity-40"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:opacity-95 text-white text-xs font-bold shadow-glow-purple transition active:scale-95 cursor-pointer disabled:opacity-40"
             >
               {activeTab === 'markdown' ? 'Save Note to Vault' : 'Upload PDF to Vault'}
             </button>

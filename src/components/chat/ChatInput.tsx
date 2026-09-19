@@ -161,12 +161,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="p-2 sm:p-3 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0B0E17]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
+    <div className="p-2 sm:p-3 border-t border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-[#0E1424]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
       {/* Reply Context Banner when replying */}
       <ReplyContextBanner replyingTo={replyingTo || null} onCancelReply={onCancelReply || (() => {})} />
 
       {/* Input Capsule Row */}
-      <div className="flex items-center gap-1 sm:gap-2 bg-slate-50 dark:bg-[#121826] border border-slate-200 dark:border-slate-800 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:bg-white dark:focus-within:bg-[#121826] focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all shadow-xs w-full">
+      <div className="flex items-center gap-1 sm:gap-2 bg-slate-50 dark:bg-[#121A2D] border border-slate-200 dark:border-slate-800 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:bg-white dark:focus-within:bg-[#121A2D] focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all shadow-xs w-full">
         {/* Attachment Options */}
         <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           <input
@@ -228,12 +228,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           )}
         </div>
 
-        {/* Send Button */}
+        {/* Send Button with Stitch Gradient */}
         <button
           type="button"
           onClick={handleSend}
           disabled={!text.trim()}
-          className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 disabled:hover:bg-indigo-600 text-white flex items-center justify-center shadow-xs shadow-indigo-500/20 transition-all active:scale-95 flex-shrink-0 cursor-pointer"
+          className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:opacity-90 disabled:opacity-30 text-white flex items-center justify-center shadow-glow-purple transition-all active:scale-95 flex-shrink-0 cursor-pointer"
           title="Send message"
         >
           <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

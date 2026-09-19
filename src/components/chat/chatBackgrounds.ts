@@ -80,34 +80,34 @@ export function getThemedBackgroundStyle(id: string, isDark: boolean): React.CSS
     return bg.containerStyle;
   }
 
-  // Obsidian Night Mode styles
+  // Obsidian Night Mode styles from Stitch
   switch (id) {
     case 'minimal':
-      return { backgroundColor: '#0B0E17' };
+      return { backgroundColor: '#080C15' };
     case 'doodle':
       return {
-        backgroundColor: '#0B0E17',
+        backgroundColor: '#080C15',
         backgroundImage: `url("${DOODLE_DARK_SVG}")`,
         backgroundRepeat: 'repeat',
         backgroundSize: '160px 160px',
       };
     case 'grid':
       return {
-        backgroundColor: '#0B0E17',
+        backgroundColor: '#080C15',
         backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px)`,
         backgroundSize: '24px 24px, 24px 24px',
       };
     case 'dots':
       return {
-        backgroundColor: '#0B0E17',
+        backgroundColor: '#080C15',
         backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px)`,
         backgroundSize: '20px 20px',
       };
     case 'ivory':
-      return { backgroundColor: '#0B0E17' };
+      return { backgroundColor: '#080C15' };
     case 'zinc':
-      return { backgroundColor: '#121826' };
+      return { backgroundColor: '#0E1424' };
     default:
-      return { backgroundColor: '#0B0E17' };
+      return { backgroundColor: '#080C15' };
   }
 }

@@ -55,20 +55,20 @@ export const RosterTab: React.FC<RosterTabProps> = ({
   return (
     <div className="space-y-4">
       {/* Search & Filter Toolbar */}
-      <div className="bg-white dark:bg-[#252526] border border-zinc-300 dark:border-[#2d2d2d] rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-[#858585]" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
           <input
             type="text"
             placeholder="Search by name, roll number, or email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl pl-10 pr-4 py-2 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-[#858585] focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition shadow-2xs font-medium"
+            className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl pl-10 pr-4 py-2 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs font-medium"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-900 dark:text-[#858585] dark:hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-white"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -79,27 +79,27 @@ export const RosterTab: React.FC<RosterTabProps> = ({
         <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto no-scrollbar">
           <button
             onClick={() => setRoleFilter('all')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${roleFilter === 'all'
-                ? 'bg-zinc-950 dark:bg-[#0e639c] text-white shadow-xs'
-                : 'text-zinc-700 dark:text-[#cccccc] hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#3c3c3c]'
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${roleFilter === 'all'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/30'
+                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#161F36]'
               }`}
           >
             All ({students.length})
           </button>
           <button
             onClick={() => setRoleFilter('student')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${roleFilter === 'student'
-                ? 'bg-zinc-950 dark:bg-[#0e639c] text-white shadow-xs'
-                : 'text-zinc-700 dark:text-[#cccccc] hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#3c3c3c]'
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${roleFilter === 'student'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/30'
+                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#161F36]'
               }`}
           >
             Students
           </button>
           <button
             onClick={() => setRoleFilter('admin')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${roleFilter === 'admin'
-                ? 'bg-zinc-950 dark:bg-[#0e639c] text-white shadow-xs'
-                : 'text-zinc-700 dark:text-[#cccccc] hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#3c3c3c]'
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${roleFilter === 'admin'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-950/30'
+                : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#161F36]'
               }`}
           >
             Class Reps / Admins
@@ -108,17 +108,17 @@ export const RosterTab: React.FC<RosterTabProps> = ({
       </div>
 
       {/* Classmate Table Card */}
-      <div className="bg-white dark:bg-[#252526] border border-zinc-300 dark:border-[#2d2d2d] rounded-3xl overflow-hidden shadow-xs">
-        <div className="p-4 sm:p-5 border-b border-zinc-200 dark:border-[#2d2d2d] flex items-center justify-between flex-wrap gap-2.5">
+      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl overflow-hidden shadow-sm">
+        <div className="p-4 sm:p-5 border-b border-zinc-200 dark:border-[#1F2A44] flex items-center justify-between flex-wrap gap-2.5">
           <div>
             <h3 className="text-sm font-black text-zinc-950 dark:text-white">Classmates Roster</h3>
-            <p className="text-xs text-zinc-600 dark:text-[#858585] font-medium">
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
               Showing {filteredStudents.length} of {students.length} registered members
             </p>
           </div>
           <button
             onClick={onOpenAddTab}
-            className="px-3.5 py-1.5 bg-zinc-950 dark:bg-[#0e639c] hover:bg-zinc-800 dark:hover:bg-[#1177bb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition active:scale-95 cursor-pointer flex-shrink-0 shadow-xs"
+            className="px-3.5 py-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition active:scale-95 cursor-pointer flex-shrink-0 shadow-md shadow-indigo-950/20"
           >
             <UserPlus className="w-3.5 h-3.5" />
             Add Student
@@ -150,7 +150,7 @@ export const RosterTab: React.FC<RosterTabProps> = ({
             {/* Desktop Table */}
             <div className="hidden sm:block overflow-x-auto no-scrollbar">
               <table className="w-full text-left text-xs">
-                <thead className="bg-zinc-100/90 dark:bg-[#1e1e1e] text-zinc-700 dark:text-[#cccccc] uppercase tracking-wider text-[10px] font-bold border-b border-zinc-200 dark:border-[#2d2d2d]">
+                <thead className="bg-zinc-100/90 dark:bg-[#121A2D] text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-[10px] font-bold border-b border-zinc-200 dark:border-[#1F2A44]">
                   <tr>
                     <th className="py-3 px-6">Classmate</th>
                     <th className="py-3 px-6">Roll Number / ID</th>
@@ -159,7 +159,7 @@ export const RosterTab: React.FC<RosterTabProps> = ({
                     <th className="py-3 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200 dark:divide-[#2d2d2d]">
+                <tbody className="divide-y divide-zinc-200 dark:divide-[#1F2A44]">
                   {filteredStudents.map((student) => (
                     <RosterTableRow
                       key={student.id}

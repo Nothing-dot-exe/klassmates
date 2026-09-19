@@ -55,12 +55,12 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white dark:bg-[#181818] border border-zinc-200 dark:border-[#2b2b2b] rounded-t-3xl sm:rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[92dvh] animate-in slide-in-from-bottom-6 sm:zoom-in-95">
+      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-t-3xl sm:rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[92dvh] animate-in slide-in-from-bottom-6 sm:zoom-in-95 transition-colors">
         {/* Mobile Pull Bar */}
         <div className="sm:hidden w-12 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mt-3 mb-1" />
 
         {/* Top Handle Bar */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 dark:border-[#2b2b2b] bg-white dark:bg-[#181818]">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 dark:border-[#1F2A44] bg-white dark:bg-[#0E1424]">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-xs font-mono font-bold text-zinc-950 dark:text-zinc-100 truncate">
               @{activeUser.rollNo && !activeUser.rollNo.includes('@')
@@ -76,7 +76,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg hover:bg-zinc-100 dark:hover:bg-[#2a2d2e] transition cursor-pointer"
+            className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg hover:bg-zinc-100 dark:hover:bg-[#161F36] transition cursor-pointer"
             aria-label="Close"
           >
             <X className="w-5 h-5" />

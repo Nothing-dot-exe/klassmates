@@ -111,21 +111,21 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Single Add Form */}
-      <div className="bg-white dark:bg-[#252526] border border-zinc-300 dark:border-[#2d2d2d] rounded-3xl p-4 sm:p-8 shadow-xs">
+      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl p-4 sm:p-8 shadow-sm">
         <div className="flex items-center gap-2.5 mb-1">
-          <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#3c3c3c] text-zinc-900 dark:text-white border border-zinc-300 dark:border-[#4a4a4a]">
+          <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#1F2A44]">
             <UserPlus className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-black text-zinc-950 dark:text-white">Add Individual Student</h3>
         </div>
-        <p className="text-xs text-zinc-600 dark:text-[#858585] mb-6 font-medium">
+        <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-6 font-medium">
           Register a student directly into the classroom with their Roll Number.
         </p>
 
         <form onSubmit={handleAddMember} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-zinc-800 dark:text-[#cccccc] mb-1">
-              Student Full Name <span className="text-rose-600">*</span>
+            <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-300 mb-1">
+              Student Full Name <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
@@ -133,14 +133,14 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
               placeholder="e.g. Priya Sharma"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-[#858585] focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition shadow-2xs font-medium"
+              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs font-medium"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-zinc-800 dark:text-[#cccccc] mb-1">
-                Roll Number / ID <span className="text-rose-600">*</span>
+              <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-300 mb-1">
+                Roll Number / ID <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
@@ -148,16 +148,16 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
                 placeholder="e.g. 22CS095"
                 value={newRollNo}
                 onChange={(e) => setNewRollNo(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono font-bold text-zinc-950 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-[#858585] focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition shadow-2xs uppercase"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs uppercase"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-zinc-800 dark:text-[#cccccc] mb-1">Role</label>
+              <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-300 mb-1">Role</label>
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value as UserRole)}
-                className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-semibold focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition shadow-2xs cursor-pointer"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-semibold focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs cursor-pointer"
               >
                 <option value="student">Student</option>
                 <option value="admin">Co-Admin / Class Rep</option>
@@ -167,7 +167,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-zinc-800 dark:text-[#cccccc] mb-1">
+              <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-300 mb-1">
                 Mobile Number <span className="text-zinc-500 font-normal">(optional)</span>
               </label>
               <input
@@ -175,24 +175,24 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
                 placeholder="+91 98765..."
                 value={newPhone}
                 onChange={(e) => setNewPhone(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-[#858585] focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition shadow-2xs font-medium"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-zinc-800 dark:text-[#cccccc] mb-1">Email Address</label>
+              <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-300 mb-1">Email Address</label>
               <input
                 type="email"
                 placeholder="student@university.edu"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-[#858585] focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition shadow-2xs font-medium"
+                className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs font-medium"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-zinc-800 dark:text-[#cccccc] mb-1">
+            <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-300 mb-1">
               Initial Password <span className="text-zinc-500 font-normal">(defaults to {DEFAULT_TEMP_PASSWORD})</span>
             </label>
             <input
@@ -200,16 +200,16 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
               placeholder={`Leave blank to use default (${DEFAULT_TEMP_PASSWORD})`}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-[#858585] focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition font-mono shadow-2xs"
+              className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition font-mono shadow-xs"
             />
-            <p className="text-[11px] text-zinc-600 dark:text-[#858585] mt-1 font-medium">
+            <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1 font-medium">
               If left blank, student must change their password on first login.
             </p>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-zinc-950 dark:bg-[#0e639c] hover:bg-zinc-800 dark:hover:bg-[#1177bb] text-white text-xs font-bold shadow-xs transition active:scale-95 cursor-pointer"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-950/20 transition active:scale-95 cursor-pointer"
           >
             Add Student to Roster
           </button>
@@ -217,15 +217,15 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
       </div>
 
       {/* Bulk Roll Number Import */}
-      <div className="bg-white dark:bg-[#252526] border border-zinc-300 dark:border-[#2d2d2d] rounded-3xl p-4 sm:p-8 shadow-xs flex flex-col justify-between">
+      <div className="bg-white dark:bg-[#0E1424] border border-zinc-200 dark:border-[#1F2A44] rounded-3xl p-4 sm:p-8 shadow-sm flex flex-col justify-between">
         <div>
           <div className="flex items-center gap-2.5 mb-1">
-            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#3c3c3c] text-zinc-900 dark:text-white border border-zinc-300 dark:border-[#4a4a4a]">
+            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#121A2D] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#1F2A44]">
               <Layers className="w-4 h-4" />
             </div>
             <h3 className="text-sm font-black text-zinc-950 dark:text-white">Bulk Roll Number Whitelist</h3>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-[#858585] mb-4 font-medium">
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-4 font-medium">
             Paste entire class roll numbers (comma or newline separated). They will be automatically enrolled and able to chat.
           </p>
 
@@ -234,7 +234,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
             placeholder={'22CS001, 22CS002, 22CS003\n22CS004\n22CS005...'}
             value={bulkRollInput}
             onChange={(e) => setBulkRollInput(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-300 dark:border-[#3c3c3c] rounded-xl p-3 text-xs font-mono font-semibold text-zinc-950 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-[#858585] focus:outline-none focus:border-zinc-950 dark:focus:border-[#007acc] focus:bg-white dark:focus:bg-[#1e1e1e] transition shadow-2xs"
+            className="w-full bg-zinc-50 dark:bg-[#121A2D] border border-zinc-200 dark:border-[#1F2A44] rounded-xl p-3 text-xs font-mono font-semibold text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#161F36] transition shadow-xs"
           />
         </div>
 
@@ -242,7 +242,7 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
           type="button"
           onClick={handleBulkAdd}
           disabled={!bulkRollInput.trim()}
-          className="mt-4 w-full py-3 rounded-xl bg-zinc-950 dark:bg-[#0e639c] hover:bg-zinc-800 dark:hover:bg-[#1177bb] disabled:opacity-40 text-white text-xs font-bold transition active:scale-95 cursor-pointer shadow-xs"
+          className="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-40 text-white text-xs font-bold transition active:scale-95 cursor-pointer shadow-md shadow-indigo-950/20"
         >
           Import & Whitelist Roll Numbers
         </button>

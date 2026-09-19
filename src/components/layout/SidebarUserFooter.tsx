@@ -25,43 +25,44 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
       : (currentUser.name || 'User');
 
   return (
-    <div className="p-3 border-t border-zinc-200 dark:border-[#2d2d2d] bg-white dark:bg-[#181818] transition-colors">
-      <div className="flex items-center justify-between p-2 rounded-2xl bg-zinc-50 dark:bg-[#252526] border border-zinc-200 dark:border-[#2d2d2d] gap-2">
+    <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#0E1424] transition-colors">
+      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 dark:bg-[#10172A] border border-slate-200 dark:border-slate-800/80 gap-2 shadow-sm">
         <button
           type="button"
           onClick={onOpenSettings}
-          className="flex items-center gap-2 min-w-0 flex-1 hover:opacity-85 transition text-left cursor-pointer group"
+          className="flex items-center gap-2.5 min-w-0 flex-1 hover:opacity-90 transition text-left cursor-pointer group"
           title="Open My Profile & Settings"
         >
-          <div className="relative flex-shrink-0 p-[1px] rounded-full hover:ring-2 hover:ring-black dark:hover:ring-[#007acc] transition">
+          <div className="relative flex-shrink-0">
             <img
               src={getSafeAvatar(currentUser.avatar, displayName)}
               alt={displayName}
-              className="w-8 h-8 rounded-full object-cover bg-zinc-200 dark:bg-[#3c3c3c] ring-1 ring-zinc-200 dark:ring-[#3c3c3c]"
+              className="w-9 h-9 rounded-xl object-cover bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700"
             />
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#252526]" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#10172A]" />
           </div>
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold text-zinc-950 dark:text-white group-hover:text-black dark:group-hover:text-white transition truncate max-w-[100px]">
+              <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition truncate max-w-[100px]">
                 {displayName}
               </span>
             </div>
-            <div className="flex items-center gap-1 flex-wrap mt-0.5">
+            <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
               {cleanRollNo && (
                 <span
-                  className="font-mono text-[10px] font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/60 truncate max-w-[75px] flex-shrink-0"
+                  className="font-mono text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-slate-800 px-1.5 py-0.2 rounded border border-indigo-200 dark:border-slate-700 truncate max-w-[75px] flex-shrink-0"
                   title={cleanRollNo}
                 >
                   #{cleanRollNo}
                 </span>
               )}
               <span
-                className={`text-[9.5px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap flex items-center gap-1 flex-shrink-0 ${currentUser.role === 'admin'
-                    ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.15)]'
+                className={`text-[9.5px] font-mono font-bold uppercase tracking-wider px-2 py-0.2 rounded-full whitespace-nowrap flex items-center gap-1 flex-shrink-0 ${
+                  currentUser.role === 'admin'
+                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 shadow-glow-gold'
                     : 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40'
-                  }`}
+                }`}
               >
                 {currentUser.role === 'admin' ? '👑 Class Rep' : '🎓 Student'}
               </span>
@@ -70,12 +71,12 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
         </button>
 
         <div className="flex items-center gap-0.5 flex-shrink-0">
-          <ThemeToggle className="p-1" />
+          <ThemeToggle className="p-1 text-slate-500 dark:text-slate-400 hover:text-amber-500" />
           {onOpenSettings && (
             <button
               type="button"
               onClick={onOpenSettings}
-              className="p-1.5 rounded-xl text-zinc-500 dark:text-[#858585] hover:text-black dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-[#3c3c3c] border border-transparent transition active:scale-95 cursor-pointer"
+              className="p-1.5 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition active:scale-95 cursor-pointer"
               title="Account & Privacy Settings"
             >
               <Settings className="w-3.5 h-3.5" />
@@ -86,7 +87,7 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
             <button
               type="button"
               onClick={onSignOut}
-              className="p-1.5 rounded-xl text-zinc-500 dark:text-[#858585] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 border border-transparent transition active:scale-95 cursor-pointer"
+              className="p-1.5 rounded-xl text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition active:scale-95 cursor-pointer"
               title="Sign Out or Switch Account"
             >
               <LogOut className="w-3.5 h-3.5" />

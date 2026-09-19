@@ -98,7 +98,7 @@ export const CreateRoomView: React.FC<CreateRoomViewProps> = (props) => {
       {/* Submit button */}
       <button
         type="submit"
-        className="w-full py-3.5 rounded-2xl bg-black dark:bg-[#0e639c] hover:bg-zinc-800 dark:hover:bg-[#1177bb] text-white text-xs font-bold shadow-sm transition flex items-center justify-center gap-2 mt-4 active:scale-[0.99] cursor-pointer"
+        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-950/30 transition flex items-center justify-center gap-2 mt-4 active:scale-[0.99] cursor-pointer"
       >
         <Sparkles className="w-4 h-4" />
         <span>Launch Classroom & Enter Dashboard</span>

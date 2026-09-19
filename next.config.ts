@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     '*.loca.lt',
     '*.trycloudflare.com',
   ],
+  devIndicators: false,
 };
 
 export default nextConfig;

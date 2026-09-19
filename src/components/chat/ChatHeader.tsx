@@ -1,6 +1,6 @@
 'use client';
 
-import { Hash, Phone, Trash2, Image as ImageIcon } from 'lucide-react';
+import { Hash, Phone, Trash2, Image as ImageIcon, ArrowLeft } from 'lucide-react';
 import { Channel, User } from '@/types';
 import { getSafeAvatar } from '@/lib/avatarUtils';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
@@ -15,6 +15,7 @@ interface ChatHeaderProps {
   onOpenProfileById?: (userId: string) => void;
   onOpenClearChat: () => void;
   onOpenWallpaper?: () => void;
+  onBack?: () => void;
 }
 
 export const ChatHeader: React.FC<ChatHeaderProps> = ({
@@ -27,10 +28,21 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onOpenProfileById,
   onOpenClearChat,
   onOpenWallpaper,
+  onBack,
 }) => {
   return (
-    <div className="h-14 sm:h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#0B0E17]/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
-      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+    <div className="h-14 sm:h-16 border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-[#0E1424]/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="p-1.5 rounded-xl bg-slate-100 dark:bg-[#121A2D] text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-slate-800 transition active:scale-95 cursor-pointer flex-shrink-0"
+            title="Back to Channels"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+        )}
         {currentRecipient ? (
           <button
             type="button"

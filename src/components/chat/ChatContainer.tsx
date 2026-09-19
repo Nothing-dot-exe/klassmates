@@ -36,6 +36,7 @@ interface ChatContainerProps {
   onOpenProfileById?: (userId: string) => void;
   typingUser?: { userName: string; userAvatar?: string } | null;
   onTyping?: (isTyping: boolean) => void;
+  onBack?: () => void;
 }
 
 /** Returns a label like "Today", "Yesterday", or "8 September 2026" */
@@ -89,6 +90,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
   onOpenProfileById,
   typingUser,
   onTyping,
+  onBack,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
@@ -173,7 +175,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
   });
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#F8FAFC] dark:bg-[#0B0E17] overflow-hidden min-h-0 min-w-0 transition-colors">
+    <div className="flex-1 flex flex-col h-full bg-[#F8FAFC] dark:bg-[#080C15] overflow-hidden min-h-0 min-w-0 transition-colors">
       {/* Chat Header */}
       <ChatHeader
         currentChannel={currentChannel}
@@ -185,6 +187,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         onOpenProfileById={onOpenProfileById}
         onOpenClearChat={() => setIsClearChatOpen(true)}
         onOpenWallpaper={() => setIsWallpaperModalOpen(true)}
+        onBack={onBack}
       />
 
       {/* Messages Scroll Area with Dynamic Atmospheric Wallpaper */}
@@ -192,15 +195,45 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         style={themedBgStyle}
         className="flex-1 overflow-y-auto p-3 sm:p-4 no-scrollbar transition-all duration-300"
       >
+        {/* Stitch Glassmorphic Pinned Announcement Card for #general */}
+        {currentChannel && currentChannel.name.toLowerCase() === 'general' && (
+          <div className="p-3.5 mb-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-50 to-white dark:from-[#161F36] dark:via-[#121A2D] dark:to-[#0E1424] border border-amber-500/30 shadow-md relative overflow-hidden group">
+            <div className="absolute -right-8 -top-8 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
+            <div className="flex items-start justify-between relative z-10 gap-3">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-500 flex-shrink-0">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.2 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold text-[10px] uppercase tracking-wider">
+                      📌 Milestone Notice
+                    </span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                      • Pinned by Class Rep
+                    </span>
+                  </div>
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+                    Study Notes, Handouts & Lecture Slides in Document Vault
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Syllabi, cheat sheets, and assignment submissions are organized in the Vault. Upload yours to share with classmates!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Welcome Banner - Tailored for General vs DM */}
         {currentChannel ? (
-          <div className="p-6 my-4 rounded-3xl bg-white dark:bg-[#121826] border border-slate-200 dark:border-slate-800 text-center space-y-2.5 shadow-sm transition-colors">
-            <div className="inline-flex p-3 rounded-2xl bg-slate-100 dark:bg-[#182032] text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700/60 shadow-inner">
-              <Hash className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+          <div className="p-6 my-4 rounded-3xl bg-white dark:bg-[#0E1424] border border-slate-200 dark:border-slate-800/80 text-center space-y-2.5 shadow-md transition-colors">
+            <div className="inline-flex p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 shadow-inner">
+              <Hash className="w-6 h-6" />
             </div>
             <div className="flex items-center justify-center gap-2">
               <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight font-display">Welcome to #{currentChannel.name}!</h3>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#182032] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                 Classroom Hall
               </span>
             </div>
@@ -208,56 +241,56 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
               This is the official discussion channel for your classroom. Announcements, class questions, and shared notes posted here are visible to all enrolled classmates.
             </p>
             <div className="flex items-center justify-center gap-3 pt-1 text-[11px] text-slate-500 dark:text-slate-400">
-              <span className="inline-flex items-center gap-1 font-medium">
-                <Users className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" /> Class Discussions
+              <span className="inline-flex items-center gap-1 font-medium text-slate-600 dark:text-slate-300">
+                <Users className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" /> Class Discussions
               </span>
               <span>•</span>
-              <span className="inline-flex items-center gap-1 font-medium">
-                <Sparkles className="w-3.5 h-3.5 text-zinc-700 dark:text-[#cccccc]" /> Realtime Sync
+              <span className="inline-flex items-center gap-1 font-medium text-slate-600 dark:text-slate-300">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" /> Realtime Sync
               </span>
             </div>
           </div>
         ) : currentRecipient ? (
-          <div className="p-6 my-4 rounded-3xl bg-white dark:bg-[#252526] border border-zinc-200/90 dark:border-[#2d2d2d] text-center space-y-3 shadow-sm transition-colors">
+          <div className="p-6 my-4 rounded-3xl bg-white dark:bg-[#0E1424] border border-slate-200 dark:border-slate-800/80 text-center space-y-3 shadow-md transition-colors">
             <div className="relative inline-block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={getSafeAvatar(currentRecipient.avatar, currentRecipient.name)}
                 alt={currentRecipient.name}
-                className="w-16 h-16 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-[#3c3c3c] mx-auto shadow-sm bg-zinc-100 dark:bg-[#1e1e1e]"
+                className="w-16 h-16 rounded-2xl object-cover ring-2 ring-indigo-500/30 mx-auto shadow-sm bg-slate-100 dark:bg-slate-800"
               />
               <span
-                className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-[#252526] ${
+                className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-[#0E1424] ${
                   currentRecipient.status === 'studying'
-                    ? 'bg-zinc-600 dark:bg-zinc-400'
+                    ? 'bg-amber-400'
                     : currentRecipient.status === 'online'
                     ? 'bg-emerald-500'
-                    : 'bg-zinc-300 dark:bg-zinc-600'
+                    : 'bg-slate-400'
                 }`}
               />
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-bold text-zinc-950 dark:text-white flex items-center justify-center gap-2 flex-wrap">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2 flex-wrap">
                 {hasRecipientNickname ? (
                   <>
                     <span>{currentRecipient.nickname?.trim()}</span>
-                    <span className="text-xs text-zinc-500 dark:text-[#858585] font-normal">({currentRecipient.name})</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-normal">({currentRecipient.name})</span>
                   </>
                 ) : (
                   <span>{currentRecipient.name}</span>
                 )}
                 {currentRecipient.rollNo && (
-                  <span className="text-[10px] font-mono text-zinc-800 dark:text-[#cccccc] bg-zinc-100 dark:bg-[#3c3c3c] border border-zinc-200 dark:border-[#2d2d2d] px-1.5 py-0.5 rounded">
-                    {currentRecipient.rollNo}
+                  <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 px-1.5 py-0.5 rounded">
+                    #{currentRecipient.rollNo}
                   </span>
                 )}
               </h3>
-              <p className="text-xs text-zinc-600 dark:text-[#858585] max-w-sm mx-auto">
+              <p className="text-xs text-slate-600 dark:text-slate-400 max-w-sm mx-auto">
                 {currentRecipient.bio || 'Direct 1-on-1 classmate conversation'}
               </p>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-50 dark:bg-[#1e1e1e] border border-zinc-200 dark:border-[#2d2d2d] text-[10.5px] text-zinc-600 dark:text-[#858585] font-medium">
-              <Lock className="w-3 h-3 text-zinc-500 dark:text-[#858585]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-[10.5px] text-slate-600 dark:text-slate-400 font-medium">
+              <Lock className="w-3 h-3 text-slate-400" />
               <span>End-to-End Direct Chat • Private between you and {currentRecipient.nickname?.trim() || currentRecipient.name}</span>
             </div>
           </div>
@@ -267,12 +300,12 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         {renderItems.map((item) => {
           if (item.kind === 'date') {
             return (
-              <div key={item.key} className="flex items-center gap-3 my-4 px-2">
-                <div className="flex-1 h-px bg-zinc-200" />
-                <span className="text-[10px] font-semibold text-zinc-600 bg-white border border-zinc-200 px-3 py-1 rounded-full tracking-wide uppercase select-none shadow-xs font-mono">
+              <div key={item.key} className="flex items-center gap-3 my-5 px-2">
+                <div className="flex-1 h-px bg-slate-200 dark:bg-slate-800/80" />
+                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-[#121A2D] border border-slate-200 dark:border-slate-800 px-3 py-0.5 rounded-full tracking-wider uppercase select-none shadow-2xs font-mono">
                   {item.label}
                 </span>
-                <div className="flex-1 h-px bg-zinc-200" />
+                <div className="flex-1 h-px bg-slate-200 dark:bg-slate-800/80" />
               </div>
             );
           }
@@ -309,20 +342,20 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
               <img
                 src={typingUser.userAvatar}
                 alt={typingUser.userName}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-1 ring-zinc-200 flex-shrink-0 mb-1"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-700 flex-shrink-0 mb-1"
               />
             ) : (
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-zinc-100 text-zinc-900 border border-zinc-200 font-bold flex items-center justify-center text-xs flex-shrink-0 mb-1">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-bold flex items-center justify-center text-xs flex-shrink-0 mb-1">
                 {typingUser.userName[0]?.toUpperCase()}
               </div>
             )}
-            <div className="flex items-center gap-2 bg-white border border-zinc-200 rounded-2xl rounded-tl-xs px-4 py-2.5 shadow-xs">
+            <div className="flex items-center gap-2 bg-white dark:bg-[#121A2D] border border-slate-200 dark:border-slate-800 rounded-2xl rounded-tl-xs px-4 py-2.5 shadow-xs">
               <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-zinc-950 typing-dot-1" />
-                <span className="w-2 h-2 rounded-full bg-zinc-950 typing-dot-2" />
-                <span className="w-2 h-2 rounded-full bg-zinc-950 typing-dot-3" />
+                <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 typing-dot-1" />
+                <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 typing-dot-2" />
+                <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 typing-dot-3" />
               </div>
-              <span className="text-xs font-medium text-zinc-600 ml-1">
+              <span className="text-xs font-medium text-slate-600 dark:text-slate-300 ml-1">
                 {typingUser.userName} is typing...
               </span>
             </div>

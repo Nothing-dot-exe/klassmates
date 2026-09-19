@@ -1,52 +1,55 @@
 import QRCode from 'qrcode';
 import path from 'path';
+import os from 'os';
 
-const baseUrl = process.argv[2] || 'https://subsection-essays-dig-determination.trycloudflare.com';
-const tunnelUrl = baseUrl.includes('?') ? baseUrl : `${baseUrl}?reset=true`;
-const localIp = '10.248.203.164';
-const localUrl = `http://${localIp}:3000?reset=true`;
+function getLocalIp() {
+  const nets = os.networkInterfaces();
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name] || []) {
+      if (net.family === 'IPv4' && !net.internal) {
+        return net.address;
+      }
+    }
+  }
+  return 'localhost';
+}
 
 async function main() {
+  const localIp = getLocalIp();
+  const targetUrl = process.argv[2] || `http://${localIp}:3000`;
+
   console.log('\n=============================================================');
-  console.log('📱 CLASSMATE MOBILE QR CODE CONNECT');
+  console.log('📱 CLASSMATE MOBILE CONNECT & RESPONSIVENESS TEST');
   console.log('=============================================================');
-  console.log('🌍 Public HTTPS URL (Works on any mobile network / 4G / 5G / Wi-Fi):');
-  console.log(`   ${tunnelUrl}\n`);
-  console.log('📶 Local Wi-Fi URL (Same Wi-Fi network):');
-  console.log(`   ${localUrl}\n`);
-  console.log('📷 SCAN THE QR CODE BELOW WITH YOUR MOBILE CAMERA:');
-  console.log('=============================================================\n');
+  console.log(`💻 Local Computer URL:   http://localhost:3000`);
+  console.log(`📶 Wi-Fi Mobile Network: ${targetUrl}`);
+  console.log('=============================================================');
+  console.log('📷 SCAN WITH YOUR MOBILE PHONE CAMERA TO TEST ON MOBILE:\n');
 
-  // Print ASCII QR Code for Terminal
-  const asciiQr = await QRCode.toString(tunnelUrl, {
-    type: 'terminal',
-    small: true
-  });
-  console.log(asciiQr);
+  try {
+    const asciiQr = await QRCode.toString(targetUrl, {
+      type: 'terminal',
+      small: true,
+    });
+    console.log(asciiQr);
+  } catch (err) {
+    console.log(`Could not generate terminal QR, open directly on phone: ${targetUrl}`);
+  }
 
-  // Save PNG QR Code to public and artifacts directory
-  const publicQr = path.join(process.cwd(), 'public', 'mobile_connect_qr.png');
-  await QRCode.toFile(publicQr, tunnelUrl, {
-    width: 600,
-    margin: 2,
-    color: {
-      dark: '#0f172a',
-      light: '#ffffff'
-    }
-  });
+  try {
+    const publicQr = path.join(process.cwd(), 'public', 'mobile_connect_qr.png');
+    await QRCode.toFile(publicQr, targetUrl, {
+      width: 400,
+      margin: 2,
+      color: {
+        dark: '#09090b',
+        light: '#ffffff',
+      },
+    });
+  } catch {
+    // optional
+  }
 
-  const artifactDir = 'C:\\Users\\kadam\\.gemini\\antigravity-ide\\brain\\57f90c60-656c-4346-ad5a-3f32054e0cb3';
-  const pngPath = path.join(artifactDir, 'mobile_connect_qr.png');
-  await QRCode.toFile(pngPath, tunnelUrl, {
-    width: 600,
-    margin: 2,
-    color: {
-      dark: '#0f172a',
-      light: '#ffffff'
-    }
-  });
-
-  console.log(`\n✅ High-resolution PNG QR saved to: ${pngPath}`);
   console.log('=============================================================\n');
 }
 

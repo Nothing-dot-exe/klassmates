@@ -10,8 +10,8 @@ import { useJoinGateOtp } from './useJoinGateOtp';
 export interface JoinGateActionProps {
   classroom: Classroom;
   existingStudents: User[];
-  onLoginStudent: (student: User) => void;
-  onLoginAdmin: (adminPasswordInput: string) => boolean | Promise<boolean>;
+  onLoginStudent: (student: User, rememberMe?: boolean) => void;
+  onLoginAdmin: (adminPasswordInput: string, rememberMe?: boolean) => boolean | Promise<boolean>;
   onCreateClassroom?: (classroom: Classroom, admin: User) => void;
   onJoinSubmitted: (req: PendingRequest, classroomId?: string) => void;
   onJoinDirect: (student: User) => void;
@@ -215,17 +215,22 @@ export const useJoinGateActions = (
     if (needsRehash) {
       dbUpdateStudent(student.id, { password: inputPassword });
     }
-    if (student.mustChangePassword) {
+
+    // Security: Force students using public Roll Number as password to set a private password
+    const isDefaultRollPassword = Boolean(student.rollNo && inputPassword.toUpperCase() === student.rollNo.toUpperCase());
+    const isDefaultTempPassword = inputPassword === DEFAULT_TEMP_PASSWORD;
+
+    if (student.mustChangePassword || isDefaultRollPassword || isDefaultTempPassword) {
       s.setForceNewPasswordStudent(student);
       return;
     }
-    props.onLoginStudent(student);
+    props.onLoginStudent(student, s.rememberMe);
   };
 
   const handleAdminLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     s.setErrorMessage('');
-    const success = await props.onLoginAdmin(s.adminPasswordInput);
+    const success = await props.onLoginAdmin(s.adminPasswordInput, s.rememberMe);
     if (!success) s.setErrorMessage('Access Denied: Incorrect Master Admin Password.');
   };
 

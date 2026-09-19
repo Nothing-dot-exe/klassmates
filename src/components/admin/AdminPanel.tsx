@@ -5,6 +5,7 @@ import QRCode from 'qrcode';
 import { Sparkles } from 'lucide-react';
 import { User, UserRole } from '@/types';
 import { DEFAULT_TEMP_PASSWORD } from '@/lib/privacyUtils';
+import { verifyPassword } from '@/lib/security/passwordUtils';
 import { generateInviteCardPng } from '@/lib/cardGenerator';
 import { exportAndDownloadRoomBackup } from '@/lib/backupExporter';
 import { AdminPanelProps } from './adminTypes';
@@ -35,6 +36,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const [resetConfirmText, setResetConfirmText] = useState('');
+  const [adminPasswordConfirm, setAdminPasswordConfirm] = useState('');
   const [isResetting, setIsResetting] = useState(false);
   const [editingStudent, setEditingStudent] = useState<User | null>(null);
   const [resetModalStudent, setResetModalStudent] = useState<User | null>(null);
@@ -114,6 +116,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   const handleExtractAndReset = async () => {
+    if (classroom.adminPassword) {
+      const check = await verifyPassword(adminPasswordConfirm.trim(), classroom.adminPassword);
+      if (!check.isValid) {
+        showToast('Access Denied: Incorrect Master Admin Password.');
+        return;
+      }
+    }
+
     if (resetConfirmText.trim().toUpperCase() !== 'RESET') {
       showToast('Please type RESET to confirm.');
       return;
@@ -138,6 +148,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       setIsResetConfirmOpen(false);
       setResetConfirmText('');
+      setAdminPasswordConfirm('');
 
       if (typeof window !== 'undefined') {
         localStorage.clear();
@@ -280,8 +291,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         classroom={classroom}
         resetConfirmText={resetConfirmText}
         setResetConfirmText={setResetConfirmText}
+        adminPasswordConfirm={adminPasswordConfirm}
+        setAdminPasswordConfirm={setAdminPasswordConfirm}
         isResetting={isResetting}
-        onClose={() => setIsResetConfirmOpen(false)}
+        onClose={() => {
+          setIsResetConfirmOpen(false);
+          setAdminPasswordConfirm('');
+        }}
         onConfirmReset={handleExtractAndReset}
       />
     </div>

@@ -7,6 +7,8 @@ interface FactoryResetModalProps {
   classroom: Classroom;
   resetConfirmText: string;
   setResetConfirmText: (v: string) => void;
+  adminPasswordConfirm: string;
+  setAdminPasswordConfirm: (v: string) => void;
   isResetting: boolean;
   onClose: () => void;
   onConfirmReset: () => void;
@@ -17,6 +19,8 @@ export const FactoryResetModal: React.FC<FactoryResetModalProps> = ({
   classroom,
   resetConfirmText,
   setResetConfirmText,
+  adminPasswordConfirm,
+  setAdminPasswordConfirm,
   isResetting,
   onClose,
   onConfirmReset,
@@ -41,18 +45,32 @@ export const FactoryResetModal: React.FC<FactoryResetModalProps> = ({
           </p>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs space-y-2">
-          <div className="text-[11px] text-zinc-600 dark:text-zinc-400">
-            To confirm this factory reset, please type{' '}
-            <strong className="text-zinc-950 dark:text-white font-mono font-bold">RESET</strong> below:
+        <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs space-y-3">
+          <div className="space-y-1">
+            <label className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
+              Enter Master Admin Password to Authorize:
+            </label>
+            <input
+              type="password"
+              placeholder="Enter CR Master Password"
+              value={adminPasswordConfirm}
+              onChange={(e) => setAdminPasswordConfirm(e.target.value)}
+              className="w-full bg-white dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-950 dark:text-white focus:outline-none focus:border-rose-500 shadow-xs"
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Type RESET to confirm"
-            value={resetConfirmText}
-            onChange={(e) => setResetConfirmText(e.target.value)}
-            className="w-full bg-white dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-950 dark:text-white font-mono font-bold focus:outline-none focus:border-rose-500 tracking-wider text-center shadow-xs"
-          />
+
+          <div className="space-y-1">
+            <div className="text-[11px] text-zinc-600 dark:text-zinc-400">
+              Type <strong className="text-zinc-950 dark:text-white font-mono font-bold">RESET</strong> to confirm:
+            </div>
+            <input
+              type="text"
+              placeholder="Type RESET to confirm"
+              value={resetConfirmText}
+              onChange={(e) => setResetConfirmText(e.target.value)}
+              className="w-full bg-white dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-950 dark:text-white font-mono font-bold focus:outline-none focus:border-rose-500 tracking-wider text-center shadow-xs"
+            />
+          </div>
         </div>
 
         <div className="flex gap-2.5 pt-1">

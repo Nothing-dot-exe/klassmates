@@ -21,6 +21,8 @@ interface SignInViewProps {
   onPasswordResetSuccess?: (user: User) => void;
   setErrorMessage?: (msg: string) => void;
   setSuccessMessage?: (msg: string) => void;
+  rememberMe?: boolean;
+  setRememberMe?: (v: boolean) => void;
 }
 
 export const SignInView: React.FC<SignInViewProps> = ({
@@ -41,6 +43,8 @@ export const SignInView: React.FC<SignInViewProps> = ({
   onPasswordResetSuccess,
   setErrorMessage,
   setSuccessMessage,
+  rememberMe = true,
+  setRememberMe,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -91,35 +95,13 @@ export const SignInView: React.FC<SignInViewProps> = ({
       {/* Student Sign In Form */}
       {signInRole === 'student' ? (
         <form onSubmit={onStudentLoginSubmit} autoComplete="off" className="space-y-3.5">
-          {/* Quick Member Selector */}
-          {existingStudents.length > 0 && (
-            <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-zinc-950 dark:text-zinc-300 uppercase tracking-wider">
-                  Select Enrolled Member ({existingStudents.length} classmates):
-                </span>
-              </div>
-              <select
-                onChange={(e) => {
-                  const sel = existingStudents.find((s) => s.id === e.target.value);
-                  if (sel) {
-                    setLoginIdentifier(sel.rollNo || sel.email || '');
-                  }
-                }}
-                defaultValue=""
-                className="w-full bg-white dark:bg-[#18181b] border border-zinc-300 dark:border-[#27272a] rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500 transition cursor-pointer"
-              >
-                <option value="" disabled className="dark:bg-[#18181b] dark:text-zinc-400">
-                  -- Choose your name from the classroom roster --
-                </option>
-                {existingStudents.map((st) => (
-                  <option key={st.id} value={st.id} className="dark:bg-[#18181b] dark:text-zinc-200">
-                    {st.name} ({st.rollNo}) {st.role === 'admin' ? '👑 CR' : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          {/* Private Classroom Security Notice (No Public Member Enumeration) */}
+          <div className="p-3 rounded-xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] flex items-center gap-2.5 text-left">
+            <Lock className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+            <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-tight">
+              <strong className="text-zinc-900 dark:text-zinc-200">Private Classroom Workspace:</strong> Restricted to enrolled classmates. Enter your credentials below.
+            </p>
+          </div>
 
           <div>
             <label className="block text-xs font-semibold text-zinc-800 dark:text-zinc-300 mb-1">
@@ -164,8 +146,26 @@ export const SignInView: React.FC<SignInViewProps> = ({
               </button>
             </div>
             <p className="text-[10.5px] text-zinc-500 dark:text-zinc-500 mt-1">
-              Default password is your Roll Number or the password set during registration.
+              Initial password is your Roll Number or the password set during enrollment.
             </p>
+          </div>
+
+          {/* Remember Me / Shared Lab PC Security Toggle */}
+          <div className="flex items-center justify-between pt-0.5">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe?.(e.target.checked)}
+                className="w-3.5 h-3.5 rounded border-zinc-300 dark:border-zinc-700 text-indigo-600 focus:ring-indigo-500 accent-indigo-600 cursor-pointer"
+              />
+              <span className="text-[11px] text-zinc-700 dark:text-zinc-300 font-medium">
+                Keep me signed in on this device
+              </span>
+            </label>
+            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 hidden sm:inline">
+              (Uncheck on lab PCs)
+            </span>
           </div>
 
           <button
@@ -217,6 +217,24 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+          </div>
+
+          {/* Remember Me / Shared Lab PC Security Toggle for Admin */}
+          <div className="flex items-center justify-between pt-0.5">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe?.(e.target.checked)}
+                className="w-3.5 h-3.5 rounded border-zinc-300 dark:border-zinc-700 text-amber-500 focus:ring-amber-500 accent-amber-500 cursor-pointer"
+              />
+              <span className="text-[11px] text-zinc-700 dark:text-zinc-300 font-medium">
+                Keep CR session active on this device
+              </span>
+            </label>
+            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 hidden sm:inline">
+              (Uncheck on public PCs)
+            </span>
           </div>
 
           <button

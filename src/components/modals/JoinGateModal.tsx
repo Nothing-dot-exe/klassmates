@@ -23,8 +23,8 @@ interface JoinGateModalProps {
   classroom: Classroom;
   existingStudents: User[];
   prefilledCode?: string;
-  onLoginStudent: (student: User) => void;
-  onLoginAdmin: (adminPasswordInput: string) => boolean | Promise<boolean>;
+  onLoginStudent: (student: User, rememberMe?: boolean) => void;
+  onLoginAdmin: (adminPasswordInput: string, rememberMe?: boolean) => boolean | Promise<boolean>;
   onRegisterTeacher?: (teacher: User) => void;
   onCreateClassroom?: (classroom: Classroom, admin: User) => void;
   onJoinSubmitted: (req: PendingRequest, classroomId?: string) => void;
@@ -276,6 +276,8 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
               }}
               setErrorMessage={s.setErrorMessage}
               setSuccessMessage={s.setSuccessMessage}
+              rememberMe={s.rememberMe}
+              setRememberMe={s.setRememberMe}
             />
           )}
 

@@ -59,6 +59,9 @@ export const useJoinGateState = (prefilledCode: string, classroom: Classroom) =>
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  // Security: Keep me signed in (false on shared campus lab PCs)
+  const [rememberMe, setRememberMe] = useState(true);
+
   return {
     navMode, setNavMode,
     signInRole, setSignInRole,
@@ -96,5 +99,6 @@ export const useJoinGateState = (prefilledCode: string, classroom: Classroom) =>
     confirmPassword, setConfirmPassword,
     errorMessage, setErrorMessage,
     successMessage, setSuccessMessage,
+    rememberMe, setRememberMe,
   };
 };

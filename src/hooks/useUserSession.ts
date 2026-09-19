@@ -45,6 +45,22 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
         }
       }
 
+      // 1. Check active tab session (for shared lab PCs where Remember Me is off)
+      const tabUserStr = sessionStorage.getItem('classmate_current_user');
+      if (tabUserStr) {
+        try {
+          const parsed = JSON.parse(tabUserStr);
+          if (parsed && parsed.id) {
+            setCurrentUser(parsed);
+            setIsSessionLoaded(true);
+            return;
+          }
+        } catch {
+          sessionStorage.removeItem('classmate_current_user');
+        }
+      }
+
+      // 2. Check persistent device storage (for personal devices with Remember Me)
       const savedUserStr = localStorage.getItem('classmate_current_user');
       if (savedUserStr) {
         try {
@@ -61,7 +77,7 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
     }
   }, [classroom?.adminId, classroom?.adminEmail]);
 
-  const handleUserLoggedIn = async (user: User) => {
+  const handleUserLoggedIn = async (user: User, rememberMe: boolean = true) => {
     setCurrentUser(user);
     if (typeof window !== 'undefined') {
       const isAdmin =
@@ -71,21 +87,29 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
 
       const token = await signUserSession(user.id, isAdmin ? 'admin' : 'student', classroom?.id);
 
-      // Unified, HMAC-protected session storage across tabs & reloads
-      localStorage.setItem('classmate_current_user', JSON.stringify(user));
-      localStorage.setItem('classmate_session_token', token);
+      if (rememberMe) {
+        // Persistent storage for personal laptop/mobile
+        localStorage.setItem('classmate_current_user', JSON.stringify(user));
+        localStorage.setItem('classmate_session_token', token);
+        sessionStorage.removeItem('classmate_current_user');
+      } else {
+        // Ephemeral session storage for shared campus lab computers (clears when browser tab closes)
+        localStorage.removeItem('classmate_current_user');
+        localStorage.removeItem('classmate_session_token');
+        sessionStorage.setItem('classmate_current_user', JSON.stringify(user));
+        sessionStorage.setItem('classmate_session_token', token);
+      }
 
       if (isAdmin) {
         sessionStorage.setItem('classmate_admin_session', JSON.stringify(user));
         sessionStorage.setItem('classmate_session_token', token);
       } else {
         sessionStorage.removeItem('classmate_admin_session');
-        sessionStorage.removeItem('classmate_session_token');
       }
     }
   };
 
-  const handleAdminLogin = async (adminPasswordInput: string): Promise<boolean> => {
+  const handleAdminLogin = async (adminPasswordInput: string, rememberMe: boolean = true): Promise<boolean> => {
     const input = adminPasswordInput.trim();
     if (!input) return false;
 
@@ -120,7 +144,7 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
         joinedAt: new Date().toISOString().split('T')[0],
         bio: classroom.adminDesignation || 'Class Representative (CR)',
       };
-      await handleUserLoggedIn(resolvedAdmin);
+      await handleUserLoggedIn(resolvedAdmin, rememberMe);
       return true;
     }
     return false;

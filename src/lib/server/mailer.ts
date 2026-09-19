@@ -132,33 +132,83 @@ const dispatchEmail = async (opts: { to: string; subject: string; text: string; 
 };
 
 /**
- * Sends a 6-digit OTP verification email with numeric code.
+ * Sends a 6-digit OTP verification email with a premium dark responsive template.
  */
 export const sendVerificationEmail = async ({ to, code }: SendMailOptions): Promise<MailResult> => {
   const safeCode = escapeHtml(code);
+  const digits = code.split('').map(d => `
+    <td align="center" valign="middle" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; border-radius: 10px; font-size: 26px; font-weight: 800; color: #38bdf8; width: 46px; height: 56px; mso-padding-alt: 10px 0;">
+      ${escapeHtml(d)}
+    </td>
+  `).join('<td style="width: 8px;" width="8"></td>');
+
   const html = `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff;">
-      <div style="text-align: center; margin-bottom: 24px;">
-        <h2 style="color: #4f46e5; margin: 0 0 6px 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Classmate</h2>
-        <p style="color: #64748b; font-size: 13px; margin: 0;">Classroom Collaboration Hub</p>
-      </div>
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px 20px; text-align: center; margin-bottom: 24px;">
-        <p style="color: #334155; font-size: 14px; font-weight: 500; margin: 0 0 12px 0;">Your 6-digit verification code is:</p>
-        <div style="font-size: 36px; font-weight: 900; letter-spacing: 8px; color: #4338ca; background: #eef2ff; border: 1px solid #c7d2fe; padding: 14px 24px; border-radius: 10px; display: inline-block; font-family: 'Courier New', Courier, monospace;">
-          ${safeCode}
-        </div>
-        <p style="color: #64748b; font-size: 12px; margin: 16px 0 0 0;">Valid for <strong>10 minutes</strong>. Never share this code with anyone.</p>
-      </div>
-      <p style="color: #94a3b8; font-size: 11px; text-align: center; margin: 0; line-height: 1.5;">
-        If you did not request this verification code, you can safely ignore this message.
-      </p>
-    </div>
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Verification Code</title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #09090b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #09090b; padding: 40px 0;">
+        <tr>
+          <td align="center">
+            <table role="presentation" width="100%" max-width="520px" cellspacing="0" cellpadding="0" style="max-width: 520px; margin: 0 auto; background: #0f172a; border: 1px solid #1e293b; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
+              <tr>
+                <td style="padding: 36px 32px 24px 32px; text-align: center;">
+                  <div style="display: inline-block; padding: 6px 14px; border-radius: 9999px; background: rgba(56, 189, 248, 0.1); color: #38bdf8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                    Security Verification
+                  </div>
+                  <h1 style="color: #ffffff; margin: 0 0 8px 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">Classmate</h1>
+                  <p style="color: #94a3b8; font-size: 13px; margin: 0;">Classroom Collaboration Hub</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 0 32px 32px 32px;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 28px 24px;">
+                    <tr>
+                      <td align="center" style="padding-bottom: 20px;">
+                        <p style="color: #cbd5e1; font-size: 14px; font-weight: 500; margin: 0;">Please use the verification code below to complete your sign-in:</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center">
+                        <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+                          <tr>
+                            ${digits}
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="padding-top: 24px;">
+                        <p style="color: #94a3b8; font-size: 12px; margin: 0;">This code is valid for <strong style="color: #f8fafc;">10 minutes</strong>. Do not share this code with anyone.</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 0 32px 36px 32px; text-align: center;">
+                  <p style="color: #64748b; font-size: 11px; margin: 0; line-height: 1.6;">
+                    If you didn't request this code, you can safely ignore this email.<br>
+                    &copy; ${new Date().getFullYear()} Classmate Hub. All rights reserved.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
   `;
 
   return dispatchEmail({
     to,
     subject: `Your Classmate verification code is ${safeCode}`,
-    text: `Your Classmate 6-digit verification code is: ${safeCode}. Valid for 10 minutes.`,
+    text: `Your Classmate 6-digit verification code is: ${safeCode}. Valid for 10 minutes. Never share this code.`,
     html,
   });
 };

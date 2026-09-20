@@ -1,28 +1,36 @@
 import React from 'react';
-import { User, DocumentItem, ChatMessage, AutoDeleteOption, ChatReplyReference } from '@/types';
+import { Classroom, User, DocumentItem, ChatMessage, AutoDeleteOption, ChatReplyReference } from '@/types';
 import { CURRENT_USER } from '@/lib/mockData';
 import { dbSendMessage, dbCreateDocument, dbDeleteDocument, dbDeleteMessage, dbClearConversationMessages, dbUpdateMessageReactions } from '@/lib/databaseService';
 import { broadcastNewMessage, broadcastReaction, broadcastMessageDeleted, broadcastClearChat } from '@/lib/realtimeService';
 import { generateUniqueId } from '@/lib/security/idUtils';
+import { sanitizeChatMessage, validateEmojiReaction } from '@/lib/security/inputSanitizer';
+import { evaluateCanDeleteForEveryone } from '@/lib/chatPermissions';
 
 interface UseChatActionsParams {
   classroomId: string;
+  classroom?: Classroom;
   currentUser: User | null;
   currentConversationKey: string;
   selectedChannelId: string;
   selectedDmUserId: string;
   activeView: string;
+  messages?: Record<string, ChatMessage[]>;
+  documents?: DocumentItem[];
   setMessages: React.Dispatch<React.SetStateAction<Record<string, ChatMessage[]>>>;
   setDocuments: React.Dispatch<React.SetStateAction<DocumentItem[]>>;
 }
 
 export function useChatActions({
   classroomId,
+  classroom,
   currentUser,
   currentConversationKey,
   selectedChannelId,
   selectedDmUserId,
   activeView,
+  messages,
+  documents,
   setMessages,
   setDocuments,
 }: UseChatActionsParams) {
@@ -32,6 +40,16 @@ export function useChatActions({
   };
 
   const handleDeleteDocument = (docId: string) => {
+    const doc = documents?.find((d) => d.id === docId);
+    const isOwner = Boolean(doc && currentUser && doc.uploadedBy === currentUser.id);
+    const isAdmin = Boolean(
+      currentUser?.role === 'admin' ||
+      (classroom && currentUser?.id === classroom.adminId)
+    );
+    if (doc && !isOwner && !isAdmin) {
+      console.warn('Unauthorized attempt to delete document');
+      return;
+    }
     setDocuments((prev) => prev.filter((d) => d.id !== docId));
     dbDeleteDocument(docId, classroomId);
   };
@@ -51,7 +69,7 @@ export function useChatActions({
       senderName: sender.nickname?.trim() || sender.name,
       senderRollNo: sender.rollNo,
       senderAvatar: sender.avatar,
-      content: payload.content,
+      content: sanitizeChatMessage(payload.content),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       channelId: activeView === 'channel' ? selectedChannelId : undefined,
       recipientId: activeView === 'dm' ? selectedDmUserId : undefined,
@@ -98,6 +116,7 @@ export function useChatActions({
   };
 
   const handleReact = (messageId: string, emoji: string) => {
+    if (!validateEmojiReaction(emoji)) return;
     const currentUserId = currentUser ? currentUser.id : CURRENT_USER.id;
 
     setMessages((prev) => {
@@ -140,6 +159,34 @@ export function useChatActions({
   };
 
   const handleDeleteMessage = (messageId: string) => {
+    // Locate the target message across loaded conversations
+    let targetMessage: ChatMessage | undefined;
+    if (messages) {
+      for (const list of Object.values(messages)) {
+        const found = list.find((m) => m.id === messageId);
+        if (found) {
+          targetMessage = found;
+          break;
+        }
+      }
+    }
+
+    if (targetMessage && currentUser) {
+      const isChannel = Boolean(targetMessage.channelId);
+      const canDeleteEveryone = evaluateCanDeleteForEveryone({
+        isChannel,
+        currentUser,
+        targetMessage,
+        adminUser: classroom?.adminId ? { id: classroom.adminId } : undefined,
+      });
+
+      if (!canDeleteEveryone) {
+        console.warn('Unauthorized attempt to delete message for everyone; applying Delete for Me.');
+        handleDeleteForMe(messageId);
+        return;
+      }
+    }
+
     setMessages((prev) => {
       const updated: Record<string, ChatMessage[]> = {};
       Object.entries(prev).forEach(([key, list]) => {
@@ -153,16 +200,41 @@ export function useChatActions({
   };
 
   const handleDeleteForMe = (messageId: string) => {
+    const userId = currentUser?.id || CURRENT_USER.id;
+    if (typeof window !== 'undefined' && userId) {
+      try {
+        const storageKey = `classmate_deleted_for_me_${userId}`;
+        const existing: string[] = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        if (!existing.includes(messageId)) {
+          existing.push(messageId);
+          localStorage.setItem(storageKey, JSON.stringify(existing));
+        }
+      } catch (e) {
+        console.warn('Failed to save deleted for me message:', e);
+      }
+    }
+
     setMessages((prev) => {
-      const chatList = prev[currentConversationKey] || [];
-      return {
-        ...prev,
-        [currentConversationKey]: chatList.filter((m) => m.id !== messageId),
-      };
+      const updated: Record<string, ChatMessage[]> = {};
+      Object.entries(prev).forEach(([key, list]) => {
+        updated[key] = list.filter((m) => m.id !== messageId);
+      });
+      return updated;
     });
   };
 
   const handleClearChat = () => {
+    const isChannel = activeView === 'channel';
+    const isAdmin = Boolean(
+      currentUser?.role === 'admin' ||
+      (classroom && currentUser?.id === classroom.adminId)
+    );
+
+    if (isChannel && !isAdmin) {
+      console.warn('Unauthorized attempt to clear public channel chat');
+      return;
+    }
+
     setMessages((prev) => ({
       ...prev,
       [currentConversationKey]: [],

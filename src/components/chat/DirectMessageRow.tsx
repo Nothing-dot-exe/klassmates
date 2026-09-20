@@ -54,7 +54,8 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
     message.senderId === currentUserId ||
     (currentUserId && message.senderId?.toLowerCase() === currentUserId.toLowerCase())
   );
-  const canDelete = isMine || currentUserRole === 'admin';
+  // Any participant in a DM can initiate delete (sender can delete for everyone or for me; recipient can delete for me only)
+  const canDelete = true;
 
   const { dragX, touchHandlers } = useSwipeToReply({
     onReply: () => {

@@ -16,9 +16,19 @@ export async function apiSendApprovalEmail(params: SendApprovalEmailParams): Pro
   if (!params.to || !params.to.includes('@')) return false;
 
   try {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (typeof window !== 'undefined') {
+      const token =
+        sessionStorage.getItem('classmate_session_token') ||
+        localStorage.getItem('classmate_session_token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+
     const res = await fetch('/api/send-approval-email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(params),
     });
     const data = await res.json();

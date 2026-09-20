@@ -3,7 +3,10 @@
  * Generates and validates cryptographic session signatures to prevent client-side role forgery.
  */
 
-const SESSION_SECRET_SEED = process.env.NEXT_PUBLIC_SESSION_SECRET || 'classmate_secure_app_session_token_key_2026';
+const SESSION_SECRET_SEED =
+  process.env.SESSION_SIGNING_SECRET ||
+  process.env.NEXT_PUBLIC_SESSION_SECRET ||
+  'classmate_secure_app_session_token_key_2026';
 
 function bufferToHex(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
@@ -45,10 +48,15 @@ export interface SessionSignature {
 /**
  * Signs a session with an HMAC-SHA256 signature.
  */
-export async function signUserSession(userId: string, role: string, classroomId?: string): Promise<string> {
+export async function signUserSession(
+  userId: string,
+  role: string,
+  classroomId?: string,
+  customIssuedAt?: number
+): Promise<string> {
   const cryptoObj = getCrypto();
   const enc = new TextEncoder();
-  const issuedAt = Date.now();
+  const issuedAt = customIssuedAt !== undefined ? customIssuedAt : Date.now();
   const rawData = `${userId}:${role}:${classroomId || ''}:${issuedAt}`;
 
   const key = await getHmacKey();
@@ -63,7 +71,24 @@ export async function signUserSession(userId: string, role: string, classroomId?
     signature: signatureHex,
   };
 
-  return btoa(JSON.stringify(envelope));
+  const json = JSON.stringify(envelope);
+  if (typeof btoa !== 'undefined') {
+    return btoa(json);
+  }
+  return Buffer.from(json).toString('base64');
+}
+
+/**
+ * Decodes a session envelope without verifying signature.
+ */
+export function decodeSessionToken(token: string): SessionSignature | null {
+  if (!token) return null;
+  try {
+    const jsonStr = typeof atob !== 'undefined' ? atob(token) : Buffer.from(token, 'base64').toString('utf8');
+    return JSON.parse(jsonStr);
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -78,8 +103,8 @@ export async function verifyUserSession(
   if (!token || !expectedUserId) return false;
 
   try {
-    const jsonStr = atob(token);
-    const envelope: SessionSignature = JSON.parse(jsonStr);
+    const envelope = decodeSessionToken(token);
+    if (!envelope) return false;
 
     if (envelope.userId !== expectedUserId) return false;
     if (envelope.role !== expectedRole) return false;
@@ -101,3 +126,31 @@ export async function verifyUserSession(
     return false;
   }
 }
+
+/**
+ * Standalone verification of a session token returning the verified payload or null.
+ */
+export async function verifySessionTokenOnly(token: string): Promise<SessionSignature | null> {
+  if (!token) return null;
+  try {
+    const envelope = decodeSessionToken(token);
+    if (!envelope || !envelope.userId || !envelope.role || !envelope.signature) return null;
+
+    // Reject sessions older than 30 days
+    if (Date.now() - envelope.issuedAt > 30 * 24 * 60 * 60 * 1000) return null;
+
+    const cryptoObj = getCrypto();
+    const enc = new TextEncoder();
+    const rawData = `${envelope.userId}:${envelope.role}:${envelope.classroomId || ''}:${envelope.issuedAt}`;
+
+    const key = await getHmacKey();
+    const expectedSigBytes = await cryptoObj.subtle.sign('HMAC', key, enc.encode(rawData));
+    const computedSigHex = bufferToHex(expectedSigBytes);
+
+    if (computedSigHex !== envelope.signature) return null;
+    return envelope;
+  } catch {
+    return null;
+  }
+}
+

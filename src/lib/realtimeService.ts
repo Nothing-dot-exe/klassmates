@@ -183,6 +183,71 @@ export function broadcastStudentRemoved(studentId: string, classroomId: string) 
   }
 }
 
+export interface SanitizedBroadcastStudent {
+  id: string;
+  name: string;
+  nickname?: string;
+  avatar: string;
+  status: User['status'];
+  bio?: string;
+  designation?: string;
+  email?: string;
+  phone?: string;
+  showPhone?: boolean;
+  showEmail?: boolean;
+}
+
+/**
+ * Strips sensitive PII and credentials (passwords, hidden phone/email) before WebSocket broadcast.
+ */
+export function sanitizeBroadcastStudent(student: User): SanitizedBroadcastStudent {
+  const sanitized: SanitizedBroadcastStudent = {
+    id: student.id,
+    name: student.name,
+    nickname: student.nickname,
+    avatar: student.avatar,
+    status: student.status,
+    bio: student.bio,
+    designation: student.designation,
+    showPhone: student.showPhone,
+    showEmail: student.showEmail,
+  };
+
+  if (student.showEmail) {
+    sanitized.email = student.email;
+  }
+  if (student.showPhone) {
+    sanitized.phone = student.phone;
+  }
+
+  return sanitized;
+}
+
+/**
+ * Merges a broadcast student update into an existing local record safely.
+ * Strictly prevents peer broadcasts from overwriting id, rollNo, or escalating role.
+ */
+export function applySafeStudentBroadcastUpdate(existing: User, broadcastUpdate: Partial<User>): User {
+  return {
+    ...existing,
+    name: broadcastUpdate.name !== undefined ? broadcastUpdate.name : existing.name,
+    nickname: broadcastUpdate.nickname !== undefined ? broadcastUpdate.nickname : existing.nickname,
+    avatar: broadcastUpdate.avatar !== undefined ? broadcastUpdate.avatar : existing.avatar,
+    bio: broadcastUpdate.bio !== undefined ? broadcastUpdate.bio : existing.bio,
+    designation: broadcastUpdate.designation !== undefined ? broadcastUpdate.designation : existing.designation,
+    status: broadcastUpdate.status !== undefined ? broadcastUpdate.status : existing.status,
+    phone: broadcastUpdate.phone !== undefined ? broadcastUpdate.phone : existing.phone,
+    email: broadcastUpdate.email !== undefined ? broadcastUpdate.email : existing.email,
+    showPhone: broadcastUpdate.showPhone !== undefined ? broadcastUpdate.showPhone : existing.showPhone,
+    showEmail: broadcastUpdate.showEmail !== undefined ? broadcastUpdate.showEmail : existing.showEmail,
+    // IMMUTABLE / PRIVILEGED FIELDS PRESERVED:
+    id: existing.id,
+    rollNo: existing.rollNo,
+    role: existing.role,
+    joinedAt: existing.joinedAt,
+  };
+}
+
 /**
  * Broadcasts when a student or admin updates their profile (avatar, nickname, name, bio)
  * so all connected classmates immediately receive the new avatar/name in real-time.
@@ -190,11 +255,12 @@ export function broadcastStudentRemoved(studentId: string, classroomId: string) 
 export function broadcastStudentUpdated(student: User, classroomId: string) {
   const channel = getRealtimeChannel(classroomId);
   if (channel) {
+    const sanitizedStudent = sanitizeBroadcastStudent(student);
     channel
       .send({
         type: 'broadcast',
         event: 'student_updated',
-        payload: { student },
+        payload: { student: sanitizedStudent },
       })
       .catch((err) => console.warn('Realtime student_updated broadcast failed:', err));
   }

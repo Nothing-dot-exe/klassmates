@@ -162,7 +162,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
             </span>
           </div>
 
-          <div className="pt-1 flex items-center gap-2">
+          <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <button
               type="button"
               onClick={onSignIn}

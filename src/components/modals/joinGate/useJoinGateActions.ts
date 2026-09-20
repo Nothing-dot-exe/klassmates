@@ -184,43 +184,21 @@ export const useJoinGateActions = (
       }
     }
 
-    // 2. Default student initial password: their roll number (e.g. MCA2024-002)
-    if (!isValid && student.rollNo) {
-      if (inputPassword.toUpperCase() === student.rollNo.toUpperCase()) {
-        isValid = true;
-      }
-    }
-
-    // 3. Check classroom master admin password if admin account
+    // 2. Check classroom master admin password if admin account
     if (!isValid && isAdminAccount && props.classroom.adminPassword) {
       const adminCheck = await verifyPassword(inputPassword, props.classroom.adminPassword);
       if (adminCheck.isValid) isValid = true;
     }
 
-    // 4. Fallback default temp password
     if (!isValid) {
-      const tempCheck = await verifyPassword(inputPassword, DEFAULT_TEMP_PASSWORD);
-      if (tempCheck.isValid) isValid = true;
-    }
-
-    // 5. Admin default password fallback
-    if (!isValid && isAdminAccount && (inputPassword === 'Admin@2026' || inputPassword === 'admin123')) {
-      isValid = true;
-    }
-
-    if (!isValid) {
-      return s.setErrorMessage('Incorrect password. Default password for students is your Roll Number (e.g. MCA2024-002), or click "Forgot Password?".');
+      return s.setErrorMessage('Incorrect password. Please verify your credentials or click "Forgot Password?".');
     }
 
     if (needsRehash) {
       dbUpdateStudent(student.id, { password: inputPassword });
     }
 
-    // Security: Force students using public Roll Number as password to set a private password
-    const isDefaultRollPassword = Boolean(student.rollNo && inputPassword.toUpperCase() === student.rollNo.toUpperCase());
-    const isDefaultTempPassword = inputPassword === DEFAULT_TEMP_PASSWORD;
-
-    if (student.mustChangePassword || isDefaultRollPassword || isDefaultTempPassword) {
+    if (student.mustChangePassword) {
       s.setForceNewPasswordStudent(student);
       return;
     }

@@ -5,7 +5,7 @@ import { MessageSquare, FileText, ShieldCheck, User as UserIcon } from 'lucide-r
 import { DocumentItem, User } from '@/types';
 import { CURRENT_USER } from '@/lib/mockData';
 import { getDmConversationKey } from '@/lib/chatUtils';
-import { dbCreatePendingRequest } from '@/lib/databaseService';
+import { dbCreatePendingRequest, dbCreateStudent, dbUpdateClassroom } from '@/lib/databaseService';
 import { useClassroomData } from '@/hooks/useClassroomData';
 import { useUserSession } from '@/hooks/useUserSession';
 import { useClassroomActions } from '@/hooks/useClassroomActions';
@@ -164,7 +164,9 @@ export default function Home() {
     setPendingRequests,
     passwordResetRequests,
     setPasswordResetRequests,
+    documents,
     setDocuments,
+    messages,
     setMessages,
     currentUser,
     setCurrentUser,
@@ -204,7 +206,10 @@ export default function Home() {
             if (targetId) dbCreatePendingRequest(req, targetId);
           }}
           onJoinDirect={(student) => {
-            actions.handleAddStudent(student);
+            setStudents((prev) => [...prev, student]);
+            setClassroom((prev) => ({ ...prev, membersCount: prev.membersCount + 1 }));
+            dbCreateStudent(student, classroom.id);
+            dbUpdateClassroom(classroom.id, { membersCount: classroom.membersCount + 1 });
             handleUserLoggedIn(student);
           }}
           onRequestPasswordReset={actions.handleRequestPasswordReset}
@@ -338,7 +343,7 @@ export default function Home() {
       </main>
 
       {/* Mobile-First Bottom Thumb Dock */}
-      <nav className="md:hidden flex-shrink-0 h-14 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md border-t border-slate-200 dark:border-zinc-800/90 px-3 flex items-center justify-around z-30 shadow-lg">
+      <nav className="md:hidden flex-shrink-0 h-[calc(3.5rem+env(safe-area-inset-bottom,0px))] pb-[env(safe-area-inset-bottom,0px)] bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md border-t border-slate-200 dark:border-zinc-800/90 px-3 flex items-center justify-around z-30 shadow-lg">
         <button
           type="button"
           onClick={() => {

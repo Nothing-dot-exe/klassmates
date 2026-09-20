@@ -55,7 +55,8 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
     message.senderId === currentUserId ||
     (currentUserId && message.senderId?.toLowerCase() === currentUserId.toLowerCase())
   );
-  const canDelete = isMine || currentUserRole === 'admin';
+  // Any user can delete for me; author and admin can delete for everyone
+  const canDelete = true;
 
   const { dragX, touchHandlers } = useSwipeToReply({
     onReply: () => {

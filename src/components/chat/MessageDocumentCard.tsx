@@ -3,6 +3,7 @@
 import React from 'react';
 import { FileText, Sparkles, Eye, Download } from 'lucide-react';
 import { DocumentItem } from '@/types';
+import { sanitizeUrl } from '@/lib/security/urlSanitizer';
 
 interface MessageDocumentCardProps {
   document: DocumentItem;
@@ -26,9 +27,10 @@ export const MessageDocumentCard: React.FC<MessageDocumentCardProps> = ({
         url = URL.createObjectURL(blob);
       }
     }
-    if (url) {
+    const safeUrl = sanitizeUrl(url);
+    if (safeUrl && safeUrl !== '#') {
       const a = window.document.createElement('a');
-      a.href = url;
+      a.href = safeUrl;
       a.download = document.fileName || `${document.title}.${document.fileType === 'pdf' ? 'pdf' : 'txt'}`;
       window.document.body.appendChild(a);
       a.click();

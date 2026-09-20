@@ -2,8 +2,39 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { verifyServerOtp } from '@/lib/server/otpStore';
 
+// In-memory rate limiting: max 15 verification attempts per 5 minutes per IP
+interface RateLimitRecord {
+  count: number;
+  resetAt: number;
+}
+const verifyRateLimits = new Map<string, RateLimitRecord>();
+
+export function checkVerifyRateLimit(ip: string, maxRequests = 15, windowMs = 5 * 60 * 1000): boolean {
+  const now = Date.now();
+  const record = verifyRateLimits.get(ip);
+  if (!record || now > record.resetAt) {
+    verifyRateLimits.set(ip, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (record.count >= maxRequests) return false;
+  record.count += 1;
+  return true;
+}
+
+export function resetVerifyRateLimits(): void {
+  verifyRateLimits.clear();
+}
+
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
+    if (!checkVerifyRateLimit(ip)) {
+      return NextResponse.json(
+        { success: false, message: 'Too many verification attempts from this network. Please wait a few minutes before retrying.' },
+        { status: 429 }
+      );
+    }
+
     const { email, token } = await req.json();
     const cleanEmail = email ? String(email).trim().toLowerCase() : '';
     const cleanToken = token ? String(token).trim() : '';

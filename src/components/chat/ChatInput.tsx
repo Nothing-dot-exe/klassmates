@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Send, Camera, Paperclip } from 'lucide-react';
+import { Send, Camera, Paperclip, Loader2 } from 'lucide-react';
 import { AutoDeleteOption, DocumentItem, ChatMessage, ChatReplyReference } from '@/types';
-import { CameraModal } from './CameraModal';
 import { ReplyContextBanner } from './ReplyContextBanner';
 import { uploadClassroomFile } from '@/lib/storageService';
+import { validateCameraPhotoFile } from '@/lib/security/inputSanitizer';
 
 interface ChatInputProps {
   placeholder: string;
@@ -35,9 +35,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 }) => {
   const [text, setText] = useState('');
   const [autoDelete, setAutoDelete] = useState<AutoDeleteOption>(defaultAutoDelete);
-  const [showCameraModal, setShowCameraModal] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
   const textInputRef = useRef<HTMLInputElement | null>(null);
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -103,13 +104,52 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     }
   };
 
-  const handleCameraCapture = (imageDataUrl: string) => {
-    onSendMessage({
-      content: text.trim(),
-      autoDelete: autoDelete,
-      imageUrl: imageDataUrl,
-    });
-    if (text) setText('');
+  const handleCameraPhotoCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Strict validation: Camera is strictly for photos/images (reject videos, pdfs, docs)
+    const validation = validateCameraPhotoFile(file);
+    if (!validation.isValidPhoto) {
+      alert(validation.errorMessage || 'The camera button is strictly for photos. To send videos or documents, please use the paperclip attachment icon.');
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
+      return;
+    }
+
+    try {
+      setIsUploadingPhoto(true);
+      const uploadRes = await uploadClassroomFile(file, file.name || `photo_${Date.now()}.jpg`);
+
+      const replyRef: ChatReplyReference | undefined = replyingTo
+        ? {
+            id: replyingTo.id,
+            senderName: replyingTo.senderName,
+            senderRollNo: replyingTo.senderRollNo,
+            content: (replyingTo.content || '').slice(0, 120),
+            imageUrl: replyingTo.imageUrl,
+            videoUrl: replyingTo.videoUrl,
+            hasDocument: Boolean(replyingTo.document),
+          }
+        : undefined;
+
+      onSendMessage({
+        content: text.trim(),
+        autoDelete: autoDelete,
+        imageUrl: uploadRes.url,
+        replyTo: replyRef,
+      });
+
+      if (text) setText('');
+      onCancelReply?.();
+    } catch (err) {
+      console.error('Failed to upload photo from camera:', err);
+      alert('Failed to upload photo. Please try again.');
+    } finally {
+      setIsUploadingPhoto(false);
+      if (cameraInputRef.current) {
+        cameraInputRef.current.value = '';
+      }
+    }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,7 +225,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="p-2 sm:p-3 border-t border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD]/95 dark:bg-[#121214]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
+    <div className="p-2 sm:p-3 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] sm:pb-3 border-t border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD]/95 dark:bg-[#121214]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
       {/* Reply Context Banner when replying */}
       <ReplyContextBanner replyingTo={replyingTo || null} onCancelReply={onCancelReply || (() => {})} />
 
@@ -209,13 +249,27 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             <Paperclip className="w-4 h-4" />
           </button>
 
+          {/* Native Camera Photo Input (Photos Only) */}
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleCameraPhotoCapture}
+            className="hidden"
+          />
           <button
             type="button"
-            onClick={() => setShowCameraModal(true)}
-            className="p-1.5 sm:p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 rounded-full transition cursor-pointer"
-            title="Take Photo"
+            onClick={() => cameraInputRef.current?.click()}
+            disabled={isUploadingPhoto}
+            className="p-1.5 sm:p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 rounded-full transition cursor-pointer disabled:opacity-50"
+            title="Take Photo (Photos only)"
           >
-            <Camera className="w-4 h-4" />
+            {isUploadingPhoto ? (
+              <Loader2 className="w-4 h-4 animate-spin text-indigo-600 dark:text-indigo-400" />
+            ) : (
+              <Camera className="w-4 h-4" />
+            )}
           </button>
         </div>
 
@@ -241,12 +295,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
       </div>
-
-      <CameraModal
-        isOpen={showCameraModal}
-        onClose={() => setShowCameraModal(false)}
-        onCapture={handleCameraCapture}
-      />
     </div>
   );
 };

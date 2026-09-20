@@ -90,6 +90,10 @@ export function useAdminActions({
   });
 
   const handleApproveRequest = (id: string) => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to approve request');
+      return;
+    }
     const req = pendingRequests.find((r) => r.id === id);
     if (req) {
       const newStudent = mapRequestToStudent(req, `usr_${Date.now()}`);
@@ -112,16 +116,31 @@ export function useAdminActions({
   };
 
   const handleUpdateStudent = (studentId: string, updated: Partial<User>) => {
-    setStudents((prev) => prev.map((s) => (s.id === studentId ? { ...s, ...updated } : s)));
+    if (!isAuthorizedAdmin() && (!currentUser || currentUser.id !== studentId)) {
+      console.warn('Unauthorized attempt to update student');
+      return;
+    }
+    const sanitizedUpdated = isAuthorizedAdmin() ? updated : { ...updated };
+    if (!isAuthorizedAdmin()) {
+      delete sanitizedUpdated.role;
+      delete sanitizedUpdated.password;
+      delete sanitizedUpdated.id;
+    }
+
+    setStudents((prev) => prev.map((s) => (s.id === studentId ? { ...s, ...sanitizedUpdated } : s)));
     if (currentUser && currentUser.id === studentId) {
-      const merged = { ...currentUser, ...updated };
+      const merged = { ...currentUser, ...sanitizedUpdated };
       setCurrentUser(merged);
       persistUserSession(merged, classroom.adminId);
     }
-    dbUpdateStudent(studentId, updated);
+    dbUpdateStudent(studentId, sanitizedUpdated);
   };
 
   const handleApproveAllRequests = () => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to bulk approve requests');
+      return;
+    }
     const newStudents: User[] = pendingRequests.map((req, idx) =>
       mapRequestToStudent(req, `usr_${Date.now()}_${idx}`)
     );
@@ -145,6 +164,10 @@ export function useAdminActions({
   };
 
   const handleRejectRequest = (id: string) => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to reject request');
+      return;
+    }
     const req = pendingRequests.find((r) => r.id === id);
     setPendingRequests((prev) => prev.filter((r) => r.id !== id));
     dbDeletePendingRequest(id);
@@ -154,6 +177,10 @@ export function useAdminActions({
   };
 
   const handleUpdateClassroom = (updated: Partial<Classroom>) => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to update classroom settings');
+      return;
+    }
     setClassroom((prev) => ({ ...prev, ...updated }));
     dbUpdateClassroom(classroom.id, updated);
     if (updated.adminPassword) {
@@ -189,6 +216,10 @@ export function useAdminActions({
   };
 
   const handleApprovePasswordReset = async (requestId: string, studentId: string) => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to approve password reset');
+      return;
+    }
     setStudents((prev) =>
       prev.map((s) =>
         s.id === studentId ? { ...s, password: DEFAULT_TEMP_PASSWORD, mustChangePassword: true } : s
@@ -202,11 +233,19 @@ export function useAdminActions({
   };
 
   const handleRejectPasswordReset = async (requestId: string) => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to reject password reset');
+      return;
+    }
     setPasswordResetRequests((prev) => prev.filter((r) => r.id !== requestId));
     await dbDeletePasswordResetRequest(requestId);
   };
 
   const handleAdminResetPassword = async (studentId: string, tempPassword = DEFAULT_TEMP_PASSWORD) => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to reset student password');
+      return;
+    }
     setStudents((prev) =>
       prev.map((s) =>
         s.id === studentId ? { ...s, password: tempPassword, mustChangePassword: true } : s
@@ -330,6 +369,10 @@ export function useAdminActions({
   };
 
   const handleResetRoomData = async () => {
+    if (!isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to reset classroom database');
+      return;
+    }
     if (classroom.id) {
       broadcastRoomReset(classroom.id);
     }
@@ -359,6 +402,11 @@ export function useAdminActions({
   const handleLeaveClassroom = async (userToLeave?: User | null, successorId?: string): Promise<boolean> => {
     const target = userToLeave || currentUser;
     if (!target) return false;
+
+    if (userToLeave && userToLeave.id !== currentUser?.id && !isAuthorizedAdmin()) {
+      console.warn('Unauthorized attempt to force another user to leave');
+      return false;
+    }
 
     const isAdmin =
       target.role === 'admin' ||
@@ -506,6 +554,7 @@ export function useAdminActions({
   };
 
   return {
+    isAuthorizedAdmin,
     handleAddStudent, handleBulkAddStudents, handleRemoveStudent, handleApproveRequest,
     handleUpdateStudent, handleApproveAllRequests, handleRejectRequest, handleUpdateClassroom,
     handleRequestPasswordReset, handleApprovePasswordReset, handleRejectPasswordReset,

@@ -100,7 +100,7 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-zinc-950/60 dark:bg-black/80 backdrop-blur-md overflow-y-auto no-scrollbar animate-in fade-in transition-colors">
       <div className="bg-white dark:bg-[#121214] border border-zinc-200/90 dark:border-[#27272a] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl shadow-zinc-950/20 dark:shadow-black/70 flex flex-col my-auto max-h-[96dvh] transition-colors">
         {/* Header */}
-        <div className="p-6 pb-4 border-b border-zinc-200 dark:border-[#27272a] bg-white dark:bg-[#121214] text-center space-y-2 flex-shrink-0 relative">
+        <div className="p-4 sm:p-6 pb-4 pt-12 sm:pt-6 border-b border-zinc-200 dark:border-[#27272a] bg-white dark:bg-[#121214] text-center space-y-2 flex-shrink-0 relative">
           {s.navMode !== 'welcome' && !s.isWaitingApproval && !s.forceNewPasswordStudent && (
             <button
               onClick={() => {

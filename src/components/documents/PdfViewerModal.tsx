@@ -18,6 +18,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { DocumentItem } from '@/types';
+import { sanitizeUrl, isSafeUrl } from '@/lib/security/urlSanitizer';
 
 interface PdfViewerModalProps {
   document: DocumentItem | null;
@@ -103,7 +104,8 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
 
   const handleDownload = () => {
     if (!document) return;
-    const url = blobUrl || document.downloadUrl || document.content;
+    const rawUrl = blobUrl || document.downloadUrl || document.content;
+    const url = sanitizeUrl(rawUrl);
     if (!url || url === '#') return;
 
     const a = window.document.createElement('a');
@@ -115,14 +117,16 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
   };
 
   const handleOpenExternal = () => {
-    const targetUrl = blobUrl || document?.downloadUrl || document?.content;
+    const rawUrl = blobUrl || document?.downloadUrl || document?.content;
+    const targetUrl = sanitizeUrl(rawUrl);
     if (targetUrl && targetUrl !== '#') {
       window.open(targetUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
   const handlePrint = () => {
-    const targetUrl = blobUrl || document?.downloadUrl;
+    const rawUrl = blobUrl || document?.downloadUrl;
+    const targetUrl = sanitizeUrl(rawUrl);
     if (targetUrl && targetUrl !== '#') {
       const printWindow = window.open(targetUrl, '_blank');
       if (printWindow) {

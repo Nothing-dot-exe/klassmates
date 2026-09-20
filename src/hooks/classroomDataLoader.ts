@@ -9,6 +9,7 @@ import {
   dbFetchPasswordResetRequests,
 } from '@/lib/databaseService';
 import { Classroom, User, DocumentItem, ChatMessage, PendingRequest, PasswordResetRequest } from '@/types';
+import { getCurrentSessionUserId } from '@/lib/chatUtils';
 
 export interface LoadedClassroomData {
   activeClass: Classroom | null;
@@ -59,10 +60,28 @@ export async function loadInitialClassroomData(
       }
     }
 
+    let cleanedMessages = dbMsgs || {};
+    if (typeof window !== 'undefined' && dbMsgs) {
+      try {
+        const currentSessionUserId = getCurrentSessionUserId();
+        if (currentSessionUserId) {
+          const saved: string[] = JSON.parse(localStorage.getItem(`classmate_deleted_for_me_${currentSessionUserId}`) || '[]');
+          if (saved.length > 0) {
+            const delSet = new Set(saved);
+            const filtered: Record<string, ChatMessage[]> = {};
+            Object.entries(dbMsgs).forEach(([k, list]) => {
+              filtered[k] = list.filter((m) => !delSet.has(m.id));
+            });
+            cleanedMessages = filtered;
+          }
+        }
+      } catch {}
+    }
+
     return {
       activeClass,
       students: cleanedStudents,
-      messages: dbMsgs || {},
+      messages: cleanedMessages,
       documents: dbDocs || [],
       pendingRequests: dbReqs || [],
       passwordResetRequests: dbResets || [],

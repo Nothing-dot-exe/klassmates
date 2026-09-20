@@ -1,7 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { getConversationKey, parseMessageRow, getCurrentSessionUserId } from '@/lib/chatUtils';
-import { getRealtimeChannel, getUserRealtimeChannel, removeRealtimeChannel, TypingPayload } from '@/lib/realtimeService';
+import {
+  getRealtimeChannel,
+  getUserRealtimeChannel,
+  removeRealtimeChannel,
+  TypingPayload,
+  applySafeStudentBroadcastUpdate,
+} from '@/lib/realtimeService';
 import {
   dbFetchClassroom,
   dbFetchStudents,
@@ -175,9 +181,11 @@ export function useRealtimeSync({
             setStudents((prev) => {
               const exists = prev.some((s) => s.id === updatedStudent.id);
               if (exists) {
-                return prev.map((s) => (s.id === updatedStudent.id ? { ...s, ...updatedStudent } : s));
+                return prev.map((s) =>
+                  s.id === updatedStudent.id ? applySafeStudentBroadcastUpdate(s, updatedStudent) : s
+                );
               }
-              return [...prev, updatedStudent];
+              return prev;
             });
 
             if (updatedStudent.avatar || updatedStudent.name) {
@@ -351,6 +359,10 @@ export function useRealtimeSync({
             }
             const row = payload.new as any;
             if (row && isMounted) {
+              const isSessionAdmin = Boolean(
+                currentSessionUserId &&
+                (currentSessionUserId === classroom.adminId || currentSessionUserId === row.admin_id)
+              );
               setClassroom((prev) => ({
                 ...prev,
                 name: row.name || prev.name,
@@ -360,7 +372,7 @@ export function useRealtimeSync({
                 institution: row.institution || prev.institution,
                 autoDeleteSetting: row.auto_delete_setting || prev.autoDeleteSetting,
                 requireApproval: row.require_approval !== undefined ? row.require_approval : prev.requireApproval,
-                adminPassword: row.admin_password || prev.adminPassword,
+                adminPassword: isSessionAdmin ? (row.admin_password || prev.adminPassword) : (isSessionAdmin ? prev.adminPassword : ''),
               }));
             }
           }
@@ -413,6 +425,17 @@ export function useRealtimeSync({
 
           if (dbMsgs) {
             const nowTime = Date.now();
+            let deletedForMeSet = new Set<string>();
+            if (typeof window !== 'undefined') {
+              try {
+                const currentSessionUserId = getCurrentSessionUserId();
+                if (currentSessionUserId) {
+                  const saved = JSON.parse(localStorage.getItem(`classmate_deleted_for_me_${currentSessionUserId}`) || '[]');
+                  deletedForMeSet = new Set(saved);
+                }
+              } catch {}
+            }
+
             setMessages((prev) => {
               let hasChanges = false;
               const merged = { ...prev };
@@ -426,7 +449,7 @@ export function useRealtimeSync({
               Object.entries(dbMsgs).forEach(([convKey, list]) => {
                 const currentList = merged[convKey] || [];
                 const currentIds = new Set(currentList.map((m) => m.id));
-                const newItems = list.filter((m) => !currentIds.has(m.id));
+                const newItems = list.filter((m) => !currentIds.has(m.id) && !deletedForMeSet.has(m.id));
                 if (newItems.length > 0) {
                   merged[convKey] = [...currentList, ...newItems];
                   hasChanges = true;

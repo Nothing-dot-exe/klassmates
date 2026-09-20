@@ -96,7 +96,7 @@ export const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
 
       {/* Read-Only Locked Contact Details (Phone & Email cannot be changed) */}
       <div className="space-y-1.5">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">Mobile / WhatsApp</label>

@@ -12,7 +12,9 @@ interface UseClassroomActionsParams {
   setPendingRequests: React.Dispatch<React.SetStateAction<PendingRequest[]>>;
   passwordResetRequests: PasswordResetRequest[];
   setPasswordResetRequests: React.Dispatch<React.SetStateAction<PasswordResetRequest[]>>;
+  documents?: DocumentItem[];
   setDocuments: React.Dispatch<React.SetStateAction<DocumentItem[]>>;
+  messages?: Record<string, ChatMessage[]>;
   setMessages: React.Dispatch<React.SetStateAction<Record<string, ChatMessage[]>>>;
   currentUser: User | null;
   setCurrentUser: (u: User | null) => void;
@@ -32,7 +34,9 @@ export function useClassroomActions({
   setPendingRequests,
   passwordResetRequests,
   setPasswordResetRequests,
+  documents,
   setDocuments,
+  messages,
   setMessages,
   currentUser,
   setCurrentUser,
@@ -44,11 +48,14 @@ export function useClassroomActions({
 }: UseClassroomActionsParams) {
   const chatActions = useChatActions({
     classroomId: classroom.id,
+    classroom,
     currentUser,
     currentConversationKey,
     selectedChannelId,
     selectedDmUserId,
     activeView,
+    messages,
+    documents,
     setMessages,
     setDocuments,
   });

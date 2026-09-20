@@ -126,4 +126,38 @@ WHERE classroom_id = $classroomId
 
 1. **No External Trackers**: The application contains no Google Analytics, Facebook Pixel, Mixpanel, or telemetry scripts.
 2. **Cookie-Free**: Session persistence uses browser-sandboxed `localStorage` (when Remember Me is enabled) or `sessionStorage` (for shared lab machines).
-3. **Instant URL Sanitization**: Appending `?reset=true` to the application URL completely wipes all local browser state and clears active credentials immediately.
+3. **Instant URL Sanitization**: Appending `?fresh=true` to the application URL completely wipes all local browser state and clears active credentials immediately.
+
+---
+
+## 7. PostgREST AST Filter Injection Prevention
+
+* 📁 **Raw File**: [`src/lib/security/querySanitizer.ts`](../src/lib/security/querySanitizer.ts)
+* In PostgREST / Supabase queries, unescaped user inputs interpolated into `.or(...)` filter clauses can allow malicious operators (e.g. `,role.eq.admin`).
+* All user inputs are sanitized before query building:
+  - Commas, colons, parentheses, and SQL/PostgREST wildcards (`%`, `*`) are stripped.
+  - Discrete `.eq()` and `.ilike()` filters are applied for roll numbers vs email lookups.
+
+---
+
+## 8. Anti-Brute-Force & Sliding-Window Rate Limiting
+
+* 📁 **Raw Files**:
+  * [`src/app/api/auth/login/route.ts`](../src/app/api/auth/login/route.ts) (10 attempts / 5 min per IP)
+  * [`src/app/api/send-otp/route.ts`](../src/app/api/send-otp/route.ts) (3 requests / 10 min per email, 10 per IP)
+  * [`src/app/api/verify-otp/route.ts`](../src/app/api/verify-otp/route.ts) (15 attempts / 5 min per IP)
+  * [`src/lib/server/otpStore.ts`](../src/lib/server/otpStore.ts) (SHA-256 hashed code with 5-attempt burn policy)
+
+---
+
+## 9. Automated Regression Testing (Carrier-Grade Verification)
+
+* 📁 **Raw Directory**: [`tests/`](../tests/)
+* The entire security boundary is verified through 64 automated regression tests across 20 suites covering:
+  - `/tests/auth/` (Session cryptographic integrity, PBKDF2 credential safety, OTP rate limiting)
+  - `/tests/rbac/` (Admin action hook gates, mass assignment protection, API route authorization)
+  - `/tests/idor/` (Message deletion matrix, DM conversation isolation, document ownership)
+  - `/tests/websockets/` (Real-time event anti-spoofing, PII stripping)
+  - `/tests/input-validation/` (PostgREST injection, payload sanitization, camera photo validation)
+  - `/tests/integration/` (Full 30-student real-world classroom simulation)
+

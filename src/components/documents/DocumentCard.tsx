@@ -1,6 +1,7 @@
 import React from 'react';
 import { Eye, Download, MessageSquare, Star, Sparkles, BookOpen } from 'lucide-react';
 import { DocumentItem } from '@/types';
+import { sanitizeUrl } from '@/lib/security/urlSanitizer';
 
 interface DocumentCardProps {
   doc: DocumentItem;
@@ -20,9 +21,10 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onSelectDoc, on
         url = URL.createObjectURL(blob);
       }
     }
-    if (url) {
+    const safeUrl = sanitizeUrl(url);
+    if (safeUrl && safeUrl !== '#') {
       const a = document.createElement('a');
-      a.href = url;
+      a.href = safeUrl;
       a.download = doc.fileName || `${doc.title}.${doc.fileType === 'pdf' ? 'pdf' : 'txt'}`;
       document.body.appendChild(a);
       a.click();

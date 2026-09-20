@@ -69,6 +69,11 @@ export function getCurrentSessionUserId(): string | null {
       const parsed = JSON.parse(adminSessionStr);
       if (parsed && parsed.id) return parsed.id;
     }
+    const tabUserStr = sessionStorage.getItem('classmate_current_user');
+    if (tabUserStr) {
+      const parsed = JSON.parse(tabUserStr);
+      if (parsed && parsed.id) return parsed.id;
+    }
     const savedUserStr = localStorage.getItem('classmate_current_user');
     if (savedUserStr) {
       const parsed = JSON.parse(savedUserStr);

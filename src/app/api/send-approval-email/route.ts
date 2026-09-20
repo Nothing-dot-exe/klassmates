@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { sendStudentApprovalEmail, isEmailConfigured } from '@/lib/server/mailer';
+import { authenticateRequest } from '@/lib/server/serverAuth';
 
 interface RateLimitRecord {
   count: number;
@@ -21,6 +22,14 @@ function checkRateLimit(ip: string, maxRequests = 20, windowMs = 10 * 60 * 1000)
 
 export async function POST(req: Request) {
   try {
+    const auth = await authenticateRequest(req, 'admin');
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, message: auth.error || 'Unauthorized: Admin privileges required.' },
+        { status: auth.statusCode }
+      );
+    }
+
     const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
     if (!checkRateLimit(ip)) {
       return NextResponse.json(

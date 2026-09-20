@@ -12,6 +12,7 @@ import { ClearChatModal } from './ClearChatModal';
 import { ChatWallpaperModal } from './ChatWallpaperModal';
 import { CHAT_BACKGROUNDS, getThemedBackgroundStyle } from './chatBackgrounds';
 import { useTheme } from '@/hooks/useTheme';
+import { evaluateCanDeleteForEveryone } from '@/lib/chatPermissions';
 
 interface ChatContainerProps {
   currentChannel?: Channel;
@@ -354,14 +355,12 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         message={deleteTargetMessage}
         canDeleteForEveryone={Boolean(
           deleteTargetMessage &&
-          currentUser &&
-          (
-            deleteTargetMessage.senderId === currentUser.id ||
-            (Boolean(deleteTargetMessage.senderRollNo) && Boolean(currentUser.rollNo) && deleteTargetMessage.senderRollNo.toLowerCase() === currentUser.rollNo.toLowerCase()) ||
-            (Boolean(deleteTargetMessage.senderName) && Boolean(currentUser.name) && deleteTargetMessage.senderName.toLowerCase() === currentUser.name.toLowerCase()) ||
-            currentUser.role === 'admin' ||
-            (adminUser && currentUser.id === adminUser.id)
-          )
+          evaluateCanDeleteForEveryone({
+            isChannel: Boolean(currentChannel),
+            currentUser,
+            targetMessage: deleteTargetMessage,
+            adminUser,
+          })
         )}
         onClose={() => setDeleteTargetMessage(null)}
         onDeleteForEveryone={(id) => {

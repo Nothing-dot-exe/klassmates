@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from '../supabaseClient';
 import { User } from '@/types';
 import { hashPassword } from '@/lib/security/passwordUtils';
+import { sanitizePostgrestFilter, sanitizeEmail, sanitizeRollNumber } from '@/lib/security/querySanitizer';
 
 /**
  * STUDENTS DATABASE OPERATIONS
@@ -149,8 +150,34 @@ export const dbCreateStudent = async (student: User, classroomId: string): Promi
   }
 };
 
-export const dbUpdateStudent = async (studentId: string, updates: Partial<User>, classroomId?: string): Promise<boolean> => {
+/**
+ * Strict DTO filter to prevent Mass Assignment / Over-Posting attacks during student self-service profile updates.
+ * Strips role, rollNo, id, joinedAt, and other protected fields.
+ */
+export function sanitizeStudentProfileUpdate(updates: Partial<User>): Partial<User> {
+  const allowed: Partial<User> = {};
+  if (updates.name !== undefined) allowed.name = String(updates.name).trim();
+  if (updates.nickname !== undefined) allowed.nickname = String(updates.nickname).trim();
+  if (updates.bio !== undefined) allowed.bio = String(updates.bio).trim();
+  if (updates.avatar !== undefined) allowed.avatar = String(updates.avatar).trim();
+  if (updates.status !== undefined) allowed.status = updates.status;
+  if (updates.showPhone !== undefined) allowed.showPhone = Boolean(updates.showPhone);
+  if (updates.showEmail !== undefined) allowed.showEmail = Boolean(updates.showEmail);
+  if (updates.phone !== undefined) allowed.phone = String(updates.phone).trim();
+  if (updates.password !== undefined) allowed.password = updates.password;
+  if (updates.mustChangePassword !== undefined) allowed.mustChangePassword = Boolean(updates.mustChangePassword);
+  return allowed;
+}
+
+export const dbUpdateStudent = async (
+  studentId: string,
+  rawUpdates: Partial<User>,
+  classroomId?: string,
+  isPrivilegedAdmin = false
+): Promise<boolean> => {
   if (!isSupabaseConfigured() || !supabase) return false;
+
+  const updates = isPrivilegedAdmin ? rawUpdates : sanitizeStudentProfileUpdate(rawUpdates);
 
   try {
     // 1. Fetch current student record to preserve credentials and metadata
@@ -260,13 +287,23 @@ export const dbLookupStudentByIdentifier = async (
     const clean = identifier.trim();
     const cleanDigits = clean.replace(/\D/g, '');
 
-    let query = supabase
-      .from('students')
-      .select('*')
-      .or(`roll_no.ilike.${clean.toUpperCase()},email.ilike.${clean.toLowerCase()}`);
+    let query = supabase.from('students').select('*');
 
     if (classroomId) {
-      query = query.eq('classroom_id', classroomId);
+      query = query.eq('classroom_id', sanitizePostgrestFilter(classroomId));
+    }
+
+    if (clean.includes('@')) {
+      const cleanEmail = sanitizeEmail(clean);
+      if (cleanEmail) {
+        query = query.ilike('email', cleanEmail);
+      }
+    } else {
+      const cleanRoll = sanitizeRollNumber(clean);
+      const cleanGeneric = sanitizePostgrestFilter(clean);
+      if (cleanRoll || cleanGeneric) {
+        query = query.or(`roll_no.ilike.${cleanRoll || cleanGeneric},email.ilike.${cleanGeneric}`);
+      }
     }
 
     const { data, error } = await query.limit(5);

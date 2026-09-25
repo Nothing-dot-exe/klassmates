@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Mail, Clock, AlertTriangle, AlertCircle, Copy, Check, Loader2 } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
+import { Mail, Clock, AlertTriangle, AlertCircle, Loader2 } from 'lucide-react';
 
 interface OtpVerificationCardProps {
   email: string;
@@ -22,58 +22,70 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
   onOtpInputChange,
   onVerify,
 }) => {
-  const [copied, setCopied] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Individual digit slots 0..5
+  // 6 digits array derived from otpInput
   const cleanDigits = (otpInput || '').replace(/\D/g, '').slice(0, 6);
   const digits = Array.from({ length: 6 }, (_, i) => cleanDigits[i] || '');
 
-  const handleDigitChange = (idx: number, val: string) => {
-    const numeric = val.replace(/\D/g, '');
+  const handleDigitChange = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawVal = e.target.value;
+    const numeric = rawVal.replace(/\D/g, '');
 
-    // Handle multi-character input (e.g. mobile auto-complete or copy-paste)
+    // Case 1: Multi-character input (paste or mobile auto-complete)
     if (numeric.length > 1) {
-      const newDigits = [...digits];
-      let lastIndex = idx;
+      const currentArr = cleanDigits.padEnd(6, ' ').split('').slice(0, 6);
       for (let i = 0; i < numeric.length && idx + i < 6; i++) {
-        newDigits[idx + i] = numeric[i];
-        lastIndex = idx + i;
+        currentArr[idx + i] = numeric[i];
       }
-      const nextOtp = newDigits.join('');
-      onOtpInputChange(nextOtp);
-      const nextFocus = Math.min(lastIndex + 1, 5);
+      const newOtp = currentArr.join('').replace(/\s/g, '');
+      onOtpInputChange(newOtp);
+      const nextFocus = Math.min(idx + numeric.length, 5);
       inputRefs.current[nextFocus]?.focus();
       return;
     }
 
-    // Single digit typed or cleared (taking the last typed character so typing over works)
-    const digitChar = numeric.slice(-1);
-    const newDigits = [...digits];
-    newDigits[idx] = digitChar;
-    const nextOtp = newDigits.join('');
-    onOtpInputChange(nextOtp);
+    // Case 2: Single digit entered
+    if (numeric.length === 1) {
+      const currentArr = cleanDigits.padEnd(6, ' ').split('').slice(0, 6);
+      currentArr[idx] = numeric;
+      const newOtp = currentArr.join('').replace(/\s/g, '');
+      onOtpInputChange(newOtp);
 
-    // Auto-advance to next box if digit was entered
-    if (digitChar && idx < 5) {
-      inputRefs.current[idx + 1]?.focus();
-      inputRefs.current[idx + 1]?.select();
+      // Auto-advance to next box immediately!
+      if (idx < 5) {
+        inputRefs.current[idx + 1]?.focus();
+        inputRefs.current[idx + 1]?.select();
+      }
+      return;
+    }
+
+    // Case 3: Empty (user cleared it via backspace)
+    if (numeric.length === 0) {
+      const currentArr = cleanDigits.padEnd(6, ' ').split('').slice(0, 6);
+      currentArr[idx] = ' ';
+      const newOtp = currentArr.join('').replace(/\s/g, '');
+      onOtpInputChange(newOtp);
     }
   };
 
   const handleKeyDown = (idx: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
-      const newDigits = [...digits];
-      if (!newDigits[idx] && idx > 0) {
-        // Current box is already empty, move to previous box, clear it, and focus it
-        newDigits[idx - 1] = '';
-        onOtpInputChange(newDigits.join(''));
+      if (!digits[idx] && idx > 0) {
+        // Box is already empty, move to previous box, clear it, and focus it
+        const currentArr = cleanDigits.padEnd(6, ' ').split('').slice(0, 6);
+        currentArr[idx - 1] = ' ';
+        const newOtp = currentArr.join('').replace(/\s/g, '');
+        onOtpInputChange(newOtp);
         inputRefs.current[idx - 1]?.focus();
+        inputRefs.current[idx - 1]?.select();
         e.preventDefault();
-      } else {
-        // Clear current box
-        newDigits[idx] = '';
-        onOtpInputChange(newDigits.join(''));
+      } else if (digits[idx]) {
+        // Clear this box
+        const currentArr = cleanDigits.padEnd(6, ' ').split('').slice(0, 6);
+        currentArr[idx] = ' ';
+        const newOtp = currentArr.join('').replace(/\s/g, '');
+        onOtpInputChange(newOtp);
         e.preventDefault();
       }
     } else if (e.key === 'ArrowLeft' && idx > 0) {
@@ -98,28 +110,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
       setTimeout(() => {
         inputRefs.current[focusIdx]?.focus();
         inputRefs.current[focusIdx]?.select();
-      }, 0);
-    }
-  };
-
-  const handleFocus = (idx: number, e: React.FocusEvent<HTMLInputElement>) => {
-    // If user taps an empty box ahead of earlier empty boxes, redirect to the first empty box
-    const firstEmpty = digits.findIndex((d) => !d);
-    if (firstEmpty !== -1 && firstEmpty < idx) {
-      inputRefs.current[firstEmpty]?.focus();
-      return;
-    }
-    e.target.select();
-  };
-
-  const handleCopy = async () => {
-    if (cleanDigits.length < 6) return;
-    try {
-      await navigator.clipboard.writeText(cleanDigits);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // fallback
+      }, 10);
     }
   };
 
@@ -157,7 +148,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
         </span>
       </div>
 
-      {/* 6 Individual Digit Boxes */}
+      {/* 6 Individual Digit Boxes with Instant Auto-Advance */}
       <div className="flex gap-1.5 sm:gap-2 justify-center" onPaste={handlePaste}>
         {digits.map((digit, idx) => (
           <input
@@ -167,11 +158,11 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
             inputMode="numeric"
             autoComplete={idx === 0 ? 'one-time-code' : 'off'}
             pattern="[0-9]*"
-            maxLength={2}
+            maxLength={1}
             value={digit}
-            onChange={(e) => handleDigitChange(idx, e.target.value)}
+            onChange={(e) => handleDigitChange(idx, e)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
-            onFocus={(e) => handleFocus(idx, e)}
+            onFocus={(e) => e.target.select()}
             aria-label={`Digit ${idx + 1} of 6`}
             className={`w-10 h-12 sm:w-11 sm:h-13 rounded-xl border-2 text-center text-lg font-extrabold font-mono transition-all focus:outline-none ${
               digit
@@ -187,29 +178,6 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
         <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2 animate-in fade-in">
           <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600 dark:text-rose-400" />
           <span className="font-semibold text-[11px] leading-tight">{error}</span>
-        </div>
-      )}
-
-      {/* Copy Code button (shows only when complete) */}
-      {isComplete && (
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-[#18181b] hover:bg-zinc-200 dark:hover:bg-[#222226] border border-zinc-200 dark:border-zinc-700 text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 transition cursor-pointer active:scale-95"
-          >
-            {copied ? (
-              <>
-                <Check className="w-3 h-3 text-emerald-500" />
-                <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-3 h-3" />
-                <span>Copy Code</span>
-              </>
-            )}
-          </button>
         </div>
       )}
 

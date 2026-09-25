@@ -51,19 +51,51 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const origin = window.location.origin;
-      const url = `${origin}/?code=${encodeURIComponent(classroom.code)}`;
-      setJoinUrl(url);
+    let isMounted = true;
+
+    const resolveUrlAndGenerateQr = async () => {
+      if (typeof window === 'undefined') return;
+
+      const hostname = window.location.hostname;
+      const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '0.0.0.0';
+
+      let effectiveOrigin = window.location.origin;
+
+      if (isLocal) {
+        try {
+          const res = await fetch('/api/network-info');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.wifiUrl && data.localIp && data.localIp !== 'localhost') {
+              effectiveOrigin = data.wifiUrl;
+            }
+          }
+        } catch {
+          // fallback to origin
+        }
+      }
+
+      const url = `${effectiveOrigin}/?code=${encodeURIComponent(classroom.code)}`;
+      if (isMounted) {
+        setJoinUrl(url);
+      }
 
       QRCode.toDataURL(url, {
         width: 320,
         margin: 1.5,
         color: { dark: '#09090b', light: '#ffffff' },
       })
-        .then((data) => setQrDataUrl(data))
+        .then((data) => {
+          if (isMounted) setQrDataUrl(data);
+        })
         .catch((err) => console.error('QR generation error:', err));
-    }
+    };
+
+    resolveUrlAndGenerateQr();
+
+    return () => {
+      isMounted = false;
+    };
   }, [classroom.code]);
 
   const handleCopyCode = () => {

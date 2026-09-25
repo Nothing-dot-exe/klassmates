@@ -4,6 +4,7 @@ import React from 'react';
 import {
   FileText,
   ShieldCheck,
+  QrCode,
 } from 'lucide-react';
 import { Channel, Classroom, User, ChatMessage } from '@/types';
 import { CURRENT_USER } from '@/lib/mockData';
@@ -27,6 +28,7 @@ interface SidebarProps {
   onSelectDm: (userId: string) => void;
   onSelectView: (view: 'documents' | 'admin') => void;
   onOpenSettings?: () => void;
+  onOpenShare?: () => void;
   onSignOut?: () => void;
   onOpenProfile?: (user: User) => void;
   messages?: Record<string, ChatMessage[]>;
@@ -47,6 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectDm,
   onSelectView,
   onOpenSettings,
+  onOpenShare,
   onSignOut,
   onOpenProfile,
   messages,
@@ -85,6 +88,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {classroom.institution || 'Autonomous Classroom Space'}
           </p>
         </div>
+
+        {onOpenShare && (
+          <button
+            type="button"
+            onClick={onOpenShare}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-card-muted hover:bg-slate-200/70 dark:hover:bg-[#1f2c28] border border-card-border text-xs font-bold text-foreground transition active:scale-[0.99] cursor-pointer shadow-2xs"
+            title="Open Classroom QR Code & Same-WiFi Link"
+          >
+            <span className="flex items-center gap-2">
+              <QrCode className="w-4 h-4 text-indigo-500" />
+              <span>Share & QR Code</span>
+            </span>
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-500/20">
+              {classroom.code}
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Navigation Scrollable Area */}
@@ -172,6 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           messages={messages}
           currentUserId={currentUser.id}
           onlineUserIds={onlineUserIds}
+          onOpenShare={onOpenShare}
         />
       </div>
 

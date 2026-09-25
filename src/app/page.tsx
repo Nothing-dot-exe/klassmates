@@ -18,6 +18,7 @@ import { JoinGateModal } from '@/components/modals/JoinGateModal';
 import { MarkdownViewerModal } from '@/components/documents/MarkdownViewerModal';
 import { PdfViewerModal } from '@/components/documents/PdfViewerModal';
 import { StudentProfileModal } from '@/components/modals/StudentProfileModal';
+import { ShareRoomModal } from '@/components/modals/ShareRoomModal';
 import { IncomingMessageToast, IncomingNotificationData } from '@/components/common/IncomingMessageToast';
 import { ChatMessage } from '@/types';
 
@@ -61,6 +62,7 @@ export default function Home() {
   const [profileModalUser, setProfileModalUser] = useState<User | null>(null);
   const [activeMarkdownDoc, setActiveMarkdownDoc] = useState<DocumentItem | null>(null);
   const [activePdfDoc, setActivePdfDoc] = useState<DocumentItem | null>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const handleOpenDocument = (doc: DocumentItem) => {
@@ -229,6 +231,7 @@ export default function Home() {
         isMobileSidebarOpen={isMobileSidebarOpen}
         onToggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
         onOpenProfile={(u) => setProfileModalUser(u)}
+        onOpenShare={() => setIsShareModalOpen(true)}
         onSignOut={handleSignOut}
       />
 
@@ -252,6 +255,7 @@ export default function Home() {
           onSelectDm={(userId) => { setSelectedDmUserId(userId); setActiveView('dm'); setIsMobileSidebarOpen(false); }}
           onSelectView={(view) => { setActiveView(view); setIsMobileSidebarOpen(false); }}
           onOpenSettings={() => setProfileModalUser(currentUser)}
+          onOpenShare={() => setIsShareModalOpen(true)}
           onOpenProfile={(u) => setProfileModalUser(u)}
           onSignOut={handleSignOut}
           messages={messages}
@@ -293,6 +297,7 @@ export default function Home() {
             onTyping={(isTyping) =>
               sendTypingStatus(isTyping, currentConversationKey, currentUser, activeView === 'dm' ? selectedDmUserId : undefined)
             }
+            onOpenShare={() => setIsShareModalOpen(true)}
           />
         )}
 
@@ -447,6 +452,13 @@ export default function Home() {
           onLeaveClassroom={(successorId) => actions.handleLeaveClassroom(currentUser, successorId)}
         />
       )}
+
+      {/* Share Classroom & QR Code Modal */}
+      <ShareRoomModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        classroom={classroom}
+      />
 
       {/* Social Media Style Incoming Message Toast Notification */}
       <IncomingMessageToast

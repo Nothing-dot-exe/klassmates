@@ -38,6 +38,7 @@ interface ChatContainerProps {
   onOpenProfileById?: (userId: string) => void;
   typingUser?: { userName: string; userAvatar?: string } | null;
   onTyping?: (isTyping: boolean) => void;
+  onOpenShare?: () => void;
   onBack?: () => void;
 }
 
@@ -92,6 +93,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
   onOpenProfileById,
   typingUser,
   onTyping,
+  onOpenShare,
   onBack,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -189,6 +191,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         onOpenProfileById={onOpenProfileById}
         onOpenClearChat={() => setIsClearChatOpen(true)}
         onOpenWallpaper={() => setIsWallpaperModalOpen(true)}
+        onOpenShare={onOpenShare}
         onBack={onBack}
       />
 

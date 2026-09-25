@@ -1,6 +1,6 @@
 'use client';
 
-import { Hash, Phone, Trash2, Image as ImageIcon, ArrowLeft } from 'lucide-react';
+import { Hash, Phone, Trash2, Image as ImageIcon, ArrowLeft, QrCode } from 'lucide-react';
 import { Channel, User } from '@/types';
 import { getSafeAvatar } from '@/lib/avatarUtils';
 
@@ -14,6 +14,7 @@ interface ChatHeaderProps {
   onOpenProfileById?: (userId: string) => void;
   onOpenClearChat: () => void;
   onOpenWallpaper?: () => void;
+  onOpenShare?: () => void;
   onBack?: () => void;
 }
 
@@ -27,6 +28,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onOpenProfileById,
   onOpenClearChat,
   onOpenWallpaper,
+  onOpenShare,
   onBack,
 }) => {
   return (
@@ -133,6 +135,17 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               </a>
             )}
           </div>
+        )}
+
+        {onOpenShare && (
+          <button
+            type="button"
+            onClick={onOpenShare}
+            className="p-1.5 rounded-xl text-slate-400 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition cursor-pointer"
+            title="Classroom QR Code & Share"
+          >
+            <QrCode className="w-4 h-4" />
+          </button>
         )}
 
         <button

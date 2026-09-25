@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, QrCode } from 'lucide-react';
 import { Classroom, User } from '@/types';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { getSafeAvatar } from '@/lib/avatarUtils';
@@ -12,6 +12,7 @@ interface MobileHeaderProps {
   onToggleSidebar: () => void;
   onSignOut: () => void;
   onOpenProfile?: (user: User) => void;
+  onOpenShare?: () => void;
 }
 
 export const MobileHeader: React.FC<MobileHeaderProps> = ({
@@ -22,6 +23,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   onToggleSidebar,
   onSignOut,
   onOpenProfile,
+  onOpenShare,
 }) => {
   return (
     <div className="md:hidden h-14 flex-shrink-0 w-full bg-card/95 backdrop-blur-xl border-b border-card-border z-30 px-3 flex items-center justify-between transition-colors">
@@ -53,6 +55,16 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-1.5 flex-shrink-0">
+        {onOpenShare && (
+          <button
+            onClick={onOpenShare}
+            className="p-1.5 rounded-xl bg-card-muted border border-card-border text-slate-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition cursor-pointer"
+            title="Classroom QR Code & Invite"
+            aria-label="Classroom QR Code"
+          >
+            <QrCode className="w-4 h-4" />
+          </button>
+        )}
         <ThemeToggle className="p-1 text-slate-500 dark:text-zinc-400" />
         {currentUser && onOpenProfile && (
           <button

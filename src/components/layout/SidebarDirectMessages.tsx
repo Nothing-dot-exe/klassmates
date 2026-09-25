@@ -15,6 +15,7 @@ interface SidebarDirectMessagesProps {
   messages?: Record<string, ChatMessage[]>;
   currentUserId?: string;
   onlineUserIds?: Set<string>;
+  onOpenShare?: () => void;
 }
 
 export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
@@ -27,6 +28,7 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
   messages = {},
   currentUserId = '',
   onlineUserIds,
+  onOpenShare,
 }) => {
   const [copied, setCopied] = useState(false);
   const [readTimestamps, setReadTimestamps] = useState<Record<string, number>>(() => {
@@ -80,14 +82,14 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
             Add via Admin Panel or share Class Code with your batchmates.
           </p>
           <button
-            onClick={handleCopyCode}
+            onClick={onOpenShare ? onOpenShare : handleCopyCode}
             type="button"
             className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 active:scale-95 text-indigo-600 dark:text-indigo-300 text-[11px] font-semibold tracking-wide border border-slate-200 dark:border-zinc-700 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span>{copied ? 'Code Copied!' : 'Share Class Code'}</span>
+            <span>{onOpenShare ? 'Share & QR Code' : copied ? 'Code Copied!' : 'Share Class Code'}</span>
           </button>
         </div>
       ) : (

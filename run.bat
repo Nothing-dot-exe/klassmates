@@ -69,6 +69,7 @@ start "" cmd /c "timeout /t 3 /nobreak >nul & start http://localhost:3000"
 echo.
 echo =============================================================
 echo  Next.js Server Active (Turbopack)
+echo  [Notice] QR Code & Invite Links are live in the website UI
 echo  Press Ctrl+C to stop the server
 echo =============================================================
 echo.

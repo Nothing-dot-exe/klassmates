@@ -118,6 +118,12 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
                 <span>{copiedLink ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
+            {joinUrl && !joinUrl.includes('localhost') && !joinUrl.includes('127.0.0.1') && (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                <span>Same Wi-Fi Ready: Mobile phones connected to your Wi-Fi can scan this QR code or open this link to join directly!</span>
+              </div>
+            )}
             <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
               Share this link with students. When opened, it automatically selects your class and fills in the class code.
             </p>

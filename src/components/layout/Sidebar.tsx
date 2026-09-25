@@ -59,9 +59,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     CURRENT_USER;
 
   return (
-    <aside className="w-64 md:w-72 h-full bg-[#F1EBF5] dark:bg-[#121214] border-r border-[#DFD3E7] dark:border-zinc-800/80 flex flex-col justify-between select-none transition-colors">
+    <aside className="w-[min(86vw,20rem)] md:w-72 h-full bg-card border-r border-card-border flex flex-col justify-between select-none transition-colors">
       {/* Header Profile / Classroom Title */}
-      <div className="p-4 border-b border-[#DFD3E7] dark:border-zinc-800/80 space-y-2.5">
+      <div className="p-4 border-b border-card-border space-y-2.5">
         <div className="flex items-center justify-between">
           {/* Live status pill with Stitch pulse-dot-ring */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 shadow-xs">
@@ -78,10 +78,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         <div>
-          <h1 className="text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight" title={classroom.name}>
+          <h1 className="text-base font-display text-foreground truncate tracking-tight" title={classroom.name}>
             {classroom.name}
           </h1>
-          <p className="text-[11px] text-slate-500 dark:text-zinc-400 truncate">
+          <p className="text-[11px] text-muted truncate">
             {classroom.institution || 'Autonomous Classroom Space'}
           </p>
         </div>
@@ -108,8 +108,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => onSelectView('documents')}
             className={`w-full group relative overflow-hidden rounded-xl p-3 font-semibold flex items-center justify-between transition-all duration-150 cursor-pointer ${
               activeView === 'documents'
-                ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white shadow-glow-purple active:scale-[0.99]'
-                : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300'
+                ? 'bg-primary text-white shadow-glow-teal active:scale-[0.99]'
+                : 'bg-card-muted hover:bg-slate-200/80 dark:hover:bg-[#1f2c28] border border-card-border text-slate-700 dark:text-zinc-300'
             }`}
           >
             <div className="flex items-center gap-2.5">
@@ -132,8 +132,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => onSelectView('admin')}
               className={`w-full flex items-center justify-between p-3 rounded-xl transition-all cursor-pointer ${
                 activeView === 'admin'
-                  ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white shadow-glow-purple active:scale-[0.99]'
-                  : 'bg-slate-100 dark:bg-[#0E1528] hover:bg-slate-200/80 dark:hover:bg-[#131D36] border border-slate-200 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-primary text-white shadow-glow-teal active:scale-[0.99]'
+                  : 'bg-card-muted hover:bg-slate-200/80 dark:hover:bg-[#1f2c28] border border-card-border text-slate-700 dark:text-zinc-300 hover:text-foreground'
               }`}
             >
               <div className="flex items-center gap-2.5">

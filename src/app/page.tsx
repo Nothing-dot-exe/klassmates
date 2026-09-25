@@ -179,12 +179,12 @@ export default function Home() {
 
   if (!isSessionLoaded) {
     return (
-      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#09090b] flex items-center justify-center transition-colors">
+      <div className="h-[100dvh] w-screen bg-background flex items-center justify-center transition-colors">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-600 dark:bg-indigo-500 animate-pulse flex items-center justify-center text-white font-black text-xl shadow-glow-purple">
+          <div className="w-14 h-14 rounded-2xl bg-[image:var(--gradient-brand)] animate-pulse flex items-center justify-center text-white font-display text-2xl shadow-glow-purple">
             C
           </div>
-          <p className="text-xs text-slate-500 dark:text-zinc-400 font-medium font-mono">Connecting to Classmate Vault...</p>
+          <p className="text-sm text-muted font-medium">Opening your classroom…</p>
         </div>
       </div>
     );
@@ -192,7 +192,7 @@ export default function Home() {
 
   if (!currentUser) {
     return (
-      <div className="h-[100dvh] w-screen bg-[#F8FAFC] dark:bg-[#09090b] flex items-center justify-center p-3 sm:p-4 overflow-y-auto no-scrollbar transition-colors">
+      <div className="h-[100dvh] w-screen bg-background flex items-center justify-center p-0 sm:p-4 overflow-y-auto no-scrollbar transition-colors">
         <JoinGateModal
           classroom={classroom}
           existingStudents={students}
@@ -221,7 +221,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-[100dvh] w-screen overflow-hidden bg-[#F8FAFC] dark:bg-[#09090b] text-slate-900 dark:text-zinc-100 antialiased font-sans transition-colors">
+    <div className="flex flex-col md:flex-row h-[100dvh] w-screen overflow-hidden bg-background text-foreground antialiased font-sans transition-colors">
       <MobileHeader
         classroom={classroom}
         adminUser={adminUser}
@@ -344,21 +344,21 @@ export default function Home() {
       </main>
 
       {/* Mobile-First Bottom Thumb Dock */}
-      <nav className="md:hidden flex-shrink-0 h-[calc(3.5rem+env(safe-area-inset-bottom,0px))] pb-[env(safe-area-inset-bottom,0px)] bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md border-t border-slate-200 dark:border-zinc-800/90 px-3 flex items-center justify-around z-30 shadow-lg">
+      <nav className="md:hidden flex-shrink-0 h-[calc(4rem+env(safe-area-inset-bottom,0px))] pb-[env(safe-area-inset-bottom,0px)] bg-card/95 backdrop-blur-md border-t border-card-border px-2 flex items-center justify-around z-30">
         <button
           type="button"
           onClick={() => {
             setActiveView('channel');
             setIsMobileSidebarOpen(false);
           }}
-          className={`flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl transition cursor-pointer ${
+          className={`flex flex-col items-center justify-center gap-1 min-h-12 min-w-16 py-1 px-3 rounded-xl transition cursor-pointer ${
             activeView === 'channel' || activeView === 'dm'
-              ? 'text-indigo-600 dark:text-indigo-400 font-bold'
-              : 'text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
+              ? 'text-primary font-bold bg-indigo-50 dark:bg-indigo-950/40'
+              : 'text-muted font-medium hover:text-foreground'
           }`}
         >
-          <MessageSquare className="w-4 h-4" />
-          <span className="text-[10px]">Discuss</span>
+          <MessageSquare className="w-5 h-5" />
+          <span className="text-[11px]">Discuss</span>
         </button>
 
         <button
@@ -367,16 +367,16 @@ export default function Home() {
             setActiveView('documents');
             setIsMobileSidebarOpen(false);
           }}
-          className={`relative flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl transition cursor-pointer ${
+          className={`relative flex flex-col items-center justify-center gap-1 min-h-12 min-w-16 py-1 px-3 rounded-xl transition cursor-pointer ${
             activeView === 'documents'
-              ? 'text-indigo-600 dark:text-indigo-400 font-bold'
-              : 'text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
+              ? 'text-primary font-bold bg-indigo-50 dark:bg-indigo-950/40'
+              : 'text-muted font-medium hover:text-foreground'
           }`}
         >
-          <FileText className="w-4 h-4" />
-          <span className="text-[10px]">Vault</span>
+          <FileText className="w-5 h-5" />
+          <span className="text-[11px]">Vault</span>
           {documents.length > 0 && (
-            <span className="absolute -top-0.5 right-1.5 px-1 min-w-[15px] h-3.5 bg-indigo-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-0.5 right-1.5 px-1 min-w-[15px] h-3.5 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center">
               {documents.length}
             </span>
           )}
@@ -389,14 +389,14 @@ export default function Home() {
               setActiveView('admin');
               setIsMobileSidebarOpen(false);
             }}
-            className={`relative flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl transition cursor-pointer ${
+            className={`relative flex flex-col items-center justify-center gap-1 min-h-12 min-w-16 py-1 px-3 rounded-xl transition cursor-pointer ${
               activeView === 'admin'
-                ? 'text-indigo-600 dark:text-indigo-400 font-bold'
-                : 'text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200'
+                ? 'text-primary font-bold bg-indigo-50 dark:bg-indigo-950/40'
+                : 'text-muted font-medium hover:text-foreground'
             }`}
           >
-            <ShieldCheck className="w-4 h-4" />
-            <span className="text-[10px]">Admin</span>
+            <ShieldCheck className="w-5 h-5" />
+            <span className="text-[11px]">Admin</span>
             {pendingRequests.length > 0 && (
               <span className="absolute -top-0.5 right-1.5 px-1 min-w-[15px] h-3.5 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
                 {pendingRequests.length}
@@ -407,10 +407,10 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setProfileModalUser(currentUser)}
-            className="flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-xl text-slate-500 dark:text-zinc-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 transition cursor-pointer"
+            className="flex flex-col items-center justify-center gap-1 min-h-12 min-w-16 py-1 px-3 rounded-xl text-muted font-medium hover:text-foreground transition cursor-pointer"
           >
-            <UserIcon className="w-4 h-4" />
-            <span className="text-[10px]">Profile</span>
+            <UserIcon className="w-5 h-5" />
+            <span className="text-[11px]">Profile</span>
           </button>
         )}
       </nav>

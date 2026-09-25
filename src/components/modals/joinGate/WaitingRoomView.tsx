@@ -20,7 +20,7 @@ export const WaitingRoomView: React.FC<WaitingRoomViewProps> = ({
     <div className="text-center py-6 space-y-4 animate-in fade-in">
       <div className="relative mx-auto w-20 h-20 flex items-center justify-center">
         <div className="absolute inset-0 rounded-full border-2 border-indigo-500/30 animate-ping" />
-        <div className="w-16 h-16 rounded-full bg-indigo-50 dark:bg-[#222226] border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-xs">
+        <div className="w-16 h-16 rounded-full bg-indigo-50 dark:bg-[#24302c] border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-xs">
           <Clock className="w-7 h-7 animate-spin" style={{ animationDuration: '8s' }} />
         </div>
       </div>
@@ -33,7 +33,7 @@ export const WaitingRoomView: React.FC<WaitingRoomViewProps> = ({
       </div>
 
       {/* Class Rep Contact in Waiting Room */}
-      <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-left space-y-2">
+      <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border text-left space-y-2">
         <div className="text-[10px] uppercase font-black text-zinc-900 dark:text-zinc-200 flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
           <span>Class Representative</span>

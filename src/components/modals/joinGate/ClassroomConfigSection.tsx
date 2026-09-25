@@ -27,7 +27,7 @@ export const ClassroomConfigSection: React.FC<ClassroomConfigSectionProps> = ({
   setNewRoomCode,
 }) => {
   return (
-    <div className="space-y-3 pt-2 border-t border-zinc-200 dark:border-[#27272a]">
+    <div className="space-y-3 pt-2 border-t border-zinc-200 dark:border-card-border">
       <h4 className="text-[11px] font-black uppercase tracking-wider text-zinc-950 dark:text-white flex items-center gap-1.5">
         <School className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
         <span>2. Classroom Hub Configuration</span>
@@ -43,7 +43,7 @@ export const ClassroomConfigSection: React.FC<ClassroomConfigSectionProps> = ({
           placeholder="e.g. B.Tech Computer Science (Batch 2026)"
           value={newRoomName}
           onChange={(e) => setNewRoomName(e.target.value)}
-          className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+          className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
         />
       </div>
 
@@ -55,7 +55,7 @@ export const ClassroomConfigSection: React.FC<ClassroomConfigSectionProps> = ({
             placeholder="e.g. Section B"
             value={newRoomSection}
             onChange={(e) => setNewRoomSection(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+            className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
           />
         </div>
 
@@ -66,7 +66,7 @@ export const ClassroomConfigSection: React.FC<ClassroomConfigSectionProps> = ({
             placeholder="e.g. 5th Sem (3rd Year)"
             value={newRoomSemester}
             onChange={(e) => setNewRoomSemester(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+            className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
           />
         </div>
       </div>
@@ -80,7 +80,7 @@ export const ClassroomConfigSection: React.FC<ClassroomConfigSectionProps> = ({
           placeholder="e.g. Oxford Institute of Technology"
           value={newRoomInstitution}
           onChange={(e) => setNewRoomInstitution(e.target.value)}
-          className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+          className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
         />
       </div>
 
@@ -107,7 +107,7 @@ export const ClassroomConfigSection: React.FC<ClassroomConfigSectionProps> = ({
           placeholder="e.g. CS-4891"
           value={newRoomCode}
           onChange={(e) => setNewRoomCode(e.target.value.toUpperCase())}
-          className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-indigo-600 dark:text-indigo-400 font-mono font-bold tracking-widest focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 uppercase transition shadow-xs"
+          className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-indigo-600 dark:text-indigo-400 font-mono font-bold tracking-widest focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 uppercase transition shadow-xs"
         />
       </div>
     </div>

@@ -78,7 +78,7 @@ export const IncomingMessageToast: React.FC<IncomingMessageToastProps> = ({
     <div className="fixed top-4 right-3 sm:right-6 z-50 max-w-sm w-[calc(100vw-24px)] animate-in slide-in-from-top-3 fade-in duration-200">
       <div
         onClick={() => onOpenConversation(notification)}
-        className="group relative flex items-start gap-3 p-3 bg-white/95 dark:bg-[#18181b]/95 border border-indigo-200/80 dark:border-indigo-500/30 rounded-2xl shadow-xl shadow-indigo-950/15 backdrop-blur-xl hover:border-indigo-400 dark:hover:border-indigo-400 transition cursor-pointer select-none"
+        className="group relative flex items-start gap-3 p-3 bg-white/95 dark:bg-card-muted/95 border border-indigo-200/80 dark:border-indigo-500/30 rounded-2xl shadow-xl shadow-indigo-950/15 backdrop-blur-xl hover:border-indigo-400 dark:hover:border-indigo-400 transition cursor-pointer select-none"
       >
         {/* Sender Avatar with Green Online Glow */}
         <div className="relative flex-shrink-0">

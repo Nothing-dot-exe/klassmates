@@ -177,7 +177,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
   });
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#F8FAFC] dark:bg-[#09090b] overflow-hidden min-h-0 min-w-0 transition-colors">
+    <div className="flex-1 flex flex-col h-full bg-background overflow-hidden min-h-0 min-w-0 transition-colors">
       {/* Chat Header */}
       <ChatHeader
         currentChannel={currentChannel}
@@ -212,7 +212,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
 
         {/* Welcome Banner - Simple & Responsive */}
         {currentChannel ? (
-          <div className="p-3.5 sm:p-5 my-2 sm:my-3 rounded-2xl bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-zinc-800/80 text-center space-y-1.5 shadow-xs transition-colors">
+          <div className="p-3.5 sm:p-5 my-2 sm:my-3 rounded-2xl bg-card dark:bg-card border border-card-border dark:border-zinc-800/80 text-center space-y-1.5 shadow-xs transition-colors">
             <div className="inline-flex p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30">
               <Hash className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
@@ -226,7 +226,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             </div>
           </div>
         ) : currentRecipient ? (
-          <div className="p-3.5 sm:p-5 my-2 sm:my-3 rounded-2xl bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-zinc-800/80 text-center space-y-2 shadow-xs transition-colors">
+          <div className="p-3.5 sm:p-5 my-2 sm:my-3 rounded-2xl bg-card dark:bg-card border border-card-border dark:border-zinc-800/80 text-center space-y-2 shadow-xs transition-colors">
             <div className="relative inline-block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -276,7 +276,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             return (
               <div key={item.key} className="flex items-center gap-3 my-5 px-2">
                 <div className="flex-1 h-px bg-slate-200 dark:bg-zinc-800/80" />
-                <span className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 px-3 py-0.5 rounded-full tracking-wider uppercase select-none shadow-2xs font-mono">
+                <span className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-card-muted border border-slate-200 dark:border-zinc-800 px-3 py-0.5 rounded-full tracking-wider uppercase select-none shadow-2xs font-mono">
                   {item.label}
                 </span>
                 <div className="flex-1 h-px bg-slate-200 dark:bg-zinc-800/80" />
@@ -323,7 +323,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 {typingUser.userName[0]?.toUpperCase()}
               </div>
             )}
-            <div className="flex items-center gap-2 bg-white dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 rounded-2xl rounded-tl-xs px-4 py-2.5 shadow-xs">
+            <div className="flex items-center gap-2 bg-card-muted border border-slate-200 dark:border-zinc-800 rounded-2xl rounded-tl-xs px-4 py-2.5 shadow-xs">
               <div className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 typing-dot-1" />
                 <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 typing-dot-2" />

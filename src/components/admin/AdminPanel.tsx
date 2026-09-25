@@ -186,7 +186,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-100/70 dark:bg-[#09090b] overflow-y-auto no-scrollbar relative transition-colors">
+    <div className="flex-1 flex flex-col h-full bg-slate-100/70 dark:bg-background overflow-y-auto no-scrollbar relative transition-colors">
       {toastMessage && (
         <div className="fixed bottom-6 right-4 sm:right-6 left-4 sm:left-auto z-50 max-w-sm sm:max-w-md bg-slate-900 dark:bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-glow-purple border border-slate-800 dark:border-indigo-500/50 flex items-center gap-2.5 text-xs font-semibold animate-in fade-in slide-in-from-bottom-4 duration-200">
           <Sparkles className="w-4 h-4 text-white flex-shrink-0" />

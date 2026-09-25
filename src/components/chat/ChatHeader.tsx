@@ -30,13 +30,13 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onBack,
 }) => {
   return (
-    <div className="h-14 sm:h-16 border-b border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD]/95 dark:bg-[#121214]/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
+    <div className="h-14 sm:h-16 border-b border-card-border bg-card/95 backdrop-blur-xl px-3 sm:px-6 flex items-center justify-between flex-shrink-0 transition-colors">
       <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
         {onBack && (
           <button
             type="button"
             onClick={onBack}
-            className="p-1.5 rounded-xl bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800 transition active:scale-95 cursor-pointer flex-shrink-0"
+            className="p-1.5 rounded-xl bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800 transition active:scale-95 cursor-pointer flex-shrink-0"
             title="Back to Channels"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -53,11 +53,11 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             <img
               src={getSafeAvatar(currentRecipient.avatar, currentRecipient.name)}
               alt={currentRecipient.name}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover bg-slate-100 dark:bg-[#18181b]"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover bg-slate-100 dark:bg-card-muted"
             />
           </button>
         ) : (
-          <div className="p-2 rounded-xl bg-slate-100 dark:bg-[#18181b] text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700/60 flex-shrink-0">
+          <div className="p-2 rounded-xl bg-slate-100 dark:bg-card-muted text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700/60 flex-shrink-0">
             <Hash className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
           </div>
         )}
@@ -80,7 +80,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             )}
 
             {currentRecipient && currentRecipient.rollNo && (
-              <span className="text-[10px] font-mono bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.5 rounded flex-shrink-0">
+              <span className="text-[10px] font-mono bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.5 rounded flex-shrink-0">
                 {currentRecipient.rollNo}
               </span>
             )}
@@ -119,7 +119,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
       {/* Header Right: Channel Admin / Spotify / Wallpaper / Clear Chat / Theme Toggle */}
       <div className="flex items-center gap-2">
         {currentChannel && adminUser && (
-          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-700/60 text-[11px] text-slate-700 dark:text-zinc-300">
+          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-card-muted border border-slate-200 dark:border-zinc-700/60 text-[11px] text-slate-700 dark:text-zinc-300">
             <span className="font-bold text-slate-900 dark:text-white">👑 CR:</span>
             <span className="text-slate-800 dark:text-zinc-200 font-semibold">{adminUser.name}</span>
             {adminUser.phone && (

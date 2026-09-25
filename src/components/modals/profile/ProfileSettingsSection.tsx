@@ -45,14 +45,14 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
   };
 
   return (
-    <div className="space-y-3.5 pt-2 border-t border-zinc-200 dark:border-[#27272a]">
+    <div className="space-y-3.5 pt-2 border-t border-zinc-200 dark:border-card-border">
       <div className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
         <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
         Chat & Account Settings
       </div>
 
       {/* AES-256 E2EE Active Shield */}
-      <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] flex items-center gap-2.5 shadow-xs">
+      <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border flex items-center gap-2.5 shadow-xs">
         <ShieldCheck className="w-5 h-5 text-indigo-500 dark:text-indigo-400 flex-shrink-0" />
         <div>
           <div className="text-xs font-bold text-zinc-950 dark:text-white">AES-256 End-to-End Encryption</div>
@@ -63,13 +63,13 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
       </div>
 
       {/* Auto-Delete (Disappearing Messages) Setting */}
-      <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] space-y-2 shadow-xs">
+      <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border space-y-2 shadow-xs">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-900 dark:text-white">
             <Clock className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
             <span>Disappearing Messages</span>
           </div>
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a]">
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white dark:bg-[#24302c] text-indigo-600 dark:text-indigo-400 border border-zinc-200 dark:border-card-border">
             {currentAutoDelete === 'off' ? 'Off (Permanent)' : currentAutoDelete}
           </span>
         </div>
@@ -83,7 +83,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
               className={`py-1.5 text-xs font-semibold rounded-xl border transition cursor-pointer ${
                 currentAutoDelete === opt
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-transparent shadow-sm'
-                  : 'bg-white dark:bg-[#222226] border-zinc-200 dark:border-[#27272a] text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#1c2744]'
+                  : 'bg-white dark:bg-[#24302c] border-zinc-200 dark:border-card-border text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#1c2744]'
               }`}
             >
               {opt === 'off' ? 'Permanent' : opt === '24h' ? '24 Hours' : '7 Days'}
@@ -97,7 +97,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
         <button
           type="button"
           onClick={onClearAllChat}
-          className="w-full py-2.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] hover:bg-zinc-100 dark:hover:bg-[#222226] text-zinc-700 dark:text-zinc-300 hover:text-rose-600 dark:hover:text-rose-400 border border-zinc-200 dark:border-[#27272a] text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+          className="w-full py-2.5 rounded-xl bg-zinc-50 dark:bg-card-muted hover:bg-zinc-100 dark:hover:bg-[#24302c] text-zinc-700 dark:text-zinc-300 hover:text-rose-600 dark:hover:text-rose-400 border border-zinc-200 dark:border-card-border text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
         >
           <Trash2 className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
           <span>Clear Chat History (with Backup)</span>
@@ -109,7 +109,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
         <button
           type="button"
           onClick={onSignOut}
-          className="w-full py-2.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] hover:bg-zinc-100 dark:hover:bg-[#222226] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-[#27272a] text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+          className="w-full py-2.5 rounded-xl bg-zinc-50 dark:bg-card-muted hover:bg-zinc-100 dark:hover:bg-[#24302c] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-card-border text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
         >
           <LogOut className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
           <span>Sign Out / Switch Account</span>
@@ -118,13 +118,13 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
 
       {/* Voluntary Exit / Leave Classroom Card */}
       {onLeaveClassroom && (
-        <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] space-y-2.5 shadow-xs">
+        <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border space-y-2.5 shadow-xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-900 dark:text-white">
               <UserMinus className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
               <span>Leave Classroom</span>
             </div>
-            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-zinc-100 dark:bg-[#222226] text-zinc-800 dark:text-zinc-300 border border-zinc-300 dark:border-[#27272a]">
+            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-zinc-100 dark:bg-[#24302c] text-zinc-800 dark:text-zinc-300 border border-zinc-300 dark:border-card-border">
               {isAdmin ? 'Admin Transfer' : 'Student Exit'}
             </span>
           </div>
@@ -136,7 +136,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
           </p>
 
           {confirmLeave ? (
-            <div className="p-3 rounded-xl bg-white dark:bg-[#222226] border border-zinc-300 dark:border-[#27272a] space-y-3 shadow-sm animate-in fade-in">
+            <div className="p-3 rounded-xl bg-white dark:bg-[#24302c] border border-zinc-300 dark:border-card-border space-y-3 shadow-sm animate-in fade-in">
               {isAdmin && otherStudents.length > 0 ? (
                 <>
                   <div className="flex items-start gap-2 text-zinc-950 dark:text-white text-xs font-semibold">
@@ -151,11 +151,11 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
                     <select
                       value={selectedSuccessorId}
                       onChange={(e) => setSelectedSuccessorId(e.target.value)}
-                      className="w-full py-2 px-3 bg-zinc-50 dark:bg-[#18181b] border border-zinc-300 dark:border-[#27272a] rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
+                      className="w-full py-2 px-3 bg-zinc-50 dark:bg-card-muted border border-zinc-300 dark:border-card-border rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
                     >
-                      <option value="" className="dark:bg-[#18181b] dark:text-zinc-400">-- Select next Admin from class --</option>
+                      <option value="" className="dark:bg-card-muted dark:text-zinc-400">-- Select next Admin from class --</option>
                       {otherStudents.map((cand) => (
-                        <option key={cand.id} value={cand.id} className="dark:bg-[#18181b] dark:text-zinc-200">
+                        <option key={cand.id} value={cand.id} className="dark:bg-card-muted dark:text-zinc-200">
                           {cand.name} ({cand.rollNo}) — {cand.designation || 'Classmate'}
                         </option>
                       ))}
@@ -176,7 +176,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
                         setConfirmLeave(false);
                         setSelectedSuccessorId('');
                       }}
-                      className="flex-1 py-1.5 rounded-xl bg-zinc-100 dark:bg-[#18181b] hover:bg-zinc-200 dark:hover:bg-[#222226] text-zinc-700 dark:text-zinc-300 text-xs font-medium transition cursor-pointer border border-zinc-200 dark:border-[#27272a]"
+                      className="flex-1 py-1.5 rounded-xl bg-zinc-100 dark:bg-card-muted hover:bg-zinc-200 dark:hover:bg-[#24302c] text-zinc-700 dark:text-zinc-300 text-xs font-medium transition cursor-pointer border border-zinc-200 dark:border-card-border"
                     >
                       Cancel
                     </button>
@@ -186,7 +186,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
                       onClick={handleConfirmLeaveClassroom}
                       className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shadow-xs ${
                         !selectedSuccessorId
-                          ? 'bg-zinc-100 dark:bg-[#18181b] text-zinc-400 dark:text-zinc-500 cursor-not-allowed border border-zinc-200 dark:border-[#27272a]'
+                          ? 'bg-zinc-100 dark:bg-card-muted text-zinc-400 dark:text-zinc-500 cursor-not-allowed border border-zinc-200 dark:border-card-border'
                           : 'bg-gradient-to-r from-amber-500 to-amber-600 text-white cursor-pointer active:scale-98 shadow-md'
                       }`}
                     >
@@ -206,7 +206,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
                       type="button"
                       disabled={isLeaving}
                       onClick={() => setConfirmLeave(false)}
-                      className="flex-1 py-1.5 rounded-xl bg-zinc-100 dark:bg-[#18181b] hover:bg-zinc-200 dark:hover:bg-[#222226] text-zinc-700 dark:text-zinc-300 text-xs font-medium transition cursor-pointer border border-zinc-200 dark:border-[#27272a]"
+                      className="flex-1 py-1.5 rounded-xl bg-zinc-100 dark:bg-card-muted hover:bg-zinc-200 dark:hover:bg-[#24302c] text-zinc-700 dark:text-zinc-300 text-xs font-medium transition cursor-pointer border border-zinc-200 dark:border-card-border"
                     >
                       Cancel
                     </button>
@@ -227,7 +227,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
             <button
               type="button"
               onClick={() => setConfirmLeave(true)}
-              className="w-full py-2.5 rounded-xl bg-white dark:bg-[#222226] hover:bg-zinc-100 dark:hover:bg-[#1c2744] text-zinc-900 dark:text-zinc-200 border border-zinc-300 dark:border-[#27272a] text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 shadow-xs"
+              className="w-full py-2.5 rounded-xl bg-white dark:bg-[#24302c] hover:bg-zinc-100 dark:hover:bg-[#1c2744] text-zinc-900 dark:text-zinc-200 border border-zinc-300 dark:border-card-border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 shadow-xs"
             >
               <UserMinus className="w-3.5 h-3.5" />
               <span>{isAdmin ? 'Leave Classroom (Appoint Successor)' : 'Leave Classroom & Delete Account'}</span>

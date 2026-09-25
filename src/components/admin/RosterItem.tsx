@@ -37,7 +37,7 @@ export const RosterTableRow: React.FC<RosterItemProps> = ({
                 CR Admin
               </span>
             ) : student.designation ? (
-              <span className="text-[9px] bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.2 rounded font-bold uppercase flex items-center gap-1">
+              <span className="text-[9px] bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.2 rounded font-bold uppercase flex items-center gap-1">
                 {student.designation}
               </span>
             ) : null}
@@ -74,7 +74,7 @@ export const RosterTableRow: React.FC<RosterItemProps> = ({
       </td>
 
       <td className="py-3.5 px-6 font-mono font-bold text-slate-900 dark:text-white">
-        <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-700/60 text-slate-800 dark:text-zinc-200">
+        <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-card-muted border border-slate-200 dark:border-zinc-700/60 text-slate-800 dark:text-zinc-200">
           {student.rollNo?.includes('@') ? (student.role === 'admin' ? 'ADMIN' : 'MEMBER') : student.rollNo}
         </span>
       </td>
@@ -87,7 +87,7 @@ export const RosterTableRow: React.FC<RosterItemProps> = ({
           className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition inline-flex items-center gap-1 ${
             student.role === 'admin'
               ? 'bg-indigo-600 text-white border border-indigo-500 hover:bg-indigo-500 shadow-2xs'
-              : 'bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60'
+              : 'bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60'
           } ${isPrimaryAdmin ? 'cursor-default opacity-80' : 'cursor-pointer'}`}
         >
           {student.role === 'admin' ? (
@@ -160,7 +160,7 @@ export const RosterMobileCard: React.FC<RosterItemProps> = ({
   const isPrimaryAdmin = student.id === (classroom.adminId || 'usr_admin');
 
   return (
-    <div className="p-3.5 sm:p-4 space-y-2.5 sm:space-y-3 bg-white dark:bg-[#121214] transition-colors">
+    <div className="p-3.5 sm:p-4 space-y-2.5 sm:space-y-3 bg-card transition-colors">
       <div className="flex items-start gap-2.5 sm:gap-3">
         <img
           src={getSafeAvatar(student.avatar, student.name)}
@@ -178,14 +178,14 @@ export const RosterMobileCard: React.FC<RosterItemProps> = ({
                   CR Admin
                 </span>
               ) : student.designation ? (
-                <span className="text-[9px] bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.2 rounded font-bold uppercase inline-flex items-center gap-1 flex-shrink-0">
+                <span className="text-[9px] bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.2 rounded font-bold uppercase inline-flex items-center gap-1 flex-shrink-0">
                   {student.designation}
                 </span>
               ) : null}
             </div>
 
             <span
-              className="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-700/60 font-mono font-bold text-[11px] text-slate-800 dark:text-zinc-200 truncate max-w-[120px] sm:max-w-none flex-shrink-0 self-start"
+              className="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-card-muted border border-slate-200 dark:border-zinc-700/60 font-mono font-bold text-[11px] text-slate-800 dark:text-zinc-200 truncate max-w-[120px] sm:max-w-none flex-shrink-0 self-start"
               title={student.rollNo}
             >
               {student.rollNo?.includes('@') ? (student.role === 'admin' ? 'ADMIN' : 'MEMBER') : student.rollNo}
@@ -231,7 +231,7 @@ export const RosterMobileCard: React.FC<RosterItemProps> = ({
             className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition inline-flex items-center gap-1 cursor-pointer ${
               student.role === 'admin'
                 ? 'bg-indigo-600 text-white border border-indigo-500 shadow-2xs'
-                : 'bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60'
+                : 'bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60'
             }`}
           >
             {student.role === 'admin' ? (
@@ -259,10 +259,10 @@ export const RosterMobileCard: React.FC<RosterItemProps> = ({
         </div>
 
         <div className="flex items-center gap-1">
-          <button onClick={() => onOpenResetPassword(student)} className="p-2 rounded-xl text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-[#18181b] hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 transition cursor-pointer" title="Reset Student Password">
+          <button onClick={() => onOpenResetPassword(student)} className="p-2 rounded-xl text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-card-muted hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 transition cursor-pointer" title="Reset Student Password">
             <KeyRound className="w-3.5 h-3.5" />
           </button>
-          <button onClick={() => onOpenEdit(student)} className="p-2 rounded-xl text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-[#18181b] hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 transition cursor-pointer" title="Edit">
+          <button onClick={() => onOpenEdit(student)} className="p-2 rounded-xl text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-card-muted hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 transition cursor-pointer" title="Edit">
             <Edit3 className="w-3.5 h-3.5" />
           </button>
           {!isPrimaryAdmin && (

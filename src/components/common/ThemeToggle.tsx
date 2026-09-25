@@ -18,8 +18,8 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '', showLa
       onClick={toggleTheme}
       className={`relative inline-flex items-center gap-2 p-2 rounded-xl border transition-all cursor-pointer select-none active:scale-95 ${
         isDark
-          ? 'bg-[#252526] hover:bg-[#2d2d2d] text-[#cccccc] hover:text-white border-[#3c3c3c] shadow-xs'
-          : 'bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border-zinc-200 shadow-2xs'
+          ? 'bg-card-muted hover:bg-[#24302c] text-[#e8e4dc] hover:text-white border-card-border'
+          : 'bg-card hover:bg-card-muted text-stone-700 hover:text-stone-950 border-card-border'
       } ${className}`}
       title={isDark ? 'Switch to Day Mode (Light)' : 'Switch to VS Code Dark Mode'}
       aria-label={isDark ? 'Switch to Day Mode' : 'Switch to Dark Mode'}

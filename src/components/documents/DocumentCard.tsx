@@ -48,7 +48,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onSelectDoc, on
   return (
     <div
       onClick={() => onSelectDoc(doc)}
-      className={`group relative bg-white dark:bg-[#121214] border border-slate-200 dark:border-zinc-800/90 border-l-[3.5px] ${getSubjectSpineClass(
+      className={`group relative bg-card border border-slate-200 dark:border-zinc-800/90 border-l-[3.5px] ${getSubjectSpineClass(
         doc.subject
       )} hover:border-indigo-400 dark:hover:border-indigo-500/80 rounded-2xl p-5 shadow-xs hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between cursor-pointer`}
     >

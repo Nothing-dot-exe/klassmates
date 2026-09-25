@@ -161,8 +161,8 @@ export function useRealtimeSync({
         })
         .on('broadcast', { event: 'new_message' }, ({ payload }) => {
           const msg = payload as ChatMessage;
-          // Public classroom channel only receives messages for group channels, never DMs
-          if (msg && !msg.recipientId && isMounted) {
+          // Public classroom channel receives both group and direct messages with client-side isolation
+          if (msg && isMounted) {
             handleIncomingMessage(msg);
           }
         })
@@ -225,7 +225,11 @@ export function useRealtimeSync({
         })
         .on('broadcast', { event: 'typing_status' }, ({ payload }) => {
           if (!payload || !isMounted) return;
-          const { userId, userName, userAvatar, conversationKey, isTyping } = payload as TypingPayload;
+          const { userId, userName, userAvatar, conversationKey, isTyping, recipientId } = payload as any;
+          const currentUserId = getCurrentSessionUserId();
+          if (recipientId && currentUserId && recipientId !== currentUserId && userId !== currentUserId) {
+            return;
+          }
           if (typingTimeoutsRef.current[userId]) clearTimeout(typingTimeoutsRef.current[userId]);
 
           if (!isTyping) {
@@ -402,8 +406,53 @@ export function useRealtimeSync({
         }
       }
 
-      // Efficient periodic heartbeat (30s) and immediate window focus resync to prevent excessive database load
-      const performSync = async () => {
+      // High-speed message synchronization (2.5s) to guarantee zero message lag
+      const syncMessages = async () => {
+        if (!isMounted || !classroom.id) return;
+        try {
+          const dbMsgs = await dbFetchMessages(classroom.id);
+          if (!dbMsgs || !isMounted) return;
+
+          const nowTime = Date.now();
+          let deletedForMeSet = new Set<string>();
+          if (typeof window !== 'undefined') {
+            try {
+              const currentSessionUserId = getCurrentSessionUserId();
+              if (currentSessionUserId) {
+                const saved = JSON.parse(localStorage.getItem(`classmate_deleted_for_me_${currentSessionUserId}`) || '[]');
+                deletedForMeSet = new Set(saved);
+              }
+            } catch {}
+          }
+
+          setMessages((prev) => {
+            let hasChanges = false;
+            const merged = { ...prev };
+            Object.entries(merged).forEach(([convKey, list]) => {
+              const unexpired = list.filter((m) => !m.expiresAt || new Date(m.expiresAt).getTime() > nowTime);
+              if (unexpired.length !== list.length) {
+                merged[convKey] = unexpired;
+                hasChanges = true;
+              }
+            });
+            Object.entries(dbMsgs).forEach(([convKey, list]) => {
+              const currentList = merged[convKey] || [];
+              const currentIds = new Set(currentList.map((m) => m.id));
+              const newItems = list.filter((m) => !currentIds.has(m.id) && !deletedForMeSet.has(m.id));
+              if (newItems.length > 0) {
+                merged[convKey] = [...currentList, ...newItems];
+                hasChanges = true;
+              }
+            });
+            return hasChanges ? merged : prev;
+          });
+        } catch {
+          // quiet fallback
+        }
+      };
+
+      // Periodic full sync (20s) for classroom metadata, pending enrollment requests, and roster
+      const performFullSync = async () => {
         if (!isMounted || !classroom.id) return;
         try {
           const activeClass = await dbFetchClassroom(classroom.id);
@@ -411,72 +460,75 @@ export function useRealtimeSync({
             setClassroom((prev) => ({ ...prev, ...activeClass }));
           }
 
-          const [dbReqs, dbResets, dbStuds, dbMsgs] = await Promise.all([
+          const [dbReqs, dbResets, dbStuds] = await Promise.all([
             dbFetchPendingRequests(classroom.id),
             dbFetchPasswordResetRequests(classroom.id),
             dbFetchStudents(classroom.id),
-            dbFetchMessages(classroom.id),
           ]);
 
           if (!isMounted) return;
           if (dbReqs) setPendingRequests(dbReqs);
           if (dbResets) setPasswordResetRequests(dbResets);
           if (dbStuds && dbStuds.length > 0) setStudents(dbStuds);
-
-          if (dbMsgs) {
-            const nowTime = Date.now();
-            let deletedForMeSet = new Set<string>();
-            if (typeof window !== 'undefined') {
-              try {
-                const currentSessionUserId = getCurrentSessionUserId();
-                if (currentSessionUserId) {
-                  const saved = JSON.parse(localStorage.getItem(`classmate_deleted_for_me_${currentSessionUserId}`) || '[]');
-                  deletedForMeSet = new Set(saved);
-                }
-              } catch {}
-            }
-
-            setMessages((prev) => {
-              let hasChanges = false;
-              const merged = { ...prev };
-              Object.entries(merged).forEach(([convKey, list]) => {
-                const unexpired = list.filter((m) => !m.expiresAt || new Date(m.expiresAt).getTime() > nowTime);
-                if (unexpired.length !== list.length) {
-                  merged[convKey] = unexpired;
-                  hasChanges = true;
-                }
-              });
-              Object.entries(dbMsgs).forEach(([convKey, list]) => {
-                const currentList = merged[convKey] || [];
-                const currentIds = new Set(currentList.map((m) => m.id));
-                const newItems = list.filter((m) => !currentIds.has(m.id) && !deletedForMeSet.has(m.id));
-                if (newItems.length > 0) {
-                  merged[convKey] = [...currentList, ...newItems];
-                  hasChanges = true;
-                }
-              });
-              return hasChanges ? merged : prev;
-            });
-          }
         } catch {
           // quiet fallback
         }
       };
 
-      const syncInterval = setInterval(performSync, 30000);
+      // 2.5s fast message polling fallback (adapts to 10s when tab is hidden)
+      const messageInterval = setInterval(() => {
+        if (typeof document !== 'undefined' && document.hidden) {
+          return;
+        }
+        syncMessages();
+      }, 2500);
+
+      const backgroundInterval = setInterval(() => {
+        if (typeof document !== 'undefined' && document.hidden) {
+          syncMessages();
+        }
+      }, 10000);
+
+      const fullSyncInterval = setInterval(performFullSync, 20000);
 
       const handleFocus = () => {
-        performSync();
+        syncMessages();
+        performFullSync();
       };
+
+      const handleVisibilityChange = () => {
+        if (typeof document !== 'undefined' && !document.hidden) {
+          syncMessages();
+        }
+      };
+
+      const handleOnline = () => {
+        if (channel && (channel.state === 'closed' || channel.state === 'errored')) {
+          channel.subscribe();
+        }
+        syncMessages();
+        performFullSync();
+      };
+
       if (typeof window !== 'undefined') {
         window.addEventListener('focus', handleFocus);
+        window.addEventListener('online', handleOnline);
+      }
+      if (typeof document !== 'undefined') {
+        document.addEventListener('visibilitychange', handleVisibilityChange);
       }
 
       return () => {
         isMounted = false;
-        clearInterval(syncInterval);
+        clearInterval(messageInterval);
+        clearInterval(backgroundInterval);
+        clearInterval(fullSyncInterval);
         if (typeof window !== 'undefined') {
           window.removeEventListener('focus', handleFocus);
+          window.removeEventListener('online', handleOnline);
+        }
+        if (typeof document !== 'undefined') {
+          document.removeEventListener('visibilitychange', handleVisibilityChange);
         }
         removeRealtimeChannel();
       };

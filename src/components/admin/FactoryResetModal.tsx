@@ -29,8 +29,8 @@ export const FactoryResetModal: React.FC<FactoryResetModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 text-left transition-colors">
-        <div className="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-[#222226] text-zinc-900 dark:text-rose-400 border border-zinc-200 dark:border-[#27272a] flex items-center justify-center mx-auto shadow-xs">
+      <div className="bg-card border border-zinc-200 dark:border-card-border rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 text-left transition-colors">
+        <div className="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-[#24302c] text-zinc-900 dark:text-rose-400 border border-zinc-200 dark:border-card-border flex items-center justify-center mx-auto shadow-xs">
           <Trash2 className="w-6 h-6" />
         </div>
 
@@ -38,14 +38,14 @@ export const FactoryResetModal: React.FC<FactoryResetModalProps> = ({
           <h3 className="text-base font-bold text-zinc-950 dark:text-white">Extract Archive & Reset Room</h3>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
             This will automatically download an official backup archive{' '}
-            <code className="text-zinc-950 dark:text-white font-mono text-[11px] bg-zinc-100 dark:bg-[#222226] px-1.5 py-0.5 rounded border border-zinc-200 dark:border-[#27272a]">
+            <code className="text-zinc-950 dark:text-white font-mono text-[11px] bg-zinc-100 dark:bg-[#24302c] px-1.5 py-0.5 rounded border border-zinc-200 dark:border-card-border">
               Classmate-Backup-{classroom.code}.json
             </code>{' '}
             to your device, delete all classroom data, clear your session, and return you to the Create / Login page.
           </p>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-xs space-y-3">
+        <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border text-xs space-y-3">
           <div className="space-y-1">
             <label className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
               Enter Master Admin Password to Authorize:
@@ -55,7 +55,7 @@ export const FactoryResetModal: React.FC<FactoryResetModalProps> = ({
               placeholder="Enter CR Master Password"
               value={adminPasswordConfirm}
               onChange={(e) => setAdminPasswordConfirm(e.target.value)}
-              className="w-full bg-white dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-950 dark:text-white focus:outline-none focus:border-rose-500 shadow-xs"
+              className="w-full bg-white dark:bg-[#24302c] border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-950 dark:text-white focus:outline-none focus:border-rose-500 shadow-xs"
             />
           </div>
 
@@ -68,7 +68,7 @@ export const FactoryResetModal: React.FC<FactoryResetModalProps> = ({
               placeholder="Type RESET to confirm"
               value={resetConfirmText}
               onChange={(e) => setResetConfirmText(e.target.value)}
-              className="w-full bg-white dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-950 dark:text-white font-mono font-bold focus:outline-none focus:border-rose-500 tracking-wider text-center shadow-xs"
+              className="w-full bg-white dark:bg-[#24302c] border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-950 dark:text-white font-mono font-bold focus:outline-none focus:border-rose-500 tracking-wider text-center shadow-xs"
             />
           </div>
         </div>
@@ -78,7 +78,7 @@ export const FactoryResetModal: React.FC<FactoryResetModalProps> = ({
             type="button"
             onClick={onClose}
             disabled={isResetting}
-            className="flex-1 py-2.5 bg-zinc-100 dark:bg-[#18181b] hover:bg-zinc-200 dark:hover:bg-[#222226] border border-zinc-200 dark:border-[#27272a] text-zinc-800 dark:text-zinc-300 rounded-xl text-xs font-semibold transition cursor-pointer"
+            className="flex-1 py-2.5 bg-zinc-100 dark:bg-card-muted hover:bg-zinc-200 dark:hover:bg-[#24302c] border border-zinc-200 dark:border-card-border text-zinc-800 dark:text-zinc-300 rounded-xl text-xs font-semibold transition cursor-pointer"
           >
             Cancel
           </button>

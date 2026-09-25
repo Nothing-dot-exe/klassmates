@@ -24,11 +24,11 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   onOpenProfile,
 }) => {
   return (
-    <div className="md:hidden h-14 flex-shrink-0 w-full bg-white/95 dark:bg-[#121214]/95 backdrop-blur-xl border-b border-slate-200 dark:border-zinc-800/80 z-30 px-3 flex items-center justify-between transition-colors shadow-xs">
+    <div className="md:hidden h-14 flex-shrink-0 w-full bg-card/95 backdrop-blur-xl border-b border-card-border z-30 px-3 flex items-center justify-between transition-colors">
       <div className="flex items-center gap-2 flex-shrink-0">
         <button
           onClick={onToggleSidebar}
-          className="p-1.5 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white rounded-xl bg-slate-100 dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 transition active:scale-95 cursor-pointer"
+          className="p-2 text-foreground rounded-xl bg-card-muted border border-card-border transition active:scale-95 cursor-pointer min-h-10 min-w-10 flex items-center justify-center"
           aria-label="Toggle menu"
         >
           {isMobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -42,11 +42,11 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
       </div>
 
       <div className="flex flex-col items-center min-w-0 px-2 text-center">
-        <span className="font-extrabold text-xs tracking-tight text-slate-900 dark:text-white truncate max-w-[140px] sm:max-w-[200px]">
+        <span className="font-display text-sm tracking-tight text-foreground truncate max-w-[140px] sm:max-w-[200px]">
           {classroom.name}
         </span>
         {(classroom.section || classroom.institution) && (
-          <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-medium truncate max-w-[140px] sm:max-w-[200px]">
+          <span className="text-[10px] text-muted font-medium truncate max-w-[140px] sm:max-w-[200px]">
             {classroom.section ? `${classroom.section}${classroom.semester ? ` • Sem ${classroom.semester}` : ''}` : classroom.institution}
           </span>
         )}

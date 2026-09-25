@@ -191,7 +191,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   }, [pinnedTab, baseTabs]);
 
   return (
-    <div className="border-b border-slate-200 dark:border-zinc-800/80 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-xl relative sm:sticky sm:top-0 z-20 transition-colors">
+    <div className="border-b border-card-border bg-card/95 backdrop-blur-xl relative sm:sticky sm:top-0 z-20 transition-colors">
       <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-3 sm:py-5 space-y-3 sm:space-y-4">
         {/* Top Identity Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
@@ -200,13 +200,13 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               <button
                 type="button"
                 onClick={onBack}
-                className="p-1.5 sm:p-2 rounded-xl bg-slate-100 dark:bg-[#18181b] text-slate-700 dark:text-zinc-200 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800 transition active:scale-95 cursor-pointer shrink-0"
+                className="p-1.5 sm:p-2 rounded-xl bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-200 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-zinc-800 transition active:scale-95 cursor-pointer shrink-0"
                 title="Back to Classroom"
               >
                 <ArrowLeft className="w-4 h-4" />
               </button>
             )}
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-black text-sm sm:text-lg shadow-glow-purple shrink-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-primary flex items-center justify-center text-white font-display text-sm sm:text-lg shadow-glow-teal shrink-0">
               {classroom.name ? classroom.name.slice(0, 1).toUpperCase() : 'C'}
             </div>
             <div className="min-w-0 flex-1">
@@ -214,7 +214,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
                 <span className="font-extrabold text-sm sm:text-lg text-slate-900 dark:text-white tracking-tight truncate">
                   {classroom.name || 'Classroom Admin'}
                 </span>
-                <span className="text-[10px] px-2 py-0.2 rounded-full font-bold bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 shrink-0">
+                <span className="text-[10px] px-2 py-0.2 rounded-full font-bold bg-indigo-50 dark:bg-[#24302c] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 shrink-0">
                   Admin Panel
                 </span>
               </div>
@@ -231,7 +231,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           {/* Card 1: Enrolled */}
           <div
             onClick={() => setActiveTab('roster')}
-            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-[#0E1528] hover:bg-slate-50 dark:hover:bg-[#131D36] border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center gap-2.5 group shadow-xs"
+            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-card hover:bg-slate-50 dark:hover:bg-[#1f2c28] border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center gap-2.5 group shadow-xs"
           >
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-indigo-50 dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-zinc-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <Users className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -244,7 +244,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           </div>
 
           {/* Card 2: Active Online */}
-          <div className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-[#0E1528] border border-slate-200 dark:border-zinc-800/80 flex items-center gap-2.5 group shadow-xs">
+          <div className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-card border border-slate-200 dark:border-zinc-800/80 flex items-center gap-2.5 group shadow-xs">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <Radio className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
@@ -264,7 +264,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             className={`p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border transition duration-200 cursor-pointer flex items-center gap-2.5 group shadow-xs ${
               pendingCount > 0
                 ? 'bg-amber-50/70 dark:bg-amber-950/20 border-amber-300 dark:border-amber-800/60 hover:border-amber-400 shadow-glow-gold'
-                : 'bg-white dark:bg-[#0E1528] border-slate-200 dark:border-zinc-800/80 hover:bg-slate-50 dark:hover:bg-[#131D36]'
+                : 'bg-card border-slate-200 dark:border-zinc-800/80 hover:bg-slate-50 dark:hover:bg-[#1f2c28]'
             }`}
           >
             <div
@@ -288,7 +288,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           {/* Card 4: Invite Code */}
           <div
             onClick={onCopyCode}
-            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white dark:bg-[#0E1528] hover:bg-slate-50 dark:hover:bg-[#131D36] border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center justify-between gap-1.5 group shadow-xs"
+            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-card hover:bg-slate-50 dark:hover:bg-[#1f2c28] border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center justify-between gap-1.5 group shadow-xs"
             title="Click to copy Class Code"
           >
             <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -344,7 +344,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUpOrLeave}
               onMouseLeave={handleMouseUpOrLeave}
-              className={`inline-flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-slate-100 dark:bg-[#121214] border border-slate-200 dark:border-zinc-800/80 overflow-x-auto no-scrollbar scroll-smooth touch-pan-x min-w-0 flex-1 sm:flex-initial shadow-xs select-none ${
+              className={`inline-flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-slate-100 dark:bg-card border border-slate-200 dark:border-zinc-800/80 overflow-x-auto no-scrollbar scroll-smooth touch-pan-x min-w-0 flex-1 sm:flex-initial shadow-xs select-none ${
                 isDragging ? 'cursor-grabbing' : 'cursor-grab'
               }`}
             >
@@ -359,7 +359,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
                     className={`group relative flex items-center rounded-lg sm:rounded-xl transition shrink-0 select-none ${
                       isActive
                         ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow-purple'
-                        : 'text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-[#222226]'
+                        : 'text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-[#24302c]'
                     }`}
                   >
                     <button
@@ -396,7 +396,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               <button
                 type="button"
                 onClick={() => handleScroll('right')}
-                className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl border border-slate-300 dark:border-zinc-800 bg-white dark:bg-[#18181b] text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all flex items-center justify-center shrink-0 cursor-pointer active:scale-95 shadow-xs z-10"
+                className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl border border-slate-300 dark:border-zinc-800 bg-card-muted text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all flex items-center justify-center shrink-0 cursor-pointer active:scale-95 shadow-xs z-10"
                 title="Scroll right"
                 aria-label="Scroll tabs right"
               >
@@ -406,7 +406,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           </div>
 
           {/* Desktop Right Side Balanced Companion */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-[#18181b] border border-slate-200 dark:border-zinc-800 text-xs font-semibold text-slate-700 dark:text-zinc-300 shrink-0 shadow-xs">
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-card-muted border border-slate-200 dark:border-zinc-800 text-xs font-semibold text-slate-700 dark:text-zinc-300 shrink-0 shadow-xs">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
             <span>Workspace:</span>
             <span className="text-slate-900 dark:text-white font-bold">{classroom.name}</span>

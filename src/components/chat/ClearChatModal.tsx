@@ -59,11 +59,11 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] p-5 sm:p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 transition-colors">
+      <div className="w-full max-w-md rounded-3xl bg-card border border-zinc-200 dark:border-card-border p-5 sm:p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 transition-colors">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] text-zinc-900 dark:text-indigo-400 shadow-xs">
+            <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-[#24302c] border border-zinc-200 dark:border-card-border text-zinc-900 dark:text-indigo-400 shadow-xs">
               <Download className="w-5 h-5" />
             </div>
             <div>
@@ -74,14 +74,14 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
+            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#24302c] transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Info Card */}
-        <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] space-y-2">
+        <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border space-y-2">
           <div className="flex items-center gap-2 text-xs font-semibold text-zinc-900 dark:text-white">
             <AlertCircle className="w-4 h-4 text-indigo-500 flex-shrink-0" />
             <span>Do you want to save a backup before deleting?</span>
@@ -105,7 +105,7 @@ export const ClearChatModal: React.FC<ClearChatModalProps> = ({
           <button
             type="button"
             onClick={handleClearDirectly}
-            className="w-full py-2.5 px-4 rounded-2xl bg-zinc-100 dark:bg-[#222226] hover:bg-rose-50 dark:hover:bg-rose-950/30 active:scale-95 text-zinc-800 dark:text-zinc-300 hover:text-rose-700 dark:hover:text-rose-400 border border-zinc-200 dark:border-[#27272a] hover:border-rose-200 dark:hover:border-rose-800/40 text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-2xl bg-zinc-100 dark:bg-[#24302c] hover:bg-rose-50 dark:hover:bg-rose-950/30 active:scale-95 text-zinc-800 dark:text-zinc-300 hover:text-rose-700 dark:hover:text-rose-400 border border-zinc-200 dark:border-card-border hover:border-rose-200 dark:hover:border-rose-800/40 text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Clear Without Backup</span>

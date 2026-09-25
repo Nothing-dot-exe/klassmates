@@ -61,10 +61,10 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[92dvh] transition-colors">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-[#27272a] bg-zinc-50 dark:bg-[#18181b]">
+      <div className="bg-card border border-zinc-200 dark:border-card-border rounded-3xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[92dvh] transition-colors">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-card-border bg-zinc-50 dark:bg-card-muted">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#222226] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a]">
+            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#24302c] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-card-border">
               <Edit3 className="w-4 h-4" />
             </div>
             <div>
@@ -74,7 +74,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-full hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
+            className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-full hover:bg-zinc-100 dark:hover:bg-[#24302c] transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -96,7 +96,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
                   role === 'admin'
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-transparent shadow-glow-purple'
-                    : 'bg-zinc-100 dark:bg-[#18181b] border-zinc-200 dark:border-[#27272a] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-[#222226]'
+                    : 'bg-zinc-100 dark:bg-card-muted border-zinc-200 dark:border-card-border text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-[#24302c]'
                 }`}
               >
                 <span>👑</span>
@@ -114,7 +114,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
                   role !== 'admin'
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-transparent shadow-glow-purple'
-                    : 'bg-zinc-100 dark:bg-[#18181b] border-zinc-200 dark:border-[#27272a] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-[#222226]'
+                    : 'bg-zinc-100 dark:bg-card-muted border-zinc-200 dark:border-card-border text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-[#24302c]'
                 }`}
               >
                 <span>🎒</span>
@@ -145,7 +145,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
                   className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold transition border cursor-pointer ${
                     designation === preset
                       ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-transparent'
-                      : 'bg-zinc-100 dark:bg-[#18181b] border-zinc-200 dark:border-[#27272a] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-[#222226]'
+                      : 'bg-zinc-100 dark:bg-card-muted border-zinc-200 dark:border-card-border text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-[#24302c]'
                   }`}
                 >
                   {preset}
@@ -158,7 +158,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
               required
               value={designation}
               onChange={(e) => setDesignation(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] transition shadow-xs"
             />
           </div>
 
@@ -173,7 +173,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
               placeholder={name ? `e.g. ${name.split(' ')[0]}` : 'e.g. Alex'}
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] transition shadow-xs"
             />
           </div>
 
@@ -184,7 +184,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] transition shadow-xs"
             />
           </div>
 
@@ -198,7 +198,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
                 required
                 value={rollNo}
                 onChange={(e) => setRollNo(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] uppercase transition shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] uppercase transition shadow-xs"
               />
             </div>
 
@@ -208,7 +208,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
                 value={role}
                 disabled={student.id === 'usr_admin'}
                 onChange={(e) => setRole(e.target.value as UserRole)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition disabled:opacity-50 cursor-pointer shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] transition disabled:opacity-50 cursor-pointer shadow-xs"
               >
                 <option value="student">Normal Member</option>
                 <option value="admin">Room Admin</option>
@@ -222,7 +222,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] transition shadow-xs"
             />
           </div>
 
@@ -233,12 +233,12 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
               placeholder="+91 98765 43210"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] transition shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] transition shadow-xs"
             />
           </div>
 
           {/* Privacy Controls */}
-          <div className="bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl p-3 space-y-2">
+          <div className="bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl p-3 space-y-2">
             <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider block">
               Privacy Controls
             </span>
@@ -264,11 +264,11 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
 
           {/* HR Password Reset Action */}
           {onOpenResetPassword && (
-            <div className="pt-2 border-t border-zinc-200 dark:border-[#27272a] flex items-center justify-between">
+            <div className="pt-2 border-t border-zinc-200 dark:border-card-border flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => onOpenResetPassword(student)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-[#222226] hover:bg-zinc-200 dark:hover:bg-[#1c2744] text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-[#27272a] text-xs font-semibold transition cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-[#24302c] hover:bg-zinc-200 dark:hover:bg-[#1c2744] text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-card-border text-xs font-semibold transition cursor-pointer shadow-xs"
               >
                 <KeyRound className="w-3.5 h-3.5 text-amber-500" />
                 <span>HR Reset Password</span>
@@ -281,7 +281,7 @@ export const EditStudentModal: React.FC<EditStudentModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-[#27272a] bg-zinc-100 dark:bg-[#18181b] text-zinc-800 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-[#222226] text-xs font-medium transition cursor-pointer"
+              className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-zinc-100 dark:bg-card-muted text-zinc-800 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-[#24302c] text-xs font-medium transition cursor-pointer"
             >
               Cancel
             </button>

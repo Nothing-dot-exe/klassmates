@@ -23,8 +23,8 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
       : (currentUser.name || 'User');
 
   return (
-    <div className="p-3 border-t border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD] dark:bg-[#121214] transition-colors">
-      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-white dark:bg-[#18181b] border border-[#DFD3E7] dark:border-zinc-800/80 gap-2 shadow-sm">
+    <div className="p-3 border-t border-card-border dark:border-zinc-800/80 bg-card dark:bg-card transition-colors">
+      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-card-muted border border-card-border dark:border-zinc-800/80 gap-2 shadow-sm">
         <button
           type="button"
           onClick={onOpenSettings}

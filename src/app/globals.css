@@ -3,36 +3,42 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f3efe6;
-  --foreground: #1c1917;
-  --card: #fffcf6;
-  --card-muted: #f7f2e8;
-  --card-border: #e4ddd0;
-  --muted: #78716c;
-  --accent-primary: #0f766e;
-  --accent-primary-hover: #115e59;
-  --accent-secondary: #0d9488;
-  --accent-orange: #c2410c;
-  --accent-emerald: #047857;
-  --accent-glow: rgba(15, 118, 110, 0.28);
-  --ring: rgba(15, 118, 110, 0.35);
-  --radius-btn: 0.875rem;
+  --background: #f4f6fc;
+  --foreground: #0b0c14;
+  --card: #ffffff;
+  --card-muted: #eef1fa;
+  --card-border: #e2e6f3;
+  --muted: #667085;
+  --accent-primary: #5846f5;
+  --accent-primary-hover: #4334d9;
+  --accent-secondary: #d946ef;
+  --accent-orange: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-glow: rgba(88, 70, 245, 0.42);
+  --ring: rgba(88, 70, 245, 0.28);
+  --radius-btn: 1rem;
+  --gradient-brand: linear-gradient(135deg, #5846f5 0%, #c026d3 55%, #fb7185 120%);
+  --mesh-a: rgba(88, 70, 245, 0.16);
+  --mesh-b: rgba(217, 70, 239, 0.1);
 }
 
 .dark {
-  --background: #0c1210;
-  --foreground: #f4f1ea;
-  --card: #141c19;
-  --card-muted: #1a2421;
-  --card-border: #2a3834;
-  --muted: #a8a29e;
-  --accent-primary: #0d9488;
-  --accent-primary-hover: #14b8a6;
-  --accent-secondary: #2dd4bf;
-  --accent-orange: #fb923c;
+  --background: #07070c;
+  --foreground: #f4f5fb;
+  --card: #111118;
+  --card-muted: #181822;
+  --card-border: #2a2a38;
+  --muted: #9aa0b8;
+  --accent-primary: #7c6cff;
+  --accent-primary-hover: #9588ff;
+  --accent-secondary: #e879f9;
+  --accent-orange: #fbbf24;
   --accent-emerald: #34d399;
-  --accent-glow: rgba(45, 212, 191, 0.22);
-  --ring: rgba(45, 212, 191, 0.38);
+  --accent-glow: rgba(124, 108, 255, 0.45);
+  --ring: rgba(124, 108, 255, 0.32);
+  --gradient-brand: linear-gradient(135deg, #7c6cff 0%, #e879f9 60%, #fb7185 130%);
+  --mesh-a: rgba(124, 108, 255, 0.22);
+  --mesh-b: rgba(232, 121, 249, 0.12);
 }
 
 @theme inline {
@@ -44,58 +50,33 @@
   --color-muted: var(--muted);
   --color-primary: var(--accent-primary);
   --color-primary-hover: var(--accent-primary-hover);
-  --font-sans: var(--font-dm-sans), var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: var(--font-fraunces), var(--font-outfit), Georgia, serif;
+  --font-sans: var(--font-outfit), var(--font-space-grotesk), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-outfit), sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
-  /* Recolor default indigo/purple utilities to the new teal system */
-  --color-indigo-50: #f0fdfa;
-  --color-indigo-100: #ccfbf1;
-  --color-indigo-200: #99f6e4;
-  --color-indigo-300: #5eead4;
-  --color-indigo-400: #2dd4bf;
-  --color-indigo-500: #14b8a6;
-  --color-indigo-600: #0d9488;
-  --color-indigo-700: #0f766e;
-  --color-indigo-800: #115e59;
-  --color-indigo-900: #134e4a;
-  --color-indigo-950: #042f2e;
+  --color-indigo-50: #eef2ff;
+  --color-indigo-100: #e0e7ff;
+  --color-indigo-200: #c7d2fe;
+  --color-indigo-300: #a5b4fc;
+  --color-indigo-400: #8b7dff;
+  --color-indigo-500: #6d5cff;
+  --color-indigo-600: #5846f5;
+  --color-indigo-700: #4334d9;
+  --color-indigo-800: #372aad;
+  --color-indigo-900: #2c2485;
+  --color-indigo-950: #1a154d;
 
-  --color-purple-50: #f0fdfa;
-  --color-purple-100: #ccfbf1;
-  --color-purple-200: #99f6e4;
-  --color-purple-300: #5eead4;
-  --color-purple-400: #2dd4bf;
-  --color-purple-500: #14b8a6;
-  --color-purple-600: #0f766e;
-  --color-purple-700: #115e59;
-  --color-purple-800: #134e4a;
-  --color-purple-900: #134e4a;
-  --color-purple-950: #042f2e;
-
-  --color-slate-50: #faf8f3;
-  --color-slate-100: #f3efe6;
-  --color-slate-200: #e4ddd0;
-  --color-slate-300: #d6cec0;
-  --color-slate-400: #a39b90;
-  --color-slate-500: #78716c;
-  --color-slate-600: #57534e;
-  --color-slate-700: #44403c;
-  --color-slate-800: #292524;
-  --color-slate-900: #1c1917;
-  --color-slate-950: #0c0a09;
-
-  --color-zinc-50: #faf8f3;
-  --color-zinc-100: #f3efe6;
-  --color-zinc-200: #e4ddd0;
-  --color-zinc-300: #d6cec0;
-  --color-zinc-400: #a8a29e;
-  --color-zinc-500: #78716c;
-  --color-zinc-600: #57534e;
-  --color-zinc-700: #44403c;
-  --color-zinc-800: #2a3834;
-  --color-zinc-900: #1c1917;
-  --color-zinc-950: #0c1210;
+  --color-purple-50: #fdf4ff;
+  --color-purple-100: #fae8ff;
+  --color-purple-200: #f5d0fe;
+  --color-purple-300: #f0abfc;
+  --color-purple-400: #e879f9;
+  --color-purple-500: #d946ef;
+  --color-purple-600: #c026d3;
+  --color-purple-700: #a21caf;
+  --color-purple-800: #86198f;
+  --color-purple-900: #701a75;
+  --color-purple-950: #4a044e;
 }
 
 .no-scrollbar {
@@ -117,42 +98,45 @@ html.dark {
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
   font-family: var(--font-sans);
   font-size: 15px;
-  line-height: 1.5;
-  letter-spacing: -0.011em;
+  line-height: 1.55;
+  letter-spacing: -0.018em;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(1100px 520px at 8% -12%, var(--mesh-a), transparent 55%),
+    radial-gradient(820px 420px at 108% -8%, var(--mesh-b), transparent 50%);
+  background-attachment: fixed;
 }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.03em;
-  font-weight: 650;
+  letter-spacing: -0.045em;
+  font-weight: 700;
 }
 
 button, input, textarea, select {
   font-family: inherit;
 }
 
-/* Shared buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  min-height: 2.75rem;
-  padding: 0.625rem 1rem;
+  min-height: 2.85rem;
+  padding: 0.7rem 1.1rem;
   border-radius: var(--radius-btn);
-  font-size: 0.8125rem;
+  font-size: 0.84rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   border: 1px solid transparent;
-  transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease, background 0.15s ease;
   cursor: pointer;
   user-select: none;
 }
@@ -162,28 +146,35 @@ button, input, textarea, select {
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.42;
   cursor: not-allowed;
+  filter: grayscale(0.2);
 }
 
 .btn-primary {
-  background: var(--accent-primary);
+  background: var(--gradient-brand);
   color: #fff;
-  box-shadow: 0 8px 20px -8px var(--accent-glow);
+  box-shadow:
+    0 12px 28px -12px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--accent-primary-hover);
+  filter: brightness(1.06);
+  box-shadow:
+    0 16px 34px -12px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
 }
 
 .btn-secondary {
-  background: var(--card-muted);
+  background: var(--card);
   color: var(--foreground);
   border-color: var(--card-border);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--card);
+  background: var(--card-muted);
 }
 
 .btn-ghost {
@@ -197,20 +188,20 @@ button, input, textarea, select {
 }
 
 .btn-accent {
-  background: var(--accent-orange);
+  background: linear-gradient(135deg, #f59e0b, #f97316);
   color: #fff;
-  box-shadow: 0 8px 18px -8px rgba(194, 65, 12, 0.35);
+  box-shadow: 0 10px 22px -10px rgba(245, 158, 11, 0.55);
 }
 
 .field {
   width: 100%;
-  min-height: 2.75rem;
-  padding: 0.625rem 0.875rem;
+  min-height: 2.85rem;
+  padding: 0.7rem 0.95rem;
   border-radius: var(--radius-btn);
   border: 1px solid var(--card-border);
   background: var(--card-muted);
   color: var(--foreground);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
@@ -218,7 +209,7 @@ button, input, textarea, select {
 .field:focus {
   background: var(--card);
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--ring);
+  box-shadow: 0 0 0 4px var(--ring);
 }
 
 .field::placeholder {
@@ -226,9 +217,10 @@ button, input, textarea, select {
 }
 
 .surface-card {
-  background: var(--card);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
   border: 1px solid var(--card-border);
-  border-radius: 1.25rem;
+  border-radius: 1.35rem;
+  backdrop-filter: blur(18px);
 }
 
 @keyframes pulse-ring {
@@ -243,25 +235,25 @@ button, input, textarea, select {
 
 .shadow-glow-purple,
 .shadow-glow-teal {
-  box-shadow: 0 8px 22px -6px var(--accent-glow);
+  box-shadow: 0 10px 28px -10px var(--accent-glow);
 }
 .shadow-glow-gold {
-  box-shadow: 0 0 16px -2px rgba(245, 158, 11, 0.25);
+  box-shadow: 0 0 16px -2px rgba(245, 158, 11, 0.28);
 }
 .shadow-glow-emerald {
   box-shadow: 0 0 12px -2px rgba(16, 185, 129, 0.45);
 }
 
 .card-student {
-  border-width: 1.5px;
+  border-width: 1px;
   border-radius: 1.25rem;
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.18s ease,
               box-shadow 0.18s ease;
 }
 
 .card-student:hover {
-  transform: translateY(-1.5px);
+  transform: translateY(-2px);
 }
 
 ::selection {
@@ -270,7 +262,7 @@ button, input, textarea, select {
 }
 
 .glow-indigo {
-  box-shadow: 0 0 20px -3px var(--accent-glow);
+  box-shadow: 0 0 24px -4px var(--accent-glow);
 }
 
 .glow-amber {
@@ -302,10 +294,10 @@ button, input, textarea, select {
 }
 
 .glass-panel-light {
-  background: color-mix(in srgb, var(--card) 92%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid var(--card-border);
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid color-mix(in srgb, var(--card-border) 80%, transparent);
 }
 
 @media (max-width: 767px) {
@@ -314,6 +306,6 @@ button, input, textarea, select {
   }
 
   .btn {
-    min-height: 2.875rem;
+    min-height: 3rem;
   }
 }

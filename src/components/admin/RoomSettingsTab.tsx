@@ -83,9 +83,9 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
   return (
     <div className="space-y-6">
       {/* 1. Classroom Profile & Custom Code */}
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-4 sm:p-8 space-y-6 shadow-sm">
-        <div className="flex items-center gap-3 pb-4 border-b border-zinc-200 dark:border-[#27272a]">
-          <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a]">
+      <div className="bg-card border border-zinc-200 dark:border-card-border rounded-3xl p-4 sm:p-8 space-y-6 shadow-sm">
+        <div className="flex items-center gap-3 pb-4 border-b border-zinc-200 dark:border-card-border">
+          <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-card-muted text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-card-border">
             <School className="w-5 h-5" />
           </div>
           <div>
@@ -102,7 +102,7 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
                 type="text"
                 value={classNameInput}
                 onChange={(e) => setClassNameInput(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none transition shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none transition shadow-xs"
                 required
               />
             </div>
@@ -113,7 +113,7 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
                 type="text"
                 value={institutionInput}
                 onChange={(e) => setInstitutionInput(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none transition shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none transition shadow-xs"
               />
             </div>
 
@@ -123,7 +123,7 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
                 type="text"
                 value={sectionInput}
                 onChange={(e) => setSectionInput(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none transition shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none transition shadow-xs"
               />
             </div>
 
@@ -133,7 +133,7 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
                 type="text"
                 value={semesterInput}
                 onChange={(e) => setSemesterInput(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none transition shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none transition shadow-xs"
               />
             </div>
 
@@ -147,7 +147,7 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
                 value={adminDesignationInput}
                 onChange={(e) => setAdminDesignationInput(e.target.value)}
                 placeholder="e.g. Class Representative (CR), Student Coordinator"
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none transition shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 dark:text-white font-medium placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none transition shadow-xs"
               />
             </div>
           </div>
@@ -159,12 +159,12 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
                 type="text"
                 value={customCodeInput}
                 onChange={(e) => setCustomCodeInput(e.target.value.toUpperCase())}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none uppercase tracking-wider transition shadow-xs"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none uppercase tracking-wider transition shadow-xs"
               />
               <button
                 type="button"
                 onClick={handleRegenerateCode}
-                className="px-4 py-2.5 rounded-xl bg-zinc-100 dark:bg-[#222226] hover:bg-zinc-200 dark:hover:bg-[#27272a] border border-zinc-200 dark:border-[#27272a] text-zinc-900 dark:text-white text-xs font-bold flex items-center gap-1.5 transition flex-shrink-0 cursor-pointer shadow-xs active:scale-95"
+                className="px-4 py-2.5 rounded-xl bg-zinc-100 dark:bg-[#24302c] hover:bg-zinc-200 dark:hover:bg-[#27272a] border border-zinc-200 dark:border-card-border text-zinc-900 dark:text-white text-xs font-bold flex items-center gap-1.5 transition flex-shrink-0 cursor-pointer shadow-xs active:scale-95"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 Randomize
@@ -174,8 +174,8 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
           </div>
 
           {/* Security & Access Policies */}
-          <div className="pt-4 border-t border-zinc-200 dark:border-[#27272a] space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
+          <div className="pt-4 border-t border-zinc-200 dark:border-card-border space-y-4">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border">
               <div className="space-y-0.5">
                 <div className="text-xs font-black text-zinc-950 dark:text-white flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-500" />
@@ -192,11 +192,11 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
                   onChange={(e) => setRequireApprovalState(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-zinc-200 dark:bg-[#222226] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 dark:peer-checked:bg-indigo-600 border border-zinc-300 dark:border-[#27272a]"></div>
+                <div className="w-11 h-6 bg-zinc-200 dark:bg-[#24302c] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 dark:peer-checked:bg-indigo-600 border border-zinc-300 dark:border-card-border"></div>
               </label>
             </div>
 
-            <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] space-y-2">
+            <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border space-y-2">
               <div className="text-xs font-black text-zinc-950 dark:text-white flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-indigo-500" />
                 Ephemeral History & Auto-Purge Policy
@@ -207,7 +207,7 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
               <select
                 value={autoDeleteState}
                 onChange={(e) => setAutoDeleteState(e.target.value as AutoDeleteOption)}
-                className="w-full bg-white dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs font-semibold text-zinc-950 dark:text-white focus:border-indigo-500 focus:outline-none transition shadow-xs cursor-pointer"
+                className="w-full bg-white dark:bg-[#24302c] border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs font-semibold text-zinc-950 dark:text-white focus:border-indigo-500 focus:outline-none transition shadow-xs cursor-pointer"
               >
                 <option value="never">Never auto-delete (Keep persistent history)</option>
                 <option value="24h">Auto-delete after 24 hours</option>
@@ -230,9 +230,9 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
       </div>
 
       {/* 2. Admin Security Password */}
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-4 sm:p-8 space-y-6 shadow-sm">
-        <div className="flex items-center gap-3 pb-4 border-b border-zinc-200 dark:border-[#27272a]">
-          <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-amber-400 border border-zinc-200 dark:border-[#27272a]">
+      <div className="bg-card border border-zinc-200 dark:border-card-border rounded-3xl p-4 sm:p-8 space-y-6 shadow-sm">
+        <div className="flex items-center gap-3 pb-4 border-b border-zinc-200 dark:border-card-border">
+          <div className="p-2.5 rounded-2xl bg-zinc-100 dark:bg-card-muted text-zinc-900 dark:text-amber-400 border border-zinc-200 dark:border-card-border">
             <Lock className="w-5 h-5" />
           </div>
           <div>
@@ -249,7 +249,7 @@ export const RoomSettingsTab: React.FC<RoomSettingsTabProps> = ({
               placeholder="Enter at least 6 characters..."
               value={adminPasswordInput}
               onChange={(e) => setAdminPasswordInput(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none transition shadow-xs"
+              className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-indigo-500 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none transition shadow-xs"
             />
           </div>
 

@@ -24,11 +24,11 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
   onNativeShare,
 }) => {
   return (
-    <div className="bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-[#27272a] rounded-3xl p-6 sm:p-8 shadow-sm">
+    <div className="bg-card dark:bg-card border border-card-border dark:border-card-border rounded-3xl p-6 sm:p-8 shadow-sm">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#DFD3E7] dark:border-[#27272a]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-card-border dark:border-card-border">
         <div>
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 inline-flex items-center gap-1">
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-indigo-50 dark:bg-[#24302c] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 inline-flex items-center gap-1">
             <QrCode className="w-3.5 h-3.5" />
             Classroom Invite & QR
           </span>
@@ -45,9 +45,9 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center mt-6">
         {/* Left: QR Code & Classroom Card */}
         <div className="md:col-span-5 flex flex-col items-center">
-          <div className="w-full max-w-[280px] rounded-2xl bg-white dark:bg-[#18181b] border border-[#DFD3E7] dark:border-[#27272a] p-5 text-center shadow-md space-y-3">
+          <div className="w-full max-w-[280px] rounded-2xl bg-card-muted border border-card-border dark:border-card-border p-5 text-center shadow-md space-y-3">
             {/* Institution Badge */}
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#F1EBF5] dark:bg-[#222226] text-zinc-800 dark:text-zinc-200 border border-[#DFD3E7] dark:border-[#27272a] text-[10px] font-bold uppercase tracking-wider truncate max-w-full">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-background dark:bg-[#24302c] text-zinc-800 dark:text-zinc-200 border border-card-border dark:border-card-border text-[10px] font-bold uppercase tracking-wider truncate max-w-full">
               <School className="w-3 h-3 text-indigo-500 shrink-0" />
               <span className="truncate">{classroom.institution}</span>
             </div>
@@ -78,7 +78,7 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
             </div>
 
             {/* Class Code Highlight */}
-            <div className="py-2 px-3 rounded-xl bg-[#F1EBF5] dark:bg-[#222226] border border-[#DFD3E7] dark:border-indigo-500/30 text-center">
+            <div className="py-2 px-3 rounded-xl bg-background dark:bg-[#24302c] border border-card-border dark:border-indigo-500/30 text-center">
               <div className="text-[9px] uppercase font-bold text-zinc-500 dark:text-zinc-400 tracking-wider">
                 Class Code
               </div>
@@ -98,7 +98,7 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
                 <Share2 className="w-3.5 h-3.5 text-indigo-500" />
                 Direct Invite Link
               </label>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-500/30">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-[#24302c] text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-500/30">
                 Auto-fills Code
               </span>
             </div>
@@ -108,7 +108,7 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
                 type="text"
                 readOnly
                 value={joinUrl}
-                className="flex-1 min-w-0 bg-white dark:bg-[#18181b] border border-[#DFD3E7] dark:border-[#27272a] rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:outline-none truncate shadow-xs"
+                className="flex-1 min-w-0 bg-card-muted border border-card-border dark:border-card-border rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 focus:outline-none truncate shadow-xs"
               />
               <button
                 onClick={onCopyLink}
@@ -136,7 +136,7 @@ export const ShareRoomTab: React.FC<ShareRoomTabProps> = ({
 
             <button
               onClick={onNativeShare}
-              className="w-full sm:w-auto py-3 px-5 rounded-xl border border-[#DFD3E7] dark:border-[#27272a] bg-white dark:bg-[#18181b] hover:bg-zinc-50 dark:hover:bg-[#222226] text-zinc-800 dark:text-white text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs active:scale-95"
+              className="w-full sm:w-auto py-3 px-5 rounded-xl border border-card-border dark:border-card-border bg-card-muted hover:bg-zinc-50 dark:hover:bg-[#24302c] text-zinc-800 dark:text-white text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs active:scale-95"
             >
               <Share2 className="w-4 h-4 text-indigo-500" />
               Share Link

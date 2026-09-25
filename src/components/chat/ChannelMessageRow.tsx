@@ -160,7 +160,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
 
         {/* Floating Action Bar (Hover on desktop, tap to toggle on mobile) */}
         <div
-          className={`flex items-center gap-0.5 mb-1 bg-[#FAF7FD] dark:bg-[#18181b] border border-[#DFD3E7] dark:border-[#27272a] rounded-2xl px-1.5 py-0.5 shadow-md z-20 transition-all duration-200 ${
+          className={`flex items-center gap-0.5 mb-1 bg-card dark:bg-card-muted border border-card-border dark:border-card-border rounded-2xl px-1.5 py-0.5 shadow-md z-20 transition-all duration-200 ${
             showActions
               ? 'opacity-100 scale-100'
               : 'opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100'
@@ -169,7 +169,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
           <button
             type="button"
             onClick={() => onReply?.(message)}
-            className="p-1 rounded-xl text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
+            className="p-1 rounded-xl text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-zinc-100 dark:hover:bg-[#24302c] transition cursor-pointer"
             title="Reply"
           >
             <Reply className="w-3.5 h-3.5" />
@@ -178,7 +178,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
           <button
             type="button"
             onClick={() => setShowReactionPicker(!showReactionPicker)}
-            className="p-1 rounded-xl text-zinc-600 dark:text-zinc-300 hover:text-amber-500 hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
+            className="p-1 rounded-xl text-zinc-600 dark:text-zinc-300 hover:text-amber-500 hover:bg-zinc-100 dark:hover:bg-[#24302c] transition cursor-pointer"
             title="React with Emoji"
           >
             <SmilePlus className="w-3.5 h-3.5" />
@@ -188,7 +188,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
             <button
               type="button"
               onClick={handleDeleteClick}
-              className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:bg-[#222226] transition cursor-pointer"
+              className="p-1 rounded-xl text-zinc-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:bg-[#24302c] transition cursor-pointer"
               title="Delete message or photo"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -196,7 +196,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
           )}
 
           {showReactionPicker && (
-            <div className="flex items-center gap-0.5 pl-1.5 border-l border-[#DFD3E7] dark:border-[#27272a]">
+            <div className="flex items-center gap-0.5 pl-1.5 border-l border-card-border dark:border-card-border">
               {QUICK_REACTIONS.map((emoji) => (
                 <button
                   key={emoji}
@@ -205,7 +205,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
                     onReact(message.id, emoji);
                     setShowReactionPicker(false);
                   }}
-                  className="text-sm hover:scale-125 transition-transform p-0.5 rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-[#222226]"
+                  className="text-sm hover:scale-125 transition-transform p-0.5 rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-[#24302c]"
                 >
                   {emoji}
                 </button>
@@ -233,7 +233,7 @@ export const ChannelMessageRow: React.FC<ChannelMessageRowProps> = ({
                   ? 'p-0.5 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80 bg-zinc-100 dark:bg-zinc-900 shadow-sm'
                   : isMine
                   ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white rounded-2xl rounded-tr-xs shadow-md shadow-indigo-950/20 px-3.5 py-2'
-                  : 'bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-[#27272a] text-zinc-950 dark:text-zinc-100 rounded-2xl rounded-tl-xs shadow-sm px-3.5 py-2'
+                  : 'bg-card dark:bg-card border border-card-border dark:border-card-border text-zinc-950 dark:text-zinc-100 rounded-2xl rounded-tl-xs shadow-sm px-3.5 py-2'
               }`}
             >
               {/* Reply Quote preview inside the bubble */}

@@ -16,7 +16,7 @@ export const ChatToolbar: React.FC<ChatToolbarProps> = ({
   const [showTimerMenu, setShowTimerMenu] = useState(false);
 
   return (
-    <div className="flex items-center justify-between pb-2 text-[11px] text-zinc-500">
+    <div className="flex items-center justify-between pb-2 text-[11px] text-muted gap-2 flex-wrap">
       <div className="flex items-center gap-2">
         <span className="flex items-center gap-1 text-zinc-900 font-medium bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-200 shadow-xs">
           <ShieldCheck className="w-3 h-3 text-zinc-900" />

@@ -26,20 +26,20 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
       const dataRows = tableRows.slice(1).filter((r) => !r.every((c) => c.trim().startsWith('-')));
 
       elements.push(
-        <div key={`table-${keyPrefix}`} className="overflow-x-auto my-5 rounded-xl border border-zinc-200 dark:border-[#27272a] no-scrollbar shadow-2xs">
+        <div key={`table-${keyPrefix}`} className="overflow-x-auto my-5 rounded-xl border border-zinc-200 dark:border-card-border no-scrollbar shadow-2xs">
           <table className="w-full text-left text-xs border-collapse">
-            <thead className="bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-zinc-200">
+            <thead className="bg-zinc-100 dark:bg-card-muted text-zinc-900 dark:text-zinc-200">
               <tr>
                 {headers.map((h, i) => (
-                  <th key={i} className="py-2.5 px-4 font-bold border-b border-zinc-200 dark:border-[#27272a]">
+                  <th key={i} className="py-2.5 px-4 font-bold border-b border-zinc-200 dark:border-card-border">
                     {h.trim()}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-[#27272a] bg-white dark:bg-[#121214]">
+            <tbody className="divide-y divide-zinc-200 dark:divide-[#27272a] bg-card">
               {dataRows.map((row, rIdx) => (
-                <tr key={rIdx} className="hover:bg-zinc-50 dark:hover:bg-[#222226] transition-colors">
+                <tr key={rIdx} className="hover:bg-zinc-50 dark:hover:bg-[#24302c] transition-colors">
                   {row.map((cell, cIdx) => (
                     <td key={cIdx} className="py-2 px-4 text-zinc-800 dark:text-zinc-300">
                       {cell.trim()}
@@ -67,7 +67,7 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
         const currentIndex = codeBlockCount++;
 
         elements.push(
-          <div key={`code-${idx}`} className="my-5 rounded-2xl overflow-hidden border border-zinc-200 dark:border-[#27272a] bg-zinc-950 shadow-xs">
+          <div key={`code-${idx}`} className="my-5 rounded-2xl overflow-hidden border border-zinc-200 dark:border-card-border bg-zinc-950 shadow-xs">
             <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-[11px] text-zinc-400">
               <span className="font-mono uppercase font-bold text-zinc-200">{codeLanguage}</span>
               <button

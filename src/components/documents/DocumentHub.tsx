@@ -48,10 +48,10 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
   const examCount = documents.filter((d) => d.isHighExamValue).length;
 
   return (
-    <div className="flex-1 h-full bg-[#F1EBF5] dark:bg-[#09090b] overflow-y-auto no-scrollbar transition-colors p-3 sm:p-6 lg:p-8">
+    <div className="flex-1 h-full bg-background overflow-y-auto no-scrollbar transition-colors p-3 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto space-y-5 sm:space-y-6 pb-12">
         {/* Header Banner */}
-        <div className="p-4 sm:p-6 rounded-3xl bg-[#FAF7FD] dark:bg-[#121214] border border-[#DFD3E7] dark:border-zinc-800/80 shadow-md space-y-4 transition-colors">
+        <div className="p-4 sm:p-6 rounded-3xl bg-card border border-card-border shadow-sm space-y-4 transition-colors">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div>
               <div className="flex items-center flex-wrap gap-2 mb-1.5">
@@ -59,13 +59,13 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                   <button
                     type="button"
                     onClick={onBack}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#EBE3F0] dark:bg-[#18181b] text-slate-700 dark:text-zinc-200 hover:text-slate-950 dark:hover:text-white border border-[#DFD3E7] dark:border-zinc-800 text-xs font-bold transition active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-card-muted dark:bg-card-muted text-slate-700 dark:text-zinc-200 hover:text-slate-950 dark:hover:text-white border border-card-border dark:border-zinc-800 text-xs font-bold transition active:scale-95 cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to Chat</span>
                   </button>
                 )}
-                <span className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#EBE3F0] dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-[#DFD3E7] dark:border-zinc-700 flex-shrink-0 shadow-2xs">
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-card-muted dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-card-border dark:border-zinc-700 flex-shrink-0 shadow-2xs">
                   📚 Student Knowledge Vault
                 </span>
                 <span className="text-[11px] sm:text-xs text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5 font-semibold bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 rounded-full">
@@ -73,10 +73,10 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                   Synced with Chat Channels
                 </span>
               </div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-display text-foreground tracking-tight">
                 Classroom Document Hub
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-0.5 max-w-xl leading-relaxed">
+              <p className="text-sm text-muted mt-0.5 max-w-xl leading-relaxed">
                 Shared notes, PDF summaries, cheat sheets, and study materials organized in one peer-to-peer repository.
               </p>
             </div>
@@ -91,7 +91,7 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
           </div>
 
           {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-1 border-t border-[#DFD3E7] dark:border-zinc-800/60">
+          <div className="flex flex-col sm:flex-row items-center gap-3 pt-1 border-t border-card-border dark:border-zinc-800/60">
             <div className="relative flex-1 w-full">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
               <input
@@ -99,7 +99,7 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                 placeholder="Search notes, subjects, formulas, or tags..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#F1EBF5] dark:bg-[#18181b] border border-[#DFD3E7] dark:border-zinc-800 rounded-2xl pl-10 pr-9 py-2 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-2xs"
+                className="w-full bg-background dark:bg-card-muted border border-card-border dark:border-zinc-800 rounded-2xl pl-10 pr-9 py-2 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-2xs"
               />
               {searchQuery && (
                 <button
@@ -118,7 +118,7 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                   selectedFilter === 'all'
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow-purple'
-                    : 'bg-[#FAF7FD] dark:bg-[#18181b] text-slate-600 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-[#EBE3F0] dark:hover:bg-zinc-800/80 border border-[#DFD3E7] dark:border-zinc-800'
+                    : 'bg-card dark:bg-card-muted text-slate-600 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-card-muted dark:hover:bg-zinc-800/80 border border-card-border dark:border-zinc-800'
                 }`}
               >
                 All ({documents.length})
@@ -129,7 +129,7 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap ${
                   selectedFilter === 'markdown'
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow-purple'
-                    : 'bg-[#FAF7FD] dark:bg-[#18181b] text-slate-600 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-[#EBE3F0] dark:hover:bg-zinc-800/80 border border-[#DFD3E7] dark:border-zinc-800'
+                    : 'bg-card dark:bg-card-muted text-slate-600 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-card-muted dark:hover:bg-zinc-800/80 border border-card-border dark:border-zinc-800'
                 }`}
               >
                 <BookOpen className="w-3.5 h-3.5" />
@@ -141,7 +141,7 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap ${
                   selectedFilter === 'pdf'
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow-purple'
-                    : 'bg-[#FAF7FD] dark:bg-[#18181b] text-slate-600 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-[#EBE3F0] dark:hover:bg-zinc-800/80 border border-[#DFD3E7] dark:border-zinc-800'
+                    : 'bg-card dark:bg-card-muted text-slate-600 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white hover:bg-card-muted dark:hover:bg-zinc-800/80 border border-card-border dark:border-zinc-800'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5 text-rose-500" />
@@ -153,7 +153,7 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap ${
                   selectedFilter === 'exam'
                     ? 'bg-amber-500 text-white shadow-glow-gold'
-                    : 'bg-[#FAF7FD] dark:bg-[#18181b] text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40'
+                    : 'bg-card dark:bg-card-muted text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40'
                 }`}
               >
                 <span>⭐ Exam Yield ({examCount})</span>
@@ -165,8 +165,8 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
         {/* Documents Grid / Empty State */}
         <div>
           {filteredDocs.length === 0 ? (
-            <div className="text-center py-12 sm:py-16 border border-dashed border-[#DFD3E7] dark:border-[#27272a] rounded-3xl p-6 sm:p-8 bg-[#FAF7FD] dark:bg-[#121214] backdrop-blur-sm space-y-3 transition-colors">
-              <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a] flex items-center justify-center mx-auto shadow-2xs">
+            <div className="text-center py-12 sm:py-16 border border-dashed border-card-border dark:border-card-border rounded-3xl p-6 sm:p-8 bg-card dark:bg-card backdrop-blur-sm space-y-3 transition-colors">
+              <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-card-muted text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-card-border flex items-center justify-center mx-auto shadow-2xs">
                 <FileText className="w-6 h-6" />
               </div>
               <div>

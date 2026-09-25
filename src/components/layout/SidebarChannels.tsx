@@ -41,7 +41,7 @@ export const SidebarChannels: React.FC<SidebarChannelsProps> = ({
               <span className="truncate">{ch.name}</span>
             </div>
             {isSelected && (
-              <span className="inline-flex h-2 w-2 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366F1]" />
+              <span className="inline-flex h-2 w-2 rounded-full bg-indigo-500 shadow-[0_0_8px_var(--accent-secondary)]" />
             )}
           </button>
         );

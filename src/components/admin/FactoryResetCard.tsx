@@ -20,7 +20,7 @@ export const FactoryResetCard: React.FC<FactoryResetCardProps> = ({
   onOpenResetConfirm,
 }) => {
   return (
-    <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
+    <div className="bg-card border border-zinc-200 dark:border-card-border rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h4 className="text-sm font-black text-zinc-950 dark:text-white flex items-center gap-2">
           <Trash2 className="w-4 h-4 text-rose-500" />
@@ -41,19 +41,19 @@ export const FactoryResetCard: React.FC<FactoryResetCardProps> = ({
 
       {/* Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center">
-        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
+        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border">
           <div className="text-base font-black text-zinc-950 dark:text-white">{students.length}</div>
           <div className="text-[10px] text-zinc-600 dark:text-zinc-400 font-semibold">Students</div>
         </div>
-        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
+        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border">
           <div className="text-base font-black text-zinc-950 dark:text-white">{totalMessagesCount}</div>
           <div className="text-[10px] text-zinc-600 dark:text-zinc-400 font-semibold">Messages</div>
         </div>
-        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
+        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border">
           <div className="text-base font-black text-zinc-950 dark:text-white">{documents.length}</div>
           <div className="text-[10px] text-zinc-600 dark:text-zinc-400 font-semibold">Documents</div>
         </div>
-        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a]">
+        <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border">
           <div className="text-base font-black text-zinc-950 dark:text-white">
             {pendingRequests.length + passwordResetRequests.length}
           </div>
@@ -65,7 +65,7 @@ export const FactoryResetCard: React.FC<FactoryResetCardProps> = ({
         <button
           type="button"
           onClick={onOpenResetConfirm}
-          className="w-full py-3 rounded-xl bg-zinc-100 dark:bg-[#222226] hover:bg-rose-50 dark:hover:bg-rose-950/40 text-zinc-900 dark:text-zinc-200 hover:text-rose-600 dark:hover:text-rose-400 border border-zinc-200 dark:border-[#27272a] hover:border-rose-500/30 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-95"
+          className="w-full py-3 rounded-xl bg-zinc-100 dark:bg-[#24302c] hover:bg-rose-50 dark:hover:bg-rose-950/40 text-zinc-900 dark:text-zinc-200 hover:text-rose-600 dark:hover:text-rose-400 border border-zinc-200 dark:border-card-border hover:border-rose-500/30 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-95"
         >
           <Download className="w-4 h-4 text-rose-500" />
           <span>Extract All Data & Factory Reset Room</span>

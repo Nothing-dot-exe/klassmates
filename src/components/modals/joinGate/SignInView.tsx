@@ -64,7 +64,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
   return (
     <div className="space-y-4 animate-in fade-in">
       {/* Role Toggle */}
-      <div className="grid grid-cols-2 p-1 rounded-2xl bg-zinc-100 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] transition-colors">
+      <div className="grid grid-cols-2 p-1 rounded-2xl bg-zinc-100 dark:bg-card-muted border border-zinc-200 dark:border-card-border transition-colors">
         <button
           type="button"
           onClick={() => setSignInRole('student')}
@@ -96,7 +96,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
       {signInRole === 'student' ? (
         <form onSubmit={onStudentLoginSubmit} autoComplete="off" className="space-y-3.5">
           {/* Private Classroom Security Notice (No Public Member Enumeration) */}
-          <div className="p-3 rounded-xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] flex items-center gap-2.5 text-left">
+          <div className="p-3 rounded-xl bg-zinc-50 dark:bg-card border border-zinc-200 dark:border-card-border flex items-center gap-2.5 text-left">
             <Lock className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-tight">
               <strong className="text-zinc-900 dark:text-zinc-200">Private Classroom Workspace:</strong> Restricted to enrolled classmates. Enter your credentials below.
@@ -113,7 +113,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
               placeholder="e.g. 1MS21CS042 or student@institution.edu"
               value={loginIdentifier}
               onChange={(e) => setLoginIdentifier(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
+              className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
             />
           </div>
 
@@ -135,7 +135,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 placeholder="Enter your account password"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition"
               />
               <button
                 type="button"
@@ -170,7 +170,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
 
           <button
             type="submit"
-            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-950/30 transition flex items-center justify-center gap-2 mt-2 cursor-pointer"
+            className="w-full py-3.5 rounded-2xl btn btn-primary mt-2"
           >
             <LogIn className="w-4 h-4" />
             <span>Sign In to Classroom</span>
@@ -179,7 +179,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
       ) : (
         /* Admin Sign In Form */
         <form onSubmit={onAdminLoginSubmit} className="space-y-3.5">
-          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-amber-500/25 text-left space-y-1">
+          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-card border border-zinc-200 dark:border-amber-500/25 text-left space-y-1">
             <div className="text-xs font-bold text-zinc-950 dark:text-amber-400 flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5 text-amber-500" />
               Class Representative Security Gate
@@ -207,7 +207,7 @@ export const SignInView: React.FC<SignInViewProps> = ({
                 placeholder="Enter admin password"
                 value={adminPasswordInput}
                 onChange={(e) => setAdminPasswordInput(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono"
+                className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono"
               />
               <button
                 type="button"

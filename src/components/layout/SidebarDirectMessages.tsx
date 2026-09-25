@@ -69,7 +69,7 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
       </div>
 
       {otherStudents.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 dark:border-zinc-800 bg-white/70 dark:bg-[#0E1528]/60 p-4 text-center flex flex-col items-center justify-center">
+        <div className="rounded-2xl border border-dashed border-slate-300 dark:border-zinc-800 bg-card/70 p-4 text-center flex flex-col items-center justify-center">
           <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-zinc-800/70 flex items-center justify-center text-slate-500 dark:text-zinc-400 mb-2">
             <svg className="w-4 h-4 stroke-current" fill="none" strokeWidth="1.75" viewBox="0 0 24 24">
               <path d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" strokeLinecap="round" strokeLinejoin="round" />
@@ -157,7 +157,7 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
                   <img
                     src={getSafeAvatar(st.avatar, st.name)}
                     alt={st.name}
-                    className="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-700 bg-slate-100 dark:bg-[#0E1528]"
+                    className="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-700 bg-slate-100 dark:bg-card-muted"
                   />
                   {/* Status Indicator Dot: Green if Online, Red if Offline */}
                   <span

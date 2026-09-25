@@ -225,12 +225,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="p-2 sm:p-3 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] sm:pb-3 border-t border-[#DFD3E7] dark:border-zinc-800/80 bg-[#FAF7FD]/95 dark:bg-[#121214]/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
+    <div className="p-2 sm:p-3 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] sm:pb-3 border-t border-card-border bg-card/95 backdrop-blur-2xl flex-shrink-0 w-full transition-colors">
       {/* Reply Context Banner when replying */}
       <ReplyContextBanner replyingTo={replyingTo || null} onCancelReply={onCancelReply || (() => {})} />
 
       {/* Input Capsule Row */}
-      <div className="flex items-center gap-1 sm:gap-2 bg-[#F1EBF5] dark:bg-[#18181b] border border-[#DFD3E7] dark:border-zinc-800 focus-within:border-indigo-500 dark:focus-within:border-indigo-500 focus-within:bg-[#FAF7FD] dark:focus-within:bg-[#18181b] focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all shadow-xs w-full">
+      <div className="flex items-center gap-1 sm:gap-2 bg-card-muted border border-card-border focus-within:border-primary focus-within:bg-card focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-2xl sm:rounded-full px-2 py-1.5 transition-all w-full">
         {/* Attachment Options */}
         <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           <input

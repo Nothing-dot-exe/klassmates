@@ -65,7 +65,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
       {/* CR Password Gate Modal */}
       {showCRModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] p-5 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200">
+          <div className="w-full max-w-sm rounded-3xl bg-card border border-card-border p-5 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200">
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
@@ -73,14 +73,14 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
                   <Crown className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-zinc-950 dark:text-white">CR Access</h3>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Enter Class Rep password to continue</p>
+                  <h3 className="text-sm font-display text-foreground">CR Access</h3>
+                  <p className="text-[11px] text-muted">Enter Class Rep password to continue</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => { setShowCRModal(false); setCRPassword(''); setCRError(''); }}
-                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
+                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-[#24302c] transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -96,7 +96,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
                 onKeyDown={(e) => e.key === 'Enter' && handleCRLogin()}
                 placeholder="CR / Admin password"
                 autoFocus
-                className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-zinc-200 dark:border-[#27272a] bg-zinc-50 dark:bg-[#18181b] text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition"
+                className="w-full pl-9 pr-10 py-2.5 field"
               />
               <button
                 type="button"
@@ -117,7 +117,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
               type="button"
               onClick={handleCRLogin}
               disabled={isChecking}
-              className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-md shadow-amber-900/20 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="btn btn-accent w-full"
             >
               {isChecking ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -132,19 +132,19 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
 
       {/* Active Classroom Spotlight Card */}
       {hasActiveClassroom && (
-        <div className="p-4 sm:p-5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] shadow-sm space-y-3 relative overflow-hidden transition-colors">
+        <div className="p-4 sm:p-5 rounded-2xl bg-card-muted border border-card-border shadow-sm space-y-3 relative overflow-hidden transition-colors">
           <div className="flex items-center justify-between gap-2">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-zinc-800 dark:text-zinc-300 text-[10px] font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-card-muted border border-zinc-200 dark:border-card-border text-zinc-800 dark:text-zinc-300 text-[10px] font-bold uppercase tracking-wider">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
               <span>Database Synced</span>
             </div>
-            <span className="font-mono text-xs font-black text-indigo-600 dark:text-indigo-400 px-2.5 py-0.5 rounded-lg bg-indigo-50 dark:bg-[#222226] border border-indigo-200 dark:border-indigo-500/30 shadow-xs">
+            <span className="font-mono text-xs font-black text-indigo-600 dark:text-indigo-400 px-2.5 py-0.5 rounded-lg bg-indigo-50 dark:bg-[#24302c] border border-indigo-200 dark:border-indigo-500/30 shadow-xs">
               {classroom?.code || 'MCA2026'}
             </span>
           </div>
 
           <div>
-            <h3 className="text-base font-black text-zinc-950 dark:text-white tracking-tight">
+            <h3 className="text-lg font-display text-foreground tracking-tight">
               {classroom?.name || 'MCA Batch 2024–2026'}
             </h3>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5 truncate">
@@ -152,7 +152,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400 pt-1 border-t border-zinc-200 dark:border-[#27272a]">
+          <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400 pt-1 border-t border-zinc-200 dark:border-card-border">
             <div className="flex items-center gap-1.5 text-zinc-800 dark:text-zinc-300 font-semibold">
               <Users className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>{studentCount} Enrolled Students</span>
@@ -166,7 +166,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
             <button
               type="button"
               onClick={onSignIn}
-              className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold transition shadow-md shadow-indigo-950/20 flex items-center justify-center gap-1.5 cursor-pointer"
+              className="btn btn-primary flex-1"
             >
               <span>Sign In to Classroom</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -176,7 +176,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
               <button
                 type="button"
                 onClick={() => setShowCRModal(true)}
-                className="py-2.5 px-3.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-800 dark:text-amber-300 text-xs font-bold border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer flex-shrink-0"
+                className="btn btn-secondary py-2.5 px-3.5 text-amber-800 dark:text-amber-300 border-amber-500/30"
                 title="Enter as Class Representative — requires password"
               >
                 <span>👑 Enter as CR</span>
@@ -190,22 +190,22 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
       <button
         type="button"
         onClick={onCreateRoom}
-        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] hover:border-indigo-500/40 dark:hover:border-indigo-500/50 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
+        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-card border border-card-border hover:border-primary/40 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
       >
         <div className="flex items-start justify-between">
-          <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a] flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent transition-all">
+          <div className="w-10 h-10 rounded-xl bg-card-muted text-primary border border-card-border flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-transparent transition-all">
             <ShieldCheck className="w-5 h-5" />
           </div>
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-[#18181b] text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-[#27272a]">
+          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-card-muted text-foreground border border-card-border">
             Student Lead & CR
           </span>
         </div>
 
         <div className="mt-3">
-          <h3 className="text-sm sm:text-base font-bold text-zinc-950 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition">
+          <h3 className="text-base font-display text-foreground group-hover:text-primary transition">
             Create a New Classroom
           </h3>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
+          <p className="text-sm text-muted mt-1 leading-relaxed">
             Set up a private classroom space for your batch or study group as Class Representative or Student Lead.
           </p>
         </div>
@@ -220,22 +220,22 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
       <button
         type="button"
         onClick={onJoinRoom}
-        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] hover:border-indigo-500/40 dark:hover:border-indigo-500/50 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
+        className="w-full text-left p-4 sm:p-5 rounded-2xl bg-card border border-card-border hover:border-primary/40 hover:shadow-lg transition-all group relative overflow-hidden cursor-pointer"
       >
         <div className="flex items-start justify-between">
-          <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#18181b] text-zinc-900 dark:text-indigo-400 border border-zinc-200 dark:border-[#27272a] flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent transition-all">
+          <div className="w-10 h-10 rounded-xl bg-card-muted text-primary border border-card-border flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-transparent transition-all">
             <GraduationCap className="w-5 h-5" />
           </div>
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-[#18181b] text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-[#27272a]">
+          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-card-muted text-foreground border border-card-border">
             Student Enrollment
           </span>
         </div>
 
         <div className="mt-3">
-          <h3 className="text-sm sm:text-base font-bold text-zinc-950 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition">
+          <h3 className="text-base font-display text-foreground group-hover:text-primary transition">
             Join with Class Code
           </h3>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
+          <p className="text-sm text-muted mt-1 leading-relaxed">
             Have a room code from your class representative? Enter the code and submit your verified student enrollment.
           </p>
         </div>

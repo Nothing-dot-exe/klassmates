@@ -47,14 +47,14 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
       </h4>
 
       {/* Student Organizer Identity Banner */}
-      <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#222226] text-zinc-900 dark:text-white border border-zinc-200 dark:border-[#27272a] flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
+      <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#24302c] text-zinc-900 dark:text-white border border-zinc-200 dark:border-card-border flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
           🎒
         </div>
         <div>
           <div className="text-xs font-bold text-zinc-950 dark:text-white flex items-center gap-1.5">
             <span>Student Classroom Organizer</span>
-            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30">
+            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-[#24302c] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30">
               Peer Lead
             </span>
           </div>
@@ -75,7 +75,7 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
             placeholder="e.g. Class Representative (CR)"
             value={creatorDesignation}
             onChange={(e) => setCreatorDesignation(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+            className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
           />
         </div>
 
@@ -89,7 +89,7 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
             placeholder="e.g. 21CS001"
             value={newAdminRollNo}
             onChange={(e) => setNewAdminRollNo(e.target.value.toUpperCase())}
-            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono font-bold uppercase transition shadow-xs"
+            className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-indigo-600 dark:text-indigo-400 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono font-bold uppercase transition shadow-xs"
           />
         </div>
       </div>
@@ -104,7 +104,7 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
           placeholder="e.g. Rahul Sharma"
           value={newAdminName}
           onChange={(e) => setNewAdminName(e.target.value)}
-          className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
+          className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs"
         />
       </div>
 
@@ -118,7 +118,7 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
           placeholder="+91 98765 43210"
           value={newAdminPhone}
           onChange={(e) => setNewAdminPhone(e.target.value)}
-          className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono transition shadow-xs"
+          className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 font-mono transition shadow-xs"
         />
       </div>
 
@@ -142,11 +142,11 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
             placeholder="cr.lead@college.edu"
             value={newAdminEmail}
             onChange={(e) => setNewAdminEmail(e.target.value)}
-            className={`flex-1 bg-zinc-50 dark:bg-[#18181b] border ${
+            className={`flex-1 bg-zinc-50 dark:bg-card-muted border ${
               isAdminEmailVerified
                 ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400'
-                : 'border-zinc-200 dark:border-[#27272a] text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500'
-            } rounded-xl px-3.5 py-2 text-xs focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs`}
+                : 'border-zinc-200 dark:border-card-border text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500'
+            } rounded-xl px-3.5 py-2 text-xs focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition shadow-xs`}
           />
           {!isAdminEmailVerified && (
             <button
@@ -190,7 +190,7 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
             placeholder="Min 6 characters"
             value={newAdminPassword}
             onChange={(e) => setNewAdminPassword(e.target.value)}
-            className="w-full bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#222226] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono shadow-xs"
+            className="w-full bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-xl px-3.5 pr-10 py-2 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:bg-white dark:focus:bg-[#24302c] focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition font-mono shadow-xs"
           />
           <button
             type="button"

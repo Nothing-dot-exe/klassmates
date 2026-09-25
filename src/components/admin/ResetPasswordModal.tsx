@@ -19,10 +19,10 @@ export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] rounded-3xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 transition-colors">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-[#27272a] bg-zinc-50 dark:bg-[#18181b]">
+      <div className="bg-card border border-zinc-200 dark:border-card-border rounded-3xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 transition-colors">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-card-border bg-zinc-50 dark:bg-card-muted">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#222226] text-zinc-900 dark:text-amber-400 border border-zinc-200 dark:border-[#27272a]">
+            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-[#24302c] text-zinc-900 dark:text-amber-400 border border-zinc-200 dark:border-card-border">
               <KeyRound className="w-5 h-5" />
             </div>
             <div>
@@ -32,18 +32,18 @@ export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-full hover:bg-zinc-100 dark:hover:bg-[#222226] transition cursor-pointer"
+            className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-full hover:bg-zinc-100 dark:hover:bg-[#24302c] transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         <div className="p-6 space-y-4">
-          <div className="bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-2xl p-4 flex items-center gap-3">
+          <div className="bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-2xl p-4 flex items-center gap-3">
             <img
               src={getSafeAvatar(student.avatar, student.name)}
               alt={student.name}
-              className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-[#222226] border border-zinc-200 dark:border-[#27272a] shadow-xs"
+              className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-[#24302c] border border-zinc-200 dark:border-card-border shadow-xs"
             />
             <div className="min-w-0">
               <div className="text-sm font-bold text-zinc-950 dark:text-white truncate">{student.name}</div>
@@ -52,7 +52,7 @@ export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
             </div>
           </div>
 
-          <div className="bg-zinc-50 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-2xl p-4 space-y-2 text-xs text-zinc-700 dark:text-zinc-300">
+          <div className="bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border rounded-2xl p-4 space-y-2 text-xs text-zinc-700 dark:text-zinc-300">
             <div className="font-semibold flex items-center gap-1.5 text-zinc-950 dark:text-white">
               <ShieldCheck className="w-4 h-4 text-emerald-500" />
               How HR Password Reset Works:
@@ -60,7 +60,7 @@ export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 text-[11px]">
               <li>
                 The password will be reset to temporary default:{' '}
-                <strong className="text-zinc-950 dark:text-white font-mono bg-white dark:bg-[#222226] px-1.5 py-0.5 rounded border border-zinc-200 dark:border-[#27272a]">
+                <strong className="text-zinc-950 dark:text-white font-mono bg-white dark:bg-[#24302c] px-1.5 py-0.5 rounded border border-zinc-200 dark:border-card-border">
                   {DEFAULT_TEMP_PASSWORD}
                 </strong>
               </li>
@@ -76,7 +76,7 @@ export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-[#27272a] bg-zinc-100 dark:bg-[#18181b] text-zinc-800 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-[#222226] text-xs font-medium transition cursor-pointer"
+              className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-zinc-100 dark:bg-card-muted text-zinc-800 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-[#24302c] text-xs font-medium transition cursor-pointer"
             >
               Cancel
             </button>

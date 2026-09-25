@@ -125,9 +125,9 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
   const isComplete = cleanDigits.length >= 6;
 
   return (
-    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] space-y-3 animate-in fade-in shadow-xs">
+    <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-card border border-zinc-200 dark:border-card-border space-y-3 animate-in fade-in shadow-xs">
       {/* Email Delivery Notice */}
-      <div className="p-3 rounded-xl bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] flex items-start gap-2.5">
+      <div className="p-3 rounded-xl bg-card-muted border border-zinc-200 dark:border-card-border flex items-start gap-2.5">
         <Mail className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mt-0.5 shrink-0" />
         <div className="text-xs text-zinc-800 dark:text-zinc-200 leading-relaxed min-w-0">
           <p className="font-semibold text-zinc-950 dark:text-white">Check your email inbox</p>
@@ -167,7 +167,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
             className={`w-10 h-12 sm:w-11 sm:h-13 rounded-xl border-2 text-center text-lg font-extrabold font-mono transition-all focus:outline-none ${
               digit
                 ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 shadow-sm shadow-indigo-500/20'
-                : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#18181b] text-zinc-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-500'
+                : 'border-zinc-300 dark:border-zinc-700 bg-card-muted text-zinc-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-500'
             }`}
           />
         ))}

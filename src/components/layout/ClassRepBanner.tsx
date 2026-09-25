@@ -25,7 +25,7 @@ export const ClassRepBanner: React.FC<ClassRepBannerProps> = ({
       <div className="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
 
       {/* Header: Title & Badges */}
-      <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#DFD3E7] dark:border-zinc-800/80 relative z-10">
+      <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-card-border dark:border-zinc-800/80 relative z-10">
         <div className="flex items-center gap-1.5">
           <Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-400/20" />
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300">
@@ -43,7 +43,7 @@ export const ClassRepBanner: React.FC<ClassRepBannerProps> = ({
         {/* Custom CR Mascot Avatar Frame with Stitch Amber Gradient */}
         <div className="relative flex-shrink-0">
           <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-[1.5px] shadow-glow-gold flex items-center justify-center">
-            <div className="w-full h-full rounded-[14px] bg-[#FAF7FD] dark:bg-[#0E1528] flex items-center justify-center overflow-hidden">
+            <div className="w-full h-full rounded-[14px] bg-card flex items-center justify-center overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={getSafeAvatar(admin.avatar, admin.name)}
@@ -70,7 +70,7 @@ export const ClassRepBanner: React.FC<ClassRepBannerProps> = ({
         {admin.phone && (
           <a
             href={`tel:${admin.phone}`}
-            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl bg-[#FAF7FD] dark:bg-zinc-900/60 hover:bg-[#EBE3F0] dark:hover:bg-zinc-800/80 border border-[#DFD3E7] dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white transition-all group shadow-2xs"
+            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl bg-card dark:bg-zinc-900/60 hover:bg-card-muted dark:hover:bg-zinc-800/80 border border-card-border dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white transition-all group shadow-2xs"
             title="Call Class Representative"
           >
             <span className="w-6 h-6 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-500 dark:text-indigo-400 group-hover:bg-indigo-500/25 transition-colors flex-shrink-0">
@@ -85,7 +85,7 @@ export const ClassRepBanner: React.FC<ClassRepBannerProps> = ({
         {admin.email && (
           <a
             href={`mailto:${admin.email}`}
-            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl bg-[#FAF7FD] dark:bg-zinc-900/60 hover:bg-[#EBE3F0] dark:hover:bg-zinc-800/80 border border-[#DFD3E7] dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white transition-all group shadow-2xs"
+            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl bg-card dark:bg-zinc-900/60 hover:bg-card-muted dark:hover:bg-zinc-800/80 border border-card-border dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white transition-all group shadow-2xs"
             title="Email Class Representative"
           >
             <span className="w-6 h-6 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-500 dark:text-indigo-400 group-hover:bg-indigo-500/25 transition-colors flex-shrink-0">

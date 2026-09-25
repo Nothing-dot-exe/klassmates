@@ -1,21 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit, Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Space_Grotesk, Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const outfit = Outfit({
   variable: "--font-outfit",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -34,8 +28,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
 };
 
@@ -49,7 +41,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable} ${outfit.variable} ${inter.variable} ${jetbrainsMono.variable} dark h-full antialiased`}
+      className={`${outfit.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} dark h-full antialiased`}
       data-theme="dark"
       suppressHydrationWarning
     >
@@ -73,7 +65,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#F1EBF5] dark:bg-[#09090b] text-zinc-950 dark:text-zinc-100 transition-colors duration-150" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-150" suppressHydrationWarning>
         <ThemeProvider>
           {children}
         </ThemeProvider>

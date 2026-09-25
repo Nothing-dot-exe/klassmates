@@ -98,10 +98,11 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
   }, [s.joinCode, classroom]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-zinc-950/60 dark:bg-black/80 backdrop-blur-md overflow-y-auto no-scrollbar animate-in fade-in transition-colors">
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200/90 dark:border-[#27272a] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl shadow-zinc-950/20 dark:shadow-black/70 flex flex-col my-auto max-h-[96dvh] transition-colors">
+    <div className="fixed inset-0 z-50 flex items-stretch sm:items-center justify-center p-0 sm:p-5 overflow-y-auto no-scrollbar animate-in fade-in">
+      <div className="bg-card/90 sm:bg-card/80 border-0 sm:border border-white/40 dark:border-white/10 rounded-none sm:rounded-[1.75rem] w-full max-w-lg overflow-hidden shadow-none sm:shadow-[0_30px_80px_-20px_rgba(88,70,245,0.45)] backdrop-blur-2xl flex flex-col my-0 sm:my-auto min-h-[100dvh] sm:min-h-0 max-h-[100dvh] sm:max-h-[96dvh] transition-colors">
         {/* Header */}
-        <div className="p-4 sm:p-6 pb-4 pt-12 sm:pt-6 border-b border-zinc-200 dark:border-[#27272a] bg-white dark:bg-[#121214] text-center space-y-2 flex-shrink-0 relative">
+        <div className="p-5 sm:p-7 pb-5 pt-[max(3.25rem,env(safe-area-inset-top))] sm:pt-7 border-b border-card-border/80 text-center space-y-2.5 flex-shrink-0 relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(88,70,245,0.16),transparent_58%)] dark:bg-[radial-gradient(circle_at_top,rgba(124,108,255,0.22),transparent_58%)]" />
           {s.navMode !== 'welcome' && !s.isWaitingApproval && !s.forceNewPasswordStudent && (
             <button
               onClick={() => {
@@ -110,7 +111,7 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
                 s.setSuccessMessage('');
                 s.setIsForgotPassword(false);
               }}
-              className="absolute left-4 top-4 sm:left-5 sm:top-5 px-2.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1 text-xs font-bold transition shadow-xs cursor-pointer z-10 active:scale-95"
+              className="btn btn-secondary absolute left-4 top-[max(1rem,env(safe-area-inset-top))] sm:left-5 sm:top-5 min-h-9 px-2.5 py-1.5 z-10"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -122,28 +123,28 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
             <ThemeToggle />
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-[#222226] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 text-[10px] font-bold uppercase tracking-wider">
+          <div className="relative inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50/90 dark:bg-indigo-950/50 text-primary border border-indigo-200/80 dark:border-indigo-500/30 text-[10px] font-bold uppercase tracking-[0.14em]">
             <School className="w-3.5 h-3.5" />
-            Classmate Collaboration Hub
+            Built for class batches
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-black text-zinc-950 dark:text-white tracking-tight">
-            {s.navMode === 'welcome' && 'Welcome to Classmate'}
+          <h2 className="relative text-[1.7rem] sm:text-[2rem] font-display text-foreground">
+            {s.navMode === 'welcome' && 'Your class, one space'}
             {s.navMode === 'create_room' && 'Create a Classroom'}
             {s.navMode === 'join_room' && 'Join Classroom'}
-            {s.navMode === 'signin' && 'Sign In to Classmate'}
+            {s.navMode === 'signin' && 'Welcome back'}
           </h2>
 
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto leading-relaxed">
-            {s.navMode === 'welcome' && 'Choose whether you want to set up a new classroom or join an existing batch.'}
-            {s.navMode === 'create_room' && 'Launch a private classroom and register as the verified Administrator.'}
-            {s.navMode === 'join_room' && 'Enter your class code and request verified enrollment from your Class Representative.'}
-            {s.navMode === 'signin' && 'Access your student study groups, class notes, and channels.'}
+          <p className="relative text-sm text-muted max-w-sm mx-auto leading-relaxed">
+            {s.navMode === 'welcome' && 'Create a private classroom for your batch, or join with a class code.'}
+            {s.navMode === 'create_room' && 'Set up a private space and register as the classroom administrator.'}
+            {s.navMode === 'join_room' && 'Enter your class code and request enrollment from your Class Representative.'}
+            {s.navMode === 'signin' && 'Open your channels, notes, and study threads.'}
           </p>
         </div>
 
         {/* Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto no-scrollbar space-y-4">
+        <div className="p-4 sm:p-6 overflow-y-auto no-scrollbar space-y-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {s.errorMessage && (
             <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2 animate-in fade-in">
               <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600 dark:text-rose-400" />

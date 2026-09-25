@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Mail, Clock, AlertTriangle, Copy, Check } from 'lucide-react';
+import { Mail, Clock, AlertTriangle, AlertCircle, Copy, Check, Loader2 } from 'lucide-react';
 
 interface OtpVerificationCardProps {
   email: string;
   otpInput: string;
   countdown: number;
   isVerifying: boolean;
+  error?: string;
   onOtpInputChange: (val: string) => void;
   onVerify: () => void;
 }
@@ -17,13 +18,14 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
   otpInput,
   countdown,
   isVerifying,
+  error,
   onOtpInputChange,
   onVerify,
 }) => {
   const [copied, setCopied] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Always ensure an array of exactly 6 digits, regardless of current string length
+  // Individual digit slots 0..5
   const cleanDigits = (otpInput || '').replace(/\D/g, '').slice(0, 6);
   const digits = Array.from({ length: 6 }, (_, i) => cleanDigits[i] || '');
 
@@ -45,7 +47,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
       return;
     }
 
-    // Single digit typed or cleared
+    // Single digit typed or cleared (taking the last typed character so typing over works)
     const digitChar = numeric.slice(-1);
     const newDigits = [...digits];
     newDigits[idx] = digitChar;
@@ -61,17 +63,17 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
 
   const handleKeyDown = (idx: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
-      const currentDigits = [...digits];
-      if (!currentDigits[idx] && idx > 0) {
+      const newDigits = [...digits];
+      if (!newDigits[idx] && idx > 0) {
         // Current box is already empty, move to previous box, clear it, and focus it
-        currentDigits[idx - 1] = '';
-        onOtpInputChange(currentDigits.join(''));
+        newDigits[idx - 1] = '';
+        onOtpInputChange(newDigits.join(''));
         inputRefs.current[idx - 1]?.focus();
         e.preventDefault();
       } else {
         // Clear current box
-        currentDigits[idx] = '';
-        onOtpInputChange(currentDigits.join(''));
+        newDigits[idx] = '';
+        onOtpInputChange(newDigits.join(''));
         e.preventDefault();
       }
     } else if (e.key === 'ArrowLeft' && idx > 0) {
@@ -82,7 +84,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
       inputRefs.current[idx + 1]?.focus();
       inputRefs.current[idx + 1]?.select();
       e.preventDefault();
-    } else if (e.key === 'Enter' && cleanDigits.length >= 6) {
+    } else if (e.key === 'Enter' && cleanDigits.length >= 6 && !isVerifying) {
       onVerify();
     }
   };
@@ -165,7 +167,7 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
             inputMode="numeric"
             autoComplete={idx === 0 ? 'one-time-code' : 'off'}
             pattern="[0-9]*"
-            maxLength={1}
+            maxLength={2}
             value={digit}
             onChange={(e) => handleDigitChange(idx, e.target.value)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
@@ -179,6 +181,14 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
           />
         ))}
       </div>
+
+      {/* In-Card Error Banner (Displays immediate feedback right above the button) */}
+      {error && (
+        <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2 animate-in fade-in">
+          <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600 dark:text-rose-400" />
+          <span className="font-semibold text-[11px] leading-tight">{error}</span>
+        </div>
+      )}
 
       {/* Copy Code button (shows only when complete) */}
       {isComplete && (
@@ -210,7 +220,16 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
         disabled={isVerifying || !isComplete}
         className="w-full px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/20 cursor-pointer active:scale-95"
       >
-        {isVerifying ? 'Verifying…' : isComplete ? 'Confirm Code ✓' : 'Enter all 6 digits'}
+        {isVerifying ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span>Verifying Code…</span>
+          </>
+        ) : isComplete ? (
+          'Confirm Code ✓'
+        ) : (
+          'Enter all 6 digits'
+        )}
       </button>
 
       {/* Spam hint */}

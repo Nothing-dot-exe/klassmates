@@ -16,6 +16,8 @@ export const useJoinGateOtp = (
   const [adminOtpCountdown, setAdminOtpCountdown] = useState(0);
   const [isAdminSendingOtp, setIsAdminSendingOtp] = useState(false);
   const [isAdminVerifyingOtp, setIsAdminVerifyingOtp] = useState(false);
+  const [adminVerificationToken, setAdminVerificationToken] = useState('');
+  const [adminOtpError, setAdminOtpError] = useState('');
 
   // Student OTP State
   const [isStudentEmailVerified, setIsStudentEmailVerified] = useState(false);
@@ -24,6 +26,8 @@ export const useJoinGateOtp = (
   const [studentOtpCountdown, setStudentOtpCountdown] = useState(0);
   const [isStudentSendingOtp, setIsStudentSendingOtp] = useState(false);
   const [isStudentVerifyingOtp, setIsStudentVerifyingOtp] = useState(false);
+  const [studentVerificationToken, setStudentVerificationToken] = useState('');
+  const [studentOtpError, setStudentOtpError] = useState('');
 
   // Timers
   useEffect(() => {
@@ -92,28 +96,36 @@ export const useJoinGateOtp = (
     setIsAdminSendingOtp(false);
     if (res.success) {
       setAdminOtpSent(true);
+      setAdminVerificationToken(res.verificationToken || '');
+      setAdminOtpError('');
       setAdminOtpCountdown(60);
       setSuccessMessage(res.message);
     } else {
+      setAdminOtpError(res.message);
       setErrorMessage(res.message);
     }
   };
 
   const handleVerifyAdminOtp = async () => {
+    setAdminOtpError('');
     setErrorMessage('');
     setSuccessMessage('');
     if (!adminOtpInput.trim() || adminOtpInput.trim().length < 6) {
-      setErrorMessage('Please enter the complete 6-digit verification code.');
+      const msg = 'Please enter the complete 6-digit verification code.';
+      setAdminOtpError(msg);
+      setErrorMessage(msg);
       return;
     }
     setIsAdminVerifyingOtp(true);
-    const res = await verifyEmailOtp(newAdminEmail, adminOtpInput);
+    const res = await verifyEmailOtp(newAdminEmail, adminOtpInput, adminVerificationToken);
     setIsAdminVerifyingOtp(false);
     if (res.success) {
       setIsAdminEmailVerified(true);
       setAdminOtpSent(false);
+      setAdminOtpError('');
       setSuccessMessage('Administrator email verified successfully! You can now launch your classroom.');
     } else {
+      setAdminOtpError(res.message);
       setErrorMessage(res.message);
     }
   };
@@ -139,28 +151,36 @@ export const useJoinGateOtp = (
     setIsStudentSendingOtp(false);
     if (res.success) {
       setStudentOtpSent(true);
+      setStudentVerificationToken(res.verificationToken || '');
+      setStudentOtpError('');
       setStudentOtpCountdown(60);
       setSuccessMessage(res.message);
     } else {
+      setStudentOtpError(res.message);
       setErrorMessage(res.message);
     }
   };
 
   const handleVerifyStudentOtp = async () => {
+    setStudentOtpError('');
     setErrorMessage('');
     setSuccessMessage('');
     if (!studentOtpInput.trim() || studentOtpInput.trim().length < 6) {
-      setErrorMessage('Please enter the complete 6-digit verification code.');
+      const msg = 'Please enter the complete 6-digit verification code.';
+      setStudentOtpError(msg);
+      setErrorMessage(msg);
       return;
     }
     setIsStudentVerifyingOtp(true);
-    const res = await verifyEmailOtp(studentEmail, studentOtpInput);
+    const res = await verifyEmailOtp(studentEmail, studentOtpInput, studentVerificationToken);
     setIsStudentVerifyingOtp(false);
     if (res.success) {
       setIsStudentEmailVerified(true);
       setStudentOtpSent(false);
+      setStudentOtpError('');
       setSuccessMessage('Student email verified successfully!');
     } else {
+      setStudentOtpError(res.message);
       setErrorMessage(res.message);
     }
   };
@@ -172,6 +192,7 @@ export const useJoinGateOtp = (
     adminOtpCountdown,
     isAdminSendingOtp,
     isAdminVerifyingOtp,
+    adminOtpError,
     setAdminOtpInput,
     handleSendAdminOtp,
     handleVerifyAdminOtp,
@@ -182,6 +203,7 @@ export const useJoinGateOtp = (
     studentOtpCountdown,
     isStudentSendingOtp,
     isStudentVerifyingOtp,
+    studentOtpError,
     setStudentOtpInput,
     handleSendStudentOtp,
     handleVerifyStudentOtp,

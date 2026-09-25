@@ -24,6 +24,7 @@ interface JoinRoomViewProps {
   studentOtpCountdown: number;
   studentOtpInput: string;
   isStudentVerifyingOtp: boolean;
+  studentOtpError?: string;
   setStudentOtpInput: (v: string) => void;
   onSendStudentOtp: () => void;
   onVerifyStudentOtp: () => void;
@@ -50,6 +51,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
   studentOtpCountdown,
   studentOtpInput,
   isStudentVerifyingOtp,
+  studentOtpError,
   setStudentOtpInput,
   onSendStudentOtp,
   onVerifyStudentOtp,
@@ -195,6 +197,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
               otpInput={studentOtpInput}
               countdown={studentOtpCountdown}
               isVerifying={isStudentVerifyingOtp}
+              error={studentOtpError}
               onOtpInputChange={setStudentOtpInput}
               onVerify={onVerifyStudentOtp}
             />

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { verifyServerOtp } from '@/lib/server/otpStore';
+import { verifyServerOtp, verifySignedOtpToken } from '@/lib/server/otpStore';
 
 // In-memory rate limiting: max 15 verification attempts per 5 minutes per IP
 interface RateLimitRecord {
@@ -35,7 +35,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, token } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { email, token, verificationToken } = body;
     const cleanEmail = email ? String(email).trim().toLowerCase() : '';
     const cleanToken = token ? String(token).trim() : '';
 
@@ -46,7 +47,18 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. Check server-side OTP store
+    // 1. Check stateless cryptographic signed verification token (Highest reliability)
+    if (verificationToken) {
+      const isSignedVerified = verifySignedOtpToken(cleanEmail, cleanToken, verificationToken);
+      if (isSignedVerified) {
+        return NextResponse.json({
+          success: true,
+          message: 'Email verified successfully!',
+        });
+      }
+    }
+
+    // 2. Check server-side OTP store
     const isServerVerified = await verifyServerOtp(cleanEmail, cleanToken);
     if (isServerVerified) {
       return NextResponse.json({

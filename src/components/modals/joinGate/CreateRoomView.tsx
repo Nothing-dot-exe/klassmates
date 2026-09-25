@@ -34,6 +34,7 @@ interface CreateRoomViewProps {
   adminOtpCountdown: number;
   adminOtpInput: string;
   isAdminVerifyingOtp: boolean;
+  adminOtpError?: string;
   setAdminOtpInput: (v: string) => void;
   onSendAdminOtp: () => void;
   onVerifyAdminOtp: () => void;
@@ -76,6 +77,7 @@ export const CreateRoomView: React.FC<CreateRoomViewProps> = (props) => {
         adminOtpCountdown={props.adminOtpCountdown}
         adminOtpInput={props.adminOtpInput}
         isAdminVerifyingOtp={props.isAdminVerifyingOtp}
+        adminOtpError={props.adminOtpError}
         setAdminOtpInput={props.setAdminOtpInput}
         onSendAdminOtp={props.onSendAdminOtp}
         onVerifyAdminOtp={props.onVerifyAdminOtp}

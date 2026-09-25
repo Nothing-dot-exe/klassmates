@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
-import { storeServerOtp } from '@/lib/server/otpStore';
+import { storeServerOtp, createSignedOtpToken } from '@/lib/server/otpStore';
 import { sendVerificationEmail, isSmtpConfigured } from '@/lib/server/mailer';
 
 // In-memory rate limiting: max 3 requests per 10 minutes per email, 10 per IP
@@ -109,8 +109,11 @@ export async function POST(req: Request) {
       );
     }
 
+    const verificationToken = createSignedOtpToken(cleanEmail, sixDigitOtp);
+
     return NextResponse.json({
       success: true,
+      verificationToken,
       message: `A 6-digit verification code has been sent to ${cleanEmail}. Please check your inbox and spam folder.`,
     });
   } catch (err: any) {

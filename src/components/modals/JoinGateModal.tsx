@@ -210,6 +210,7 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
               adminOtpCountdown={otp.adminOtpCountdown}
               adminOtpInput={otp.adminOtpInput}
               isAdminVerifyingOtp={otp.isAdminVerifyingOtp}
+              adminOtpError={otp.adminOtpError}
               setAdminOtpInput={otp.setAdminOtpInput}
               onSendAdminOtp={otp.handleSendAdminOtp}
               onVerifyAdminOtp={otp.handleVerifyAdminOtp}
@@ -238,6 +239,7 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
               studentOtpCountdown={otp.studentOtpCountdown}
               studentOtpInput={otp.studentOtpInput}
               isStudentVerifyingOtp={otp.isStudentVerifyingOtp}
+              studentOtpError={otp.studentOtpError}
               setStudentOtpInput={otp.setStudentOtpInput}
               onSendStudentOtp={otp.handleSendStudentOtp}
               onVerifyStudentOtp={otp.handleVerifyStudentOtp}

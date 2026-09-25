@@ -29,6 +29,54 @@ const getSupabaseAdmin = () => {
   });
 };
 
+const getSecret = (): string => {
+  return (
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    'classmate_security_salt_2026'
+  );
+};
+
+/**
+ * Creates a stateless, cryptographically signed verification token containing
+ * the target email, expiration timestamp, and HMAC-SHA256 signature.
+ * Guarantees 100% reliable verification across serverless lambdas, workers, and deployments.
+ */
+export function createSignedOtpToken(email: string, code: string, ttlMs: number = 10 * 60 * 1000): string {
+  const cleanEmail = email.trim().toLowerCase();
+  const expiresAt = Date.now() + ttlMs;
+  const secret = getSecret();
+  const data = `${cleanEmail}:${code.trim()}:${expiresAt}`;
+  const signature = crypto.createHmac('sha256', secret).update(data).digest('hex');
+  const payload = JSON.stringify({ email: cleanEmail, expiresAt, signature });
+  return Buffer.from(payload).toString('base64url');
+}
+
+/**
+ * Verifies a signed OTP token against the supplied email and 6-digit code.
+ */
+export function verifySignedOtpToken(email: string, code: string, signedToken?: string): boolean {
+  if (!signedToken || typeof signedToken !== 'string') return false;
+  try {
+    const raw = Buffer.from(signedToken, 'base64url').toString('utf8');
+    const { email: tokenEmail, expiresAt, signature } = JSON.parse(raw);
+    const cleanEmail = email.trim().toLowerCase();
+    if (tokenEmail !== cleanEmail) return false;
+    if (Date.now() > expiresAt) return false;
+
+    const secret = getSecret();
+    const expectedData = `${cleanEmail}:${code.trim()}:${expiresAt}`;
+    const expectedSignature = crypto.createHmac('sha256', secret).update(expectedData).digest('hex');
+
+    const sigBuf = Buffer.from(signature);
+    const expBuf = Buffer.from(expectedSignature);
+    if (sigBuf.length !== expBuf.length) return false;
+    return crypto.timingSafeEqual(sigBuf, expBuf);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Creates a deterministic SHA-256 hash of an email and OTP code.
  * Ensures raw plaintext codes are never stored in memory or database.

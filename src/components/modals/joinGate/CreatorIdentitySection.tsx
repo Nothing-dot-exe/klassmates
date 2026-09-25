@@ -23,6 +23,7 @@ export interface CreatorIdentitySectionProps {
   adminOtpCountdown: number;
   adminOtpInput: string;
   isAdminVerifyingOtp: boolean;
+  adminOtpError?: string;
   setAdminOtpInput: (v: string) => void;
   onSendAdminOtp: () => void;
   onVerifyAdminOtp: () => void;
@@ -34,7 +35,7 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
   newAdminPhone, setNewAdminPhone, newAdminEmail, setNewAdminEmail,
   newAdminPassword, setNewAdminPassword, isAdminEmailVerified,
   isAdminSendingOtp, adminOtpSent, adminOtpCountdown, adminOtpInput,
-  isAdminVerifyingOtp, setAdminOtpInput, onSendAdminOtp, onVerifyAdminOtp,
+  isAdminVerifyingOtp, adminOtpError, setAdminOtpInput, onSendAdminOtp, onVerifyAdminOtp,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -171,6 +172,7 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
             otpInput={adminOtpInput}
             countdown={adminOtpCountdown}
             isVerifying={isAdminVerifyingOtp}
+            error={adminOtpError}
             onOtpInputChange={setAdminOtpInput}
             onVerify={onVerifyAdminOtp}
           />

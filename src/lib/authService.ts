@@ -1,6 +1,7 @@
 export interface SendOtpResult {
   success: boolean;
   message: string;
+  verificationToken?: string;
 }
 
 export interface VerifyOtpResult {
@@ -29,6 +30,7 @@ export const sendEmailOtp = async (email: string): Promise<SendOtpResult> => {
     if (res.ok && data.success) {
       return {
         success: true,
+        verificationToken: data.verificationToken,
         message: data.message || `Verification code sent to ${cleanEmail}. Check your inbox!`,
       };
     }
@@ -47,9 +49,13 @@ export const sendEmailOtp = async (email: string): Promise<SendOtpResult> => {
 };
 
 /**
- * Verifies the 6-digit OTP code against the server.
+ * Verifies the 6-digit OTP code against the server with optional signed token for stateless verification.
  */
-export const verifyEmailOtp = async (email: string, token: string): Promise<VerifyOtpResult> => {
+export const verifyEmailOtp = async (
+  email: string,
+  token: string,
+  verificationToken?: string
+): Promise<VerifyOtpResult> => {
   const cleanEmail = email.trim().toLowerCase();
   const cleanToken = token.trim();
 
@@ -61,7 +67,7 @@ export const verifyEmailOtp = async (email: string, token: string): Promise<Veri
     const res = await fetch('/api/verify-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: cleanEmail, token: cleanToken }),
+      body: JSON.stringify({ email: cleanEmail, token: cleanToken, verificationToken }),
     });
 
     const data = await res.json();

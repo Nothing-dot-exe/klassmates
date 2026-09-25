@@ -87,6 +87,7 @@ describe('OtpVerificationCard Component UI & Input Rendering', () => {
     );
 
     assert.ok(htmlComplete.includes('Confirm Code ✓'), 'Should show Confirm Code button when complete');
+    assert.equal(htmlComplete.includes('Copy Code'), false, 'Copy Code button must never be rendered');
   });
 });
 

@@ -23,69 +23,113 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
   const [copied, setCopied] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Keep individual digit boxes in sync with parent state
-  const digits = otpInput.padEnd(6, '').split('').slice(0, 6);
+  // Always ensure an array of exactly 6 digits, regardless of current string length
+  const cleanDigits = (otpInput || '').replace(/\D/g, '').slice(0, 6);
+  const digits = Array.from({ length: 6 }, (_, i) => cleanDigits[i] || '');
 
   const handleDigitChange = (idx: number, val: string) => {
-    const clean = val.replace(/\D/g, '').slice(-1); // only last digit
-    const arr = otpInput.padEnd(6, '').split('').slice(0, 6);
-    arr[idx] = clean;
-    const next = arr.join('').replace(/\s/g, '');
-    onOtpInputChange(next);
-    // Auto-advance
-    if (clean && idx < 5) {
+    const numeric = val.replace(/\D/g, '');
+
+    // Handle multi-character input (e.g. mobile auto-complete or copy-paste)
+    if (numeric.length > 1) {
+      const newDigits = [...digits];
+      let lastIndex = idx;
+      for (let i = 0; i < numeric.length && idx + i < 6; i++) {
+        newDigits[idx + i] = numeric[i];
+        lastIndex = idx + i;
+      }
+      const nextOtp = newDigits.join('');
+      onOtpInputChange(nextOtp);
+      const nextFocus = Math.min(lastIndex + 1, 5);
+      inputRefs.current[nextFocus]?.focus();
+      return;
+    }
+
+    // Single digit typed or cleared
+    const digitChar = numeric.slice(-1);
+    const newDigits = [...digits];
+    newDigits[idx] = digitChar;
+    const nextOtp = newDigits.join('');
+    onOtpInputChange(nextOtp);
+
+    // Auto-advance to next box if digit was entered
+    if (digitChar && idx < 5) {
       inputRefs.current[idx + 1]?.focus();
+      inputRefs.current[idx + 1]?.select();
     }
   };
 
   const handleKeyDown = (idx: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
-      if (!digits[idx] && idx > 0) {
-        // Move to previous box and clear it
-        const arr = otpInput.padEnd(6, '').split('').slice(0, 6);
-        arr[idx - 1] = '';
-        onOtpInputChange(arr.join(''));
+      const currentDigits = [...digits];
+      if (!currentDigits[idx] && idx > 0) {
+        // Current box is already empty, move to previous box, clear it, and focus it
+        currentDigits[idx - 1] = '';
+        onOtpInputChange(currentDigits.join(''));
         inputRefs.current[idx - 1]?.focus();
+        e.preventDefault();
       } else {
-        const arr = otpInput.padEnd(6, '').split('').slice(0, 6);
-        arr[idx] = '';
-        onOtpInputChange(arr.join(''));
+        // Clear current box
+        currentDigits[idx] = '';
+        onOtpInputChange(currentDigits.join(''));
+        e.preventDefault();
       }
-    }
-    if (e.key === 'Enter' && otpInput.replace(/\s/g, '').length >= 6) {
+    } else if (e.key === 'ArrowLeft' && idx > 0) {
+      inputRefs.current[idx - 1]?.focus();
+      inputRefs.current[idx - 1]?.select();
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight' && idx < 5) {
+      inputRefs.current[idx + 1]?.focus();
+      inputRefs.current[idx + 1]?.select();
+      e.preventDefault();
+    } else if (e.key === 'Enter' && cleanDigits.length >= 6) {
       onVerify();
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
     const text = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
     if (text.length > 0) {
       onOtpInputChange(text);
-      // focus last filled box
       const focusIdx = Math.min(text.length, 5);
-      setTimeout(() => inputRefs.current[focusIdx]?.focus(), 0);
+      setTimeout(() => {
+        inputRefs.current[focusIdx]?.focus();
+        inputRefs.current[focusIdx]?.select();
+      }, 0);
     }
-    e.preventDefault();
+  };
+
+  const handleFocus = (idx: number, e: React.FocusEvent<HTMLInputElement>) => {
+    // If user taps an empty box ahead of earlier empty boxes, redirect to the first empty box
+    const firstEmpty = digits.findIndex((d) => !d);
+    if (firstEmpty !== -1 && firstEmpty < idx) {
+      inputRefs.current[firstEmpty]?.focus();
+      return;
+    }
+    e.target.select();
   };
 
   const handleCopy = async () => {
-    if (!otpInput || otpInput.replace(/\s/g, '').length < 6) return;
+    if (cleanDigits.length < 6) return;
     try {
-      await navigator.clipboard.writeText(otpInput.replace(/\s/g, ''));
+      await navigator.clipboard.writeText(cleanDigits);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback — select the hidden input
+      // fallback
     }
   };
 
   // Auto-focus first box on mount
   useEffect(() => {
-    setTimeout(() => inputRefs.current[0]?.focus(), 100);
+    const timer = setTimeout(() => {
+      inputRefs.current[0]?.focus();
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  const cleanCode = otpInput.replace(/\s/g, '');
-  const isComplete = cleanCode.length >= 6;
+  const isComplete = cleanDigits.length >= 6;
 
   return (
     <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#121214] border border-zinc-200 dark:border-[#27272a] space-y-3 animate-in fade-in shadow-xs">
@@ -119,14 +163,16 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
             ref={(el) => { inputRefs.current[idx] = el; }}
             type="text"
             inputMode="numeric"
+            autoComplete={idx === 0 ? 'one-time-code' : 'off'}
             pattern="[0-9]*"
             maxLength={1}
-            value={digit.trim()}
+            value={digit}
             onChange={(e) => handleDigitChange(idx, e.target.value)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
-            onFocus={(e) => e.target.select()}
+            onFocus={(e) => handleFocus(idx, e)}
+            aria-label={`Digit ${idx + 1} of 6`}
             className={`w-10 h-12 sm:w-11 sm:h-13 rounded-xl border-2 text-center text-lg font-extrabold font-mono transition-all focus:outline-none ${
-              digit.trim()
+              digit
                 ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 shadow-sm shadow-indigo-500/20'
                 : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#18181b] text-zinc-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-500'
             }`}

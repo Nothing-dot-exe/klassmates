@@ -22,6 +22,7 @@ import { ThemeToggle } from '@/components/common/ThemeToggle';
 interface JoinGateModalProps {
   classroom: Classroom;
   existingStudents: User[];
+  pendingRequests?: PendingRequest[];
   prefilledCode?: string;
   onLoginStudent: (student: User, rememberMe?: boolean) => void;
   onLoginAdmin: (adminPasswordInput: string, rememberMe?: boolean) => boolean | Promise<boolean>;

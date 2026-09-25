@@ -233,6 +233,26 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- =================================================================
+-- 6. ENFORCE STRICT SINGLE-USE IDENTITY CONSTRAINTS
+-- Guarantees that nobody can register or reuse the same email or phone number.
+-- =================================================================
+CREATE UNIQUE INDEX IF NOT EXISTS idx_students_unique_email 
+  ON public.students (LOWER(TRIM(email))) 
+  WHERE email IS NOT NULL AND TRIM(email) != '';
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_students_unique_phone 
+  ON public.students (REGEXP_REPLACE(phone, '\D', '', 'g')) 
+  WHERE phone IS NOT NULL AND LENGTH(REGEXP_REPLACE(phone, '\D', '', 'g')) >= 7;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_classrooms_unique_admin_email 
+  ON public.classrooms (LOWER(TRIM(admin_email))) 
+  WHERE admin_email IS NOT NULL AND TRIM(admin_email) != '';
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_classrooms_unique_admin_phone 
+  ON public.classrooms (REGEXP_REPLACE(admin_phone, '\D', '', 'g')) 
+  WHERE admin_phone IS NOT NULL AND LENGTH(REGEXP_REPLACE(admin_phone, '\D', '', 'g')) >= 7;
+
+-- =================================================================
 -- MIGRATION SCRIPT FOR EXISTING SUPABASE DATABASES:
 -- If you already created tables previously, run this snippet in SQL Editor:
 --
@@ -255,6 +275,11 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ALTER TABLE public.pending_requests ADD COLUMN IF NOT EXISTS show_email BOOLEAN DEFAULT false;
 -- ALTER TABLE public.pending_requests ADD COLUMN IF NOT EXISTS is_teacher BOOLEAN DEFAULT false;
 -- ALTER TABLE public.pending_requests ADD COLUMN IF NOT EXISTS designation TEXT;
+--
+-- CREATE UNIQUE INDEX IF NOT EXISTS idx_students_unique_email ON public.students (LOWER(TRIM(email))) WHERE email IS NOT NULL AND TRIM(email) != '';
+-- CREATE UNIQUE INDEX IF NOT EXISTS idx_students_unique_phone ON public.students (REGEXP_REPLACE(phone, '\D', '', 'g')) WHERE phone IS NOT NULL AND LENGTH(REGEXP_REPLACE(phone, '\D', '', 'g')) >= 7;
+-- CREATE UNIQUE INDEX IF NOT EXISTS idx_classrooms_unique_admin_email ON public.classrooms (LOWER(TRIM(admin_email))) WHERE admin_email IS NOT NULL AND TRIM(admin_email) != '';
+-- CREATE UNIQUE INDEX IF NOT EXISTS idx_classrooms_unique_admin_phone ON public.classrooms (REGEXP_REPLACE(admin_phone, '\D', '', 'g')) WHERE admin_phone IS NOT NULL AND LENGTH(REGEXP_REPLACE(admin_phone, '\D', '', 'g')) >= 7;
 --
 -- DROP POLICY IF EXISTS "Allow public all on email_otps" ON public.email_otps;
 -- REVOKE ALL ON public.email_otps FROM anon, authenticated;

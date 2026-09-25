@@ -4,12 +4,14 @@ import { dbLookupStudentByIdentifier, dbUpdateStudent } from '@/lib/databaseServ
 import { DEFAULT_TEMP_PASSWORD } from '@/lib/privacyUtils';
 import { verifyPassword } from '@/lib/security/passwordUtils';
 import { generateUniqueId } from '@/lib/security/idUtils';
+import { validateUniquenessLocally, checkServerUniqueness } from '@/lib/services/uniquenessService';
 import { useJoinGateState } from './useJoinGateState';
 import { useJoinGateOtp } from './useJoinGateOtp';
 
 export interface JoinGateActionProps {
   classroom: Classroom;
   existingStudents: User[];
+  pendingRequests?: PendingRequest[];
   onLoginStudent: (student: User, rememberMe?: boolean) => void;
   onLoginAdmin: (adminPasswordInput: string, rememberMe?: boolean) => boolean | Promise<boolean>;
   onCreateClassroom?: (classroom: Classroom, admin: User) => void;
@@ -24,7 +26,7 @@ export const useJoinGateActions = (
   otp: ReturnType<typeof useJoinGateOtp>,
   props: JoinGateActionProps
 ) => {
-  const handleCreateRoomSubmit = (e: React.FormEvent) => {
+  const handleCreateRoomSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     s.setErrorMessage('');
     if (!s.newAdminName.trim()) return s.setErrorMessage('Please enter your full name as the Class Representative / Student Lead.');
@@ -34,6 +36,29 @@ export const useJoinGateActions = (
     if (!s.newAdminRollNo.trim()) return s.setErrorMessage('Please enter your Student Roll Number / USN.');
     if (s.newAdminPassword.length < 6) return s.setErrorMessage('Master Admin Password must be at least 6 characters.');
     if (!s.newRoomName.trim()) return s.setErrorMessage('Please enter a name for your classroom.');
+
+    // 1. Local uniqueness check (email, phone, roll number)
+    const localCheck = validateUniquenessLocally({
+      email: s.newAdminEmail,
+      phone: s.newAdminPhone,
+      rollNo: s.newAdminRollNo,
+      existingStudents: props.existingStudents,
+      pendingRequests: props.pendingRequests,
+      classroom: props.classroom,
+    });
+    if (!localCheck.available) {
+      return s.setErrorMessage(localCheck.message || 'This email or mobile number is already in use.');
+    }
+
+    // 2. Server uniqueness check across all databases
+    const serverCheck = await checkServerUniqueness({
+      email: s.newAdminEmail,
+      phone: s.newAdminPhone,
+      rollNo: s.newAdminRollNo,
+    });
+    if (!serverCheck.available) {
+      return s.setErrorMessage(serverCheck.message || 'This email or mobile number is already registered. Each can only be used once.');
+    }
 
     const adminId = generateUniqueId('usr_admin');
     const cleanCode = (s.newRoomCode.trim() || 'CS-' + Math.floor(1000 + Math.random() * 9000)).toUpperCase();
@@ -82,7 +107,7 @@ export const useJoinGateActions = (
     else props.onLoginStudent(createdAdmin);
   };
 
-  const handleStudentJoinSubmit = (e: React.FormEvent) => {
+  const handleStudentJoinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     s.setErrorMessage('');
     const cleanCode = s.joinCode.trim().toUpperCase();
@@ -97,13 +122,33 @@ export const useJoinGateActions = (
     if (s.studentPassword.length < 6) return s.setErrorMessage('Please create a password of at least 6 characters.');
     if (!otp.isStudentEmailVerified) return s.setErrorMessage('Please verify your student email address with the 6-digit code before requesting to join.');
 
-    const alreadyEnrolled = props.existingStudents.find((st) => st.rollNo.toUpperCase() === cleanRoll);
-    if (alreadyEnrolled) {
-      s.setErrorMessage(`Roll Number "${cleanRoll}" is already registered. Please use Sign In.`);
-      s.setNavMode('signin');
-      s.setSignInRole('student');
-      s.setLoginIdentifier(cleanRoll);
-      return;
+    // 1. Local uniqueness validation against existing students, classroom admin, and pending requests
+    const localCheck = validateUniquenessLocally({
+      email: cleanEmail,
+      phone: cleanPhone,
+      rollNo: cleanRoll,
+      existingStudents: props.existingStudents,
+      pendingRequests: props.pendingRequests,
+      classroom: targetClassroom,
+    });
+    if (!localCheck.available) {
+      if (localCheck.field === 'rollNo') {
+        s.setNavMode('signin');
+        s.setSignInRole('student');
+        s.setLoginIdentifier(cleanRoll);
+      }
+      return s.setErrorMessage(localCheck.message || 'This mobile number or email address is already registered.');
+    }
+
+    // 2. Server-side uniqueness validation against database
+    const serverCheck = await checkServerUniqueness({
+      email: cleanEmail,
+      phone: cleanPhone,
+      rollNo: cleanRoll,
+      classroomId: targetClassroom?.id,
+    });
+    if (!serverCheck.available) {
+      return s.setErrorMessage(serverCheck.message || 'This mobile number or email is already registered. Each can only be used once.');
     }
 
     if (!targetClassroom.requireApproval) {

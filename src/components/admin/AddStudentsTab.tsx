@@ -29,9 +29,19 @@ export const AddStudentsTab: React.FC<AddStudentsTabProps> = ({
     if (!newName.trim() || !newRollNo.trim()) return;
 
     const formattedRoll = newRollNo.trim().toUpperCase();
+    const cleanPhone = newPhone.trim().replace(/\D/g, '');
+    const cleanEmail = newEmail.trim().toLowerCase();
 
     if (students.some((s) => s.rollNo.toUpperCase() === formattedRoll)) {
       showToast(`Warning: Roll Number ${formattedRoll} is already registered!`);
+      return;
+    }
+    if (cleanEmail && students.some((s) => s.email && s.email.toLowerCase() === cleanEmail)) {
+      showToast(`Warning: Email ${cleanEmail} is already registered to another member!`);
+      return;
+    }
+    if (cleanPhone.length >= 7 && students.some((s) => s.phone && s.phone.replace(/\D/g, '') === cleanPhone)) {
+      showToast(`Warning: Mobile number is already registered to another member!`);
       return;
     }
 

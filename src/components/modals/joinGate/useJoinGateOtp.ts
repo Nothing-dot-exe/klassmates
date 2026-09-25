@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { sendEmailOtp, verifyEmailOtp } from '@/lib/authService';
+import { checkServerUniqueness } from '@/lib/services/uniquenessService';
 
 export const useJoinGateOtp = (
   newAdminEmail: string,
@@ -78,6 +79,15 @@ export const useJoinGateOtp = (
       return;
     }
     setIsAdminSendingOtp(true);
+
+    // Verify email uniqueness before dispatching OTP
+    const uniqueness = await checkServerUniqueness({ email: newAdminEmail.trim() });
+    if (!uniqueness.available) {
+      setIsAdminSendingOtp(false);
+      setErrorMessage(uniqueness.message || 'This administrator email is already registered. Each email can only be used once.');
+      return;
+    }
+
     const res = await sendEmailOtp(newAdminEmail);
     setIsAdminSendingOtp(false);
     if (res.success) {
@@ -116,6 +126,15 @@ export const useJoinGateOtp = (
       return;
     }
     setIsStudentSendingOtp(true);
+
+    // Verify email uniqueness before dispatching OTP
+    const uniqueness = await checkServerUniqueness({ email: studentEmail.trim() });
+    if (!uniqueness.available) {
+      setIsStudentSendingOtp(false);
+      setErrorMessage(uniqueness.message || 'This student email is already registered. Each email can only be used once.');
+      return;
+    }
+
     const res = await sendEmailOtp(studentEmail);
     setIsStudentSendingOtp(false);
     if (res.success) {

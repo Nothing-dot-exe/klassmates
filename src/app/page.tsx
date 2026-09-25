@@ -196,6 +196,7 @@ export default function Home() {
         <JoinGateModal
           classroom={classroom}
           existingStudents={students}
+          pendingRequests={pendingRequests}
           prefilledCode={prefilledCode}
           onLoginStudent={handleUserLoggedIn}
           onLoginAdmin={handleAdminLogin}

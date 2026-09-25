@@ -1,7 +1,8 @@
 /**
  * CRYPTOGRAPHIC PASSWORD HASHING UTILITY
  * Uses native Web Crypto API (PBKDF2 with SHA-256 and 100,000 iterations).
- * Compatible with both Node.js server environments and modern browsers.
+ * Compatible with Node.js server environments, modern secure browsers (HTTPS/localhost),
+ * and gracefully falls back to server-side PBKDF2 in insecure mobile LAN HTTP contexts.
  */
 
 const ITERATIONS = 100000;
@@ -25,13 +26,37 @@ function hexToBuffer(hex: string): Uint8Array {
   return bytes;
 }
 
-function getCrypto(): Crypto {
-  if (typeof globalThis.crypto !== 'undefined') {
-    return globalThis.crypto;
+function getSubtleCrypto(): { subtle: SubtleCrypto | null; getRandomValues: (arr: Uint8Array) => Uint8Array } {
+  if (typeof window !== 'undefined') {
+    // Browser environment
+    const browserCrypto = globalThis.crypto;
+    const subtle = browserCrypto?.subtle || null;
+    const getRandomValues = (arr: Uint8Array) => {
+      if (browserCrypto?.getRandomValues) {
+        return browserCrypto.getRandomValues(arr);
+      }
+      for (let i = 0; i < arr.length; i++) {
+        arr[i] = Math.floor(Math.random() * 256);
+      }
+      return arr;
+    };
+    return { subtle, getRandomValues };
   }
-  // Node.js fallback
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require('crypto').webcrypto;
+
+  // Node.js server environment
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const nodeCrypto = require('crypto');
+    return {
+      subtle: nodeCrypto.webcrypto.subtle,
+      getRandomValues: (arr: Uint8Array) => nodeCrypto.webcrypto.getRandomValues(arr),
+    };
+  } catch {
+    return {
+      subtle: null,
+      getRandomValues: (arr: Uint8Array) => arr,
+    };
+  }
 }
 
 /**
@@ -39,12 +64,33 @@ function getCrypto(): Crypto {
  * Output format: pbkdf2:100000:<saltHex>:<hashHex>
  */
 export async function hashPassword(password: string): Promise<string> {
-  const cryptoObj = getCrypto();
+  const { subtle, getRandomValues } = getSubtleCrypto();
+
+  if (!subtle) {
+    // Insecure browser context (e.g. mobile phone browsing LAN HTTP)
+    if (typeof window !== 'undefined') {
+      try {
+        const res = await fetch('/api/auth/password-crypto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'hash', password }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.hash) return data.hash;
+        }
+      } catch (err) {
+        console.error('Remote password hashing failed:', err);
+      }
+    }
+    throw new Error('Cryptographic hashing is not supported in this environment.');
+  }
+
   const enc = new TextEncoder();
   const salt = new Uint8Array(16);
-  cryptoObj.getRandomValues(salt);
+  getRandomValues(salt);
 
-  const keyMaterial = await cryptoObj.subtle.importKey(
+  const keyMaterial = await subtle.importKey(
     'raw',
     enc.encode(password),
     'PBKDF2',
@@ -52,7 +98,7 @@ export async function hashPassword(password: string): Promise<string> {
     ['deriveBits']
   );
 
-  const derivedBits = await cryptoObj.subtle.deriveBits(
+  const derivedBits = await subtle.deriveBits(
     {
       name: 'PBKDF2',
       salt: salt as BufferSource,
@@ -85,6 +131,28 @@ export async function verifyPassword(password: string, storedHash: string): Prom
     return { isValid: isLegacyMatch, needsRehash: isLegacyMatch };
   }
 
+  const { subtle } = getSubtleCrypto();
+
+  if (!subtle) {
+    // Insecure browser context (e.g. mobile phone browsing LAN HTTP)
+    if (typeof window !== 'undefined') {
+      try {
+        const res = await fetch('/api/auth/password-crypto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'verify', password, storedHash }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          return { isValid: Boolean(data.isValid), needsRehash: false };
+        }
+      } catch (err) {
+        console.error('Remote password verification failed:', err);
+      }
+    }
+    return { isValid: false, needsRehash: false };
+  }
+
   try {
     const parts = storedHash.split(':');
     if (parts.length !== 4) return { isValid: false, needsRehash: false };
@@ -93,10 +161,9 @@ export async function verifyPassword(password: string, storedHash: string): Prom
     const salt = hexToBuffer(parts[2]);
     const expectedHashHex = parts[3];
 
-    const cryptoObj = getCrypto();
     const enc = new TextEncoder();
 
-    const keyMaterial = await cryptoObj.subtle.importKey(
+    const keyMaterial = await subtle.importKey(
       'raw',
       enc.encode(password),
       'PBKDF2',
@@ -104,7 +171,7 @@ export async function verifyPassword(password: string, storedHash: string): Prom
       ['deriveBits']
     );
 
-    const derivedBits = await cryptoObj.subtle.deriveBits(
+    const derivedBits = await subtle.deriveBits(
       {
         name: 'PBKDF2',
         salt: salt as BufferSource,

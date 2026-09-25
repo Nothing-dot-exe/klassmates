@@ -47,11 +47,28 @@ export default function Home() {
     currentUser,
     setCurrentUser,
     isSessionLoaded,
+    setIsSessionLoaded,
     prefilledCode,
     handleUserLoggedIn,
     handleAdminLogin,
     handleSignOut,
   } = useUserSession(classroom, students, isDataLoaded);
+
+  const [loadTimedOut, setLoadTimedOut] = useState(false);
+
+  // Mobile safety watchdog: never allow loading screen to stay stuck
+  useEffect(() => {
+    const watchdog = setTimeout(() => {
+      setIsSessionLoaded(true);
+    }, 350);
+    const timeoutMsg = setTimeout(() => {
+      setLoadTimedOut(true);
+    }, 1200);
+    return () => {
+      clearTimeout(watchdog);
+      clearTimeout(timeoutMsg);
+    };
+  }, [setIsSessionLoaded]);
 
   // Navigation state
   const [activeView, setActiveView] = useState<'channel' | 'dm' | 'documents' | 'admin'>('channel');
@@ -187,6 +204,15 @@ export default function Home() {
             C
           </div>
           <p className="text-sm text-muted font-medium">Opening your classroom…</p>
+          {loadTimedOut && (
+            <button
+              type="button"
+              onClick={() => setIsSessionLoaded(true)}
+              className="mt-2 text-xs text-primary underline font-medium cursor-pointer py-1.5 px-3.5 bg-card hover:bg-card-muted rounded-xl border border-card-border shadow-sm active:scale-95 transition"
+            >
+              Continue to Classroom →
+            </button>
+          )}
         </div>
       </div>
     );

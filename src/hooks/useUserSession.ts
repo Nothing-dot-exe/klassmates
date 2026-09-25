@@ -10,101 +10,140 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
 
   // Restore session from localStorage & check ?code= or ?reset= URL parameter
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-
-      // Support complete reset to first-time visitor mode via URL query parameter
-      if (params.get('reset') === 'true' || params.get('fresh') === 'true' || params.get('logout') === 'true') {
-        localStorage.removeItem('classmate_current_user');
-        localStorage.removeItem('classmate_session_token');
-        localStorage.removeItem('classmate_classroom');
-        sessionStorage.clear();
-        setCurrentUser(null);
-        setIsSessionLoaded(true);
-        window.history.replaceState({}, document.title, window.location.pathname);
-        return;
-      }
-
-      const codeParam = params.get('code');
-      if (codeParam) {
-        setPrefilledCode(codeParam.toUpperCase());
-      }
-
-      const adminSessionStr = sessionStorage.getItem('classmate_admin_session');
-      if (adminSessionStr) {
-        try {
-          const parsed = JSON.parse(adminSessionStr);
-          if (parsed && parsed.id) {
-            setCurrentUser(parsed);
-            setIsSessionLoaded(true);
-            return;
-          }
-        } catch (e) {
-          console.error('Failed to parse admin session:', e);
-          sessionStorage.removeItem('classmate_admin_session');
-        }
-      }
-
-      // 1. Check active tab session (for shared lab PCs where Remember Me is off)
-      const tabUserStr = sessionStorage.getItem('classmate_current_user');
-      if (tabUserStr) {
-        try {
-          const parsed = JSON.parse(tabUserStr);
-          if (parsed && parsed.id) {
-            setCurrentUser(parsed);
-            setIsSessionLoaded(true);
-            return;
-          }
-        } catch {
-          sessionStorage.removeItem('classmate_current_user');
-        }
-      }
-
-      // 2. Check persistent device storage (for personal devices with Remember Me)
-      const savedUserStr = localStorage.getItem('classmate_current_user');
-      if (savedUserStr) {
-        try {
-          const parsed = JSON.parse(savedUserStr);
-          if (parsed && parsed.id) {
-            setCurrentUser(parsed);
-          }
-        } catch (e) {
-          console.error('Failed to parse saved session:', e);
-          localStorage.removeItem('classmate_current_user');
-        }
-      }
+    // Watchdog fallback: Guarantee session is marked loaded within 200ms no matter what
+    const watchdog = setTimeout(() => {
       setIsSessionLoaded(true);
+    }, 200);
+
+    try {
+      if (typeof window !== 'undefined') {
+        let params: URLSearchParams | null = null;
+        try {
+          params = new URLSearchParams(window.location.search);
+        } catch {
+          // ignore search params error
+        }
+
+        if (params) {
+          // Support complete reset to first-time visitor mode via URL query parameter
+          if (params.get('reset') === 'true' || params.get('fresh') === 'true' || params.get('logout') === 'true') {
+            try {
+              localStorage.removeItem('classmate_current_user');
+              localStorage.removeItem('classmate_session_token');
+              localStorage.removeItem('classmate_classroom');
+              sessionStorage.clear();
+            } catch {}
+            setCurrentUser(null);
+            setIsSessionLoaded(true);
+            try {
+              window.history.replaceState({}, document.title, window.location.pathname);
+            } catch {}
+            return;
+          }
+
+          const codeParam = params.get('code');
+          if (codeParam) {
+            setPrefilledCode(codeParam.toUpperCase());
+          }
+        }
+
+        // 1. Check active admin tab session
+        try {
+          const adminSessionStr = sessionStorage.getItem('classmate_admin_session');
+          if (adminSessionStr) {
+            const parsed = JSON.parse(adminSessionStr);
+            if (parsed && parsed.id) {
+              setCurrentUser(parsed);
+              setIsSessionLoaded(true);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Failed to parse admin session:', e);
+        }
+
+        // 2. Check active tab session (for shared lab PCs where Remember Me is off)
+        try {
+          const tabUserStr = sessionStorage.getItem('classmate_current_user');
+          if (tabUserStr) {
+            const parsed = JSON.parse(tabUserStr);
+            if (parsed && parsed.id) {
+              setCurrentUser(parsed);
+              setIsSessionLoaded(true);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Failed to parse tab session:', e);
+        }
+
+        // 3. Check persistent device storage (for personal devices with Remember Me)
+        try {
+          const savedUserStr = localStorage.getItem('classmate_current_user');
+          if (savedUserStr) {
+            const parsed = JSON.parse(savedUserStr);
+            if (parsed && parsed.id) {
+              setCurrentUser(parsed);
+            }
+          }
+        } catch (e) {
+          console.warn('Failed to parse saved session:', e);
+        }
+      }
+    } catch (err) {
+      console.warn('Exception during session restoration:', err);
+    } finally {
+      setIsSessionLoaded(true);
+      clearTimeout(watchdog);
     }
-  }, [classroom?.adminId, classroom?.adminEmail]);
+  }, []); // Run once on client mount
 
   const handleUserLoggedIn = async (user: User, rememberMe: boolean = true) => {
     setCurrentUser(user);
     if (typeof window !== 'undefined') {
-      const isAdmin =
-        user.role === 'admin' ||
-        (classroom?.adminId && user.id === classroom.adminId) ||
-        (classroom?.adminEmail && user.email?.toLowerCase() === classroom.adminEmail.toLowerCase());
+      try {
+        const isAdmin =
+          user.role === 'admin' ||
+          (classroom?.adminId && user.id === classroom.adminId) ||
+          (classroom?.adminEmail && user.email?.toLowerCase() === classroom.adminEmail.toLowerCase());
 
-      const token = await signUserSession(user.id, isAdmin ? 'admin' : 'student', classroom?.id);
+        let token = '';
+        try {
+          token = await signUserSession(user.id, isAdmin ? 'admin' : 'student', classroom?.id);
+        } catch (sigErr) {
+          console.warn('Could not generate cryptographic session token:', sigErr);
+          token = `fallback_token_${user.id}_${Date.now()}`;
+        }
 
-      if (rememberMe) {
-        // Persistent storage for personal laptop/mobile
-        localStorage.setItem('classmate_current_user', JSON.stringify(user));
-        localStorage.setItem('classmate_session_token', token);
-        sessionStorage.removeItem('classmate_current_user');
-      } else {
-        // Ephemeral session storage for shared campus lab computers (clears when browser tab closes)
-        localStorage.removeItem('classmate_current_user');
-        localStorage.removeItem('classmate_session_token');
-        sessionStorage.setItem('classmate_current_user', JSON.stringify(user));
-        sessionStorage.setItem('classmate_session_token', token);
-      }
+        if (rememberMe) {
+          // Persistent storage for personal laptop/mobile
+          try {
+            localStorage.setItem('classmate_current_user', JSON.stringify(user));
+            localStorage.setItem('classmate_session_token', token);
+            sessionStorage.removeItem('classmate_current_user');
+          } catch {}
+        } else {
+          // Ephemeral session storage for shared campus lab computers (clears when browser tab closes)
+          try {
+            localStorage.removeItem('classmate_current_user');
+            localStorage.removeItem('classmate_session_token');
+            sessionStorage.setItem('classmate_current_user', JSON.stringify(user));
+            sessionStorage.setItem('classmate_session_token', token);
+          } catch {}
+        }
 
-      if (isAdmin) {
-        sessionStorage.setItem('classmate_admin_session', JSON.stringify(user));
-        sessionStorage.setItem('classmate_session_token', token);
-      } else {
-        sessionStorage.removeItem('classmate_admin_session');
+        if (isAdmin) {
+          try {
+            sessionStorage.setItem('classmate_admin_session', JSON.stringify(user));
+            sessionStorage.setItem('classmate_session_token', token);
+          } catch {}
+        } else {
+          try {
+            sessionStorage.removeItem('classmate_admin_session');
+          } catch {}
+        }
+      } catch (err) {
+        console.warn('Could not persist session storage:', err);
       }
     }
   };
@@ -152,10 +191,12 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
 
   const handleSignOut = () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('classmate_current_user');
-      localStorage.removeItem('classmate_session_token');
-      localStorage.removeItem('classmate_classroom');
-      sessionStorage.clear();
+      try {
+        localStorage.removeItem('classmate_current_user');
+        localStorage.removeItem('classmate_session_token');
+        localStorage.removeItem('classmate_classroom');
+        sessionStorage.clear();
+      } catch {}
     }
     setCurrentUser(null);
   };
@@ -231,6 +272,7 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
     currentUser,
     setCurrentUser,
     isSessionLoaded,
+    setIsSessionLoaded,
     prefilledCode,
     handleUserLoggedIn,
     handleAdminLogin,

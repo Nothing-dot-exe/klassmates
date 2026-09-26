@@ -197,9 +197,11 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
               otpInput={studentOtpInput}
               countdown={studentOtpCountdown}
               isVerifying={isStudentVerifyingOtp}
+              isResending={isStudentSendingOtp}
               error={studentOtpError}
               onOtpInputChange={setStudentOtpInput}
               onVerify={onVerifyStudentOtp}
+              onResend={onSendStudentOtp}
             />
           )}
         </div>

@@ -8,9 +8,11 @@ interface OtpVerificationCardProps {
   otpInput: string;
   countdown: number;
   isVerifying: boolean;
+  isResending?: boolean;
   error?: string;
   onOtpInputChange: (val: string) => void;
   onVerify: () => void;
+  onResend?: () => void;
 }
 
 export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
@@ -18,9 +20,11 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
   otpInput,
   countdown,
   isVerifying,
+  isResending,
   error,
   onOtpInputChange,
   onVerify,
+  onResend,
 }) => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -139,13 +143,30 @@ export const OtpVerificationCard: React.FC<OtpVerificationCardProps> = ({
         </div>
       </div>
 
-      {/* Countdown */}
+      {/* Code Validity & Resend Timer */}
       <div className="flex items-center justify-between text-[11px]">
-        <span className="text-zinc-700 dark:text-zinc-300 font-medium">Enter your code:</span>
-        <span className={`font-mono font-bold text-[10px] flex items-center gap-1 ${countdown <= 30 && countdown > 0 ? 'text-rose-500' : 'text-zinc-500 dark:text-zinc-400'}`}>
-          <Clock className="w-3 h-3" />
-          {countdown > 0 ? `${countdown}s remaining` : 'Expired — click Resend'}
+        <span className="text-zinc-600 dark:text-zinc-400 font-medium">
+          Valid for <strong className="text-zinc-900 dark:text-zinc-200">10 mins</strong>
         </span>
+        {countdown > 0 ? (
+          <span className="font-mono font-bold text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Resend in {countdown}s</span>
+          </span>
+        ) : onResend ? (
+          <button
+            type="button"
+            onClick={onResend}
+            disabled={isResending}
+            className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold cursor-pointer transition active:scale-95 disabled:opacity-50"
+          >
+            {isResending ? 'Sending…' : 'Resend Code'}
+          </button>
+        ) : (
+          <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
+            Resend available
+          </span>
+        )}
       </div>
 
       {/* 6 Individual Digit Boxes with Instant Auto-Advance */}

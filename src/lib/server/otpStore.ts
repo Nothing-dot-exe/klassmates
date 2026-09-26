@@ -1,18 +1,22 @@
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
-interface StoredOtp {
+interface StoredOtpEntry {
   hashedCode: string;
   expiresAt: number;
+}
+
+interface StoredOtpRecord {
+  entries: StoredOtpEntry[];
   attempts: number;
 }
 
 declare global {
   // eslint-disable-next-line no-var
-  var __classmateOtpStore: Map<string, StoredOtp> | undefined;
+  var __classmateOtpStore: Map<string, StoredOtpRecord> | undefined;
 }
 
-const getStore = (): Map<string, StoredOtp> => {
+const getStore = (): Map<string, StoredOtpRecord> => {
   if (!globalThis.__classmateOtpStore) {
     globalThis.__classmateOtpStore = new Map();
   }
@@ -87,6 +91,7 @@ function hashOtp(email: string, code: string): string {
 
 /**
  * Stores a cryptographically hashed OTP for an email with a 10-minute TTL.
+ * Supports multiple active codes so a resend does not invalidate recently delivered emails.
  */
 export const storeServerOtp = async (
   email: string,
@@ -94,15 +99,20 @@ export const storeServerOtp = async (
   ttlMs: number = 10 * 60 * 1000
 ): Promise<void> => {
   const cleanEmail = email.trim().toLowerCase();
-  const expiresAt = Date.now() + ttlMs;
+  const now = Date.now();
+  const expiresAt = now + ttlMs;
   const hashedCode = hashOtp(cleanEmail, code);
 
-  // 1. In-memory store
+  // 1. In-memory store (multi-entry per email)
   const store = getStore();
+  const existing = store.get(cleanEmail);
+  const activeEntries = (existing?.entries || []).filter((e) => e.expiresAt > now);
+  activeEntries.unshift({ hashedCode, expiresAt });
+  if (activeEntries.length > 3) activeEntries.pop();
+
   store.set(cleanEmail, {
-    hashedCode,
-    expiresAt,
-    attempts: 0,
+    entries: activeEntries,
+    attempts: existing ? existing.attempts : 0,
   });
 
   // 2. Dual-sync hashed OTP to Supabase table (never plaintext)
@@ -122,24 +132,33 @@ export const storeServerOtp = async (
 };
 
 /**
- * Validates a 6-digit code against the stored hash.
- * Increments failed attempts and invalidates/deletes after 5 attempts to prevent brute force.
+ * Validates a 6-digit code against stored hashes.
+ * Checks all active codes sent within the 10-minute window for this email.
+ * Increments failed attempts and invalidates after 5 attempts to prevent brute force.
  */
 export const verifyServerOtp = async (email: string, token: string): Promise<boolean> => {
   const cleanEmail = email.trim().toLowerCase();
   const cleanToken = token.trim();
   const inputHash = hashOtp(cleanEmail, cleanToken);
   const store = getStore();
+  const now = Date.now();
 
   // 1. Check in-memory store
   const record = store.get(cleanEmail);
   if (record) {
-    if (Date.now() > record.expiresAt || record.attempts >= 5) {
+    if (record.attempts >= 5) {
       store.delete(cleanEmail);
       return false;
     }
 
-    if (record.hashedCode === inputHash) {
+    const validEntries = record.entries.filter((e) => e.expiresAt > now);
+    if (validEntries.length === 0) {
+      store.delete(cleanEmail);
+      return false;
+    }
+
+    const isMatch = validEntries.some((e) => e.hashedCode === inputHash);
+    if (isMatch) {
       store.delete(cleanEmail);
       const supabase = getSupabaseAdmin();
       if (supabase) {

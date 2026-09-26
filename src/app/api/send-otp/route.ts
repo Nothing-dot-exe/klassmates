@@ -32,7 +32,7 @@ function checkRateLimit(map: Map<string, RateLimitRecord>, key: string, maxReque
 export async function POST(req: Request) {
   try {
     const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
-    if (!checkRateLimit(ipRateLimits, ip, 10, 10 * 60 * 1000)) {
+    if (!checkRateLimit(ipRateLimits, ip, 25, 10 * 60 * 1000)) {
       return NextResponse.json(
         { success: false, message: 'Too many verification attempts from this network. Please wait a few minutes.' },
         { status: 429 }
@@ -49,9 +49,9 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!checkRateLimit(emailRateLimits, cleanEmail, 3, 10 * 60 * 1000)) {
+    if (!checkRateLimit(emailRateLimits, cleanEmail, 8, 10 * 60 * 1000)) {
       return NextResponse.json(
-        { success: false, message: 'Too many verification codes requested for this email. Please check your inbox or wait 10 minutes.' },
+        { success: false, message: 'Too many verification codes requested for this email. Please check your inbox or wait a few minutes.' },
         { status: 429 }
       );
     }
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
     let emailDelivered = false;
     let deliveryError = '';
 
-    // 2. Try SMTP Delivery if configured
+    // 2. Try SMTP Delivery if configured (Primary Dispatch)
     if (isSmtpConfigured()) {
       const smtpRes = await sendVerificationEmail({ to: cleanEmail, code: sixDigitOtp });
       if (smtpRes.success) {
@@ -73,11 +73,11 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. Fallback or parallel Supabase Auth OTP delivery
+    // 3. Fallback Supabase Auth OTP delivery only if SMTP delivery failed or is unconfigured
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    if (supabaseUrl && supabaseKey) {
+    if (!emailDelivered && supabaseUrl && supabaseKey) {
       try {
         const supabase = createClient(supabaseUrl, supabaseKey);
         const { error } = await supabase.auth.signInWithOtp({

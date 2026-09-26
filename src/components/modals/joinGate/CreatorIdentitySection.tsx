@@ -172,9 +172,11 @@ export const CreatorIdentitySection: React.FC<CreatorIdentitySectionProps> = ({
             otpInput={adminOtpInput}
             countdown={adminOtpCountdown}
             isVerifying={isAdminVerifyingOtp}
+            isResending={isAdminSendingOtp}
             error={adminOtpError}
             onOtpInputChange={setAdminOtpInput}
             onVerify={onVerifyAdminOtp}
+            onResend={onSendAdminOtp}
           />
         )}
       </div>

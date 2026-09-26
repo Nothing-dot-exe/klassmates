@@ -1,6 +1,6 @@
 import React from 'react';
 import { Classroom, User, PendingRequest, PasswordResetRequest, DocumentItem, ChatMessage } from '@/types';
-import { CURRENT_USER, EMPTY_CLASSROOM } from '@/lib/mockData';
+import { EMPTY_CLASSROOM } from '@/lib/mockData';
 import { DEFAULT_TEMP_PASSWORD } from '@/lib/privacyUtils';
 import {
   dbUpdateClassroom, dbCreateStudent, dbBulkCreateStudents, dbUpdateStudent, dbDeleteStudent,
@@ -106,9 +106,12 @@ export function useAdminActions({
       dbUpdateClassroom(classroom.id, { membersCount: classroom.membersCount + 1 });
 
       if (req.email) {
+        const rawPwd = newStudent.password || '';
+        const isHash = !rawPwd || rawPwd.startsWith('pbkdf2:') || rawPwd.startsWith('$2') || rawPwd.length > 35;
+        const plainPass = isHash ? undefined : rawPwd;
         apiSendApprovalEmail({
           to: req.email, name: newStudent.name, rollNo: newStudent.rollNo,
-          email: req.email, password: newStudent.password,
+          email: req.email, password: plainPass,
           classroomName: classroom.name, classroomCode: classroom.code,
         });
       }
@@ -153,9 +156,12 @@ export function useAdminActions({
       dbDeletePendingRequest(req.id);
       if (req.email) {
         const st = newStudents[idx];
+        const rawPwd = st?.password || '';
+        const isHash = !rawPwd || rawPwd.startsWith('pbkdf2:') || rawPwd.startsWith('$2') || rawPwd.length > 35;
+        const plainPass = isHash ? undefined : rawPwd;
         apiSendApprovalEmail({
           to: req.email, name: req.name, rollNo: req.rollNo, email: req.email,
-          password: st?.password || req.password || DEFAULT_TEMP_PASSWORD,
+          password: plainPass,
           classroomName: classroom.name, classroomCode: classroom.code,
         });
       }

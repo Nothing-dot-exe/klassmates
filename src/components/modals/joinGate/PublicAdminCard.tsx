@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, ShieldCheck } from 'lucide-react';
+import { Phone, ShieldCheck } from 'lucide-react';
 import { Classroom } from '@/types';
 
 interface PublicAdminCardProps {
@@ -13,7 +13,6 @@ export const PublicAdminCard: React.FC<PublicAdminCardProps> = ({ classroom }) =
 
   const adminName = classroom.adminName || classroom.adminDesignation || 'Class Representative';
   const adminPhone = classroom.adminPhone || '';
-  const adminEmail = classroom.adminEmail || '';
 
   return (
     <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border shadow-xs space-y-2 text-left animate-in fade-in">
@@ -61,16 +60,7 @@ export const PublicAdminCard: React.FC<PublicAdminCardProps> = ({ classroom }) =
           </span>
         )}
 
-        {adminEmail && (
-          <a
-            href={`mailto:${adminEmail}`}
-            className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white transition truncate"
-            title="Contact Class Rep via Email"
-          >
-            <Mail className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 flex-shrink-0" />
-            <span className="truncate text-xs text-zinc-900 dark:text-zinc-100 font-medium">{adminEmail}</span>
-          </a>
-        )}
+
       </div>
     </div>
   );

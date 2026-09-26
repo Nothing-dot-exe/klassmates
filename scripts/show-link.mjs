@@ -39,7 +39,7 @@ function getActiveNetworkIp() {
 const networkIp = getActiveNetworkIp();
 
 console.log('\n=============================================================');
-console.log('       Classmate - Private Classroom Workspace');
+console.log('    iClassmates — Student Workspace & Academic Hub');
 console.log('=============================================================');
 console.log('');
 console.log('  Local Computer URL : http://localhost:3000');

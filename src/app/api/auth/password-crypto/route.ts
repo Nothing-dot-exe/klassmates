@@ -25,7 +25,11 @@ function serverVerify(password: string, storedHash: string): boolean {
   const expectedHashHex = parts[3];
 
   const derivedKey = crypto.pbkdf2Sync(password, salt, iterations, expectedHashHex.length / 2, 'sha256');
-  return derivedKey.toString('hex') === expectedHashHex;
+  const derivedBuf = Buffer.from(derivedKey);
+  const expectedBuf = Buffer.from(expectedHashHex, 'hex');
+
+  if (derivedBuf.length !== expectedBuf.length) return false;
+  return crypto.timingSafeEqual(derivedBuf, expectedBuf);
 }
 
 export async function POST(req: NextRequest) {

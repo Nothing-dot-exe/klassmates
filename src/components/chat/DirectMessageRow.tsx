@@ -6,7 +6,6 @@ import {
   SmilePlus,
   Trash2,
   Reply,
-  Lock,
   MoreHorizontal,
 } from 'lucide-react';
 import { ChatMessage, DocumentItem, UserRole } from '@/types';
@@ -25,6 +24,7 @@ export interface DirectMessageRowProps {
   currentUserRole?: UserRole;
   isHighlighted?: boolean;
   isFirst?: boolean;
+  isLast?: boolean;
   onOpenDocument: (doc: DocumentItem) => void;
   onReact: (messageId: string, emoji: string) => void;
   onDeleteMessage?: (messageId: string) => void;
@@ -40,6 +40,7 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
   currentUserRole,
   isHighlighted,
   isFirst = true,
+  isLast = true,
   onOpenDocument,
   onReact,
   onDeleteMessage,
@@ -102,14 +103,14 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
             <button
               type="button"
               onClick={() => onOpenProfile?.(message.senderId)}
-              className="p-[1px] rounded-full hover:ring-2 hover:ring-zinc-950 transition cursor-pointer"
+              className="p-[1px] rounded-full hover:ring-2 hover:ring-indigo-500 transition cursor-pointer"
               title={`View ${senderDisplayName}'s Profile`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={getSafeAvatar(message.senderAvatar, message.senderName)}
                 alt={senderDisplayName}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover bg-zinc-100 border border-zinc-200"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800"
               />
             </button>
           ) : (
@@ -192,8 +193,9 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
 
           return (
             <div
-              className={`relative transition-all duration-300 ${
-                isHighlighted ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-[#09090b] rounded-2xl' : ''
+              onClick={() => setShowActions(!showActions)}
+              className={`relative transition-all duration-300 cursor-pointer sm:cursor-default ${
+                isHighlighted ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-background rounded-2xl' : ''
               } ${
                 isMediaOnly
                   ? 'p-0.5 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80 bg-zinc-100 dark:bg-zinc-900 shadow-sm'
@@ -213,7 +215,7 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
 
               {/* Formatted Text Content */}
               {hasValidText && (
-                <div className="text-left">
+                <div className="text-left break-words [overflow-wrap:anywhere]">
                   <MessageContentRenderer
                     content={message.content}
                     isMine={isMine}
@@ -296,7 +298,6 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
                     </span>
                   )}
                   <span>{message.timestamp}</span>
-                  <Lock className="w-2.5 h-2.5 opacity-70" />
                   {/* Mobile Actions Menu Trigger */}
                   <button
                     type="button"
@@ -304,21 +305,21 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
                       e.stopPropagation();
                       setShowActions(!showActions);
                     }}
-                    className="sm:hidden p-0.5 text-white/70 hover:text-white rounded transition cursor-pointer"
+                    className="sm:hidden min-h-[26px] min-w-[26px] flex items-center justify-center p-0.5 text-white/70 hover:text-white rounded transition cursor-pointer"
                     title="Message options"
                   >
-                    <MoreHorizontal className="w-3 h-3" />
+                    <MoreHorizontal className="w-3.5 h-3.5" />
                   </button>
                 </div>
-              ) : (
+              ) : isLast || (message.autoDelete && message.autoDelete !== 'off') ? (
                 <div
                   className={`flex items-center justify-end gap-1.5 mt-1 select-none ${
-                    isMine ? 'text-zinc-400' : 'text-zinc-400'
+                    isMine ? 'text-white/60' : 'text-zinc-400 dark:text-zinc-500'
                   }`}
                 >
                   {message.autoDelete && message.autoDelete !== 'off' && (
                     <span
-                      className={`flex items-center gap-0.5 text-[9px] font-semibold ${isMine ? 'text-zinc-400' : 'text-zinc-500'}`}
+                      className={`flex items-center gap-0.5 text-[9px] font-semibold ${isMine ? 'text-white/80' : 'text-zinc-500'}`}
                       title={message.expiresAt ? `Expires: ${message.expiresAt}` : 'Disappearing message'}
                     >
                       <Clock className="w-2.5 h-2.5" />
@@ -330,10 +331,6 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
                     {message.timestamp}
                   </span>
 
-                  <span title="Protected message">
-                    <Lock className="w-2.5 h-2.5 opacity-60" />
-                  </span>
-
                   {/* Mobile Actions Menu Trigger */}
                   <button
                     type="button"
@@ -341,13 +338,15 @@ export const DirectMessageRow: React.FC<DirectMessageRowProps> = ({
                       e.stopPropagation();
                       setShowActions(!showActions);
                     }}
-                    className="sm:hidden p-0.5 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 rounded transition cursor-pointer"
+                    className={`sm:hidden min-h-[22px] min-w-[22px] flex items-center justify-center p-0.5 rounded transition cursor-pointer -mr-1 ${
+                      isMine ? 'text-white/70 hover:text-white' : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                    }`}
                     title="Message options"
                   >
-                    <MoreHorizontal className="w-3 h-3" />
+                    <MoreHorizontal className="w-3.5 h-3.5" />
                   </button>
                 </div>
-              )}
+              ) : null}
             </div>
           );
         })()}

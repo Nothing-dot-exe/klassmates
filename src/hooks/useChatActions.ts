@@ -6,6 +6,7 @@ import { broadcastNewMessage, broadcastReaction, broadcastMessageDeleted, broadc
 import { generateUniqueId } from '@/lib/security/idUtils';
 import { sanitizeChatMessage, validateEmojiReaction } from '@/lib/security/inputSanitizer';
 import { evaluateCanDeleteForEveryone } from '@/lib/chatPermissions';
+import { recordDeletedMessageId } from '@/lib/chatUtils';
 
 interface UseChatActionsParams {
   classroomId: string;
@@ -90,17 +91,10 @@ export function useChatActions({
 
     setMessages((prev) => {
       const updated = { ...prev };
-      const targetKeys = [currentConversationKey];
-      if (!newMessage.channelId) {
-        if (newMessage.recipientId) targetKeys.push(`dm_${newMessage.recipientId}`);
-        if (newMessage.senderId) targetKeys.push(`dm_${newMessage.senderId}`);
+      const list = updated[currentConversationKey] || [];
+      if (!list.some((m) => m.id === newMessage.id)) {
+        updated[currentConversationKey] = [...list, newMessage];
       }
-      targetKeys.forEach((k) => {
-        const list = updated[k] || [];
-        if (!list.some((m) => m.id === newMessage.id)) {
-          updated[k] = [...list, newMessage];
-        }
-      });
       return updated;
     });
 
@@ -187,6 +181,8 @@ export function useChatActions({
       }
     }
 
+    recordDeletedMessageId(messageId);
+
     setMessages((prev) => {
       const updated: Record<string, ChatMessage[]> = {};
       Object.entries(prev).forEach(([key, list]) => {
@@ -213,6 +209,8 @@ export function useChatActions({
         console.warn('Failed to save deleted for me message:', e);
       }
     }
+
+    recordDeletedMessageId(messageId);
 
     setMessages((prev) => {
       const updated: Record<string, ChatMessage[]> = {};

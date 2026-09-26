@@ -114,7 +114,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-[#252526] dark:hover:bg-[#2d2d2d] text-zinc-900 dark:text-zinc-200 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 border border-zinc-300 dark:border-[#383838] active:scale-98 cursor-pointer"
+                  className="btn btn-secondary w-full"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Edit Profile & Bio</span>
@@ -124,7 +124,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                   <button
                     type="button"
                     onClick={() => onStartDm && onStartDm(activeUser)}
-                    className="flex-1 py-2.5 bg-zinc-950 hover:bg-zinc-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+                    className="btn btn-primary flex-1"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>Send Direct Message</span>
@@ -132,7 +132,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                   {!isMe && activeUser.phone && activeUser.showPhone !== false && (
                     <a
                       href={`tel:${activeUser.phone}`}
-                      className="px-3.5 py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-[#252526] dark:hover:bg-[#2d2d2d] border border-zinc-300 dark:border-[#383838] text-zinc-900 dark:text-zinc-200 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5"
+                      className="btn btn-secondary px-3.5"
                       title="Call classmate"
                     >
                       <Phone className="w-3.5 h-3.5" />
@@ -145,8 +145,8 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           )}
 
           {/* Contact Details Card */}
-          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-[#252526] border border-zinc-200 dark:border-[#333333] space-y-2.5 text-xs">
-            <div className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Contact Information</div>
+          <div className="p-3.5 rounded-2xl bg-card-muted border border-card-border space-y-2.5 text-xs">
+            <div className="text-[11px] font-bold text-muted uppercase tracking-wider">Contact Information</div>
             
             <div className="flex items-center justify-between text-zinc-700 dark:text-zinc-300 gap-2">
               <span className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0">

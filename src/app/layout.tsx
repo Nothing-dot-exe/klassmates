@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Classmate — Academic Workspace & Campus Note Vault",
+  title: "iClassmates — Student Workspace & Academic Hub",
   description: "Modern peer classroom hub for student collaboration, syllabus vaults, past papers, and academic study threads.",
 };
 
@@ -47,6 +47,8 @@ export default function RootLayout({
     >
       <head>
         <script
+          type={typeof window === 'undefined' ? 'text/javascript' : 'text/plain'}
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `
               try {

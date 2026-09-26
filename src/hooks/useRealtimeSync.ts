@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
-import { getConversationKey, parseMessageRow, getCurrentSessionUserId } from '@/lib/chatUtils';
+import { getConversationKey, parseMessageRow, getCurrentSessionUserId, recordDeletedMessageId, isMessageDeleted } from '@/lib/chatUtils';
 import {
   getRealtimeChannel,
   getUserRealtimeChannel,
@@ -69,37 +69,43 @@ export function useRealtimeSync({
     initData();
 
     const handleIncomingMessage = (newMsg: ChatMessage) => {
-      // Privacy check: If message is a 1-on-1 direct message, only process if session user is sender or recipient
+      if (!newMsg || !newMsg.id || isMessageDeleted(newMsg.id)) {
+        return;
+      }
       const sessionUserId = getCurrentSessionUserId();
+
+      // Privacy check: If message is a 1-on-1 direct message:
+      // 1. If session user is unauthenticated or not yet loaded, drop it immediately.
+      // 2. If session user is NEITHER the sender NOR the recipient, drop it immediately.
       if (!newMsg.channelId && newMsg.recipientId) {
-        if (sessionUserId && newMsg.senderId !== sessionUserId && newMsg.recipientId !== sessionUserId) {
+        if (!sessionUserId || (newMsg.senderId !== sessionUserId && newMsg.recipientId !== sessionUserId)) {
           return;
         }
       }
 
+      // Store message strictly under its canonical key (e.g. 'chn_general' or 'dm_minId_maxId')
+      // Direct messages are strictly pair-isolated; never index under single-user alias keys
       const key = getConversationKey(newMsg.channelId, newMsg.senderId, newMsg.recipientId);
-      const targetKeys = [key];
-      if (!newMsg.channelId) {
-        if (newMsg.recipientId) targetKeys.push(`dm_${newMsg.recipientId}`);
-        if (newMsg.senderId) targetKeys.push(`dm_${newMsg.senderId}`);
-      }
 
       setMessages((prev) => {
-        const updated = { ...prev };
-        let hasNew = false;
-        targetKeys.forEach((k) => {
-          const existing = updated[k] || [];
-          if (!existing.some((m) => m.id === newMsg.id)) {
-            updated[k] = [...existing, newMsg];
-            hasNew = true;
-          }
-        });
-        return hasNew ? updated : prev;
+        const existing = prev[key] || [];
+        if (existing.some((m) => m.id === newMsg.id)) {
+          return prev;
+        }
+        return {
+          ...prev,
+          [key]: [...existing, newMsg],
+        };
       });
 
-      // Dispatch social media notification event for app-level banner toast
-      if (typeof window !== 'undefined' && currentSessionUserId && newMsg.senderId !== currentSessionUserId) {
-        window.dispatchEvent(new CustomEvent('classmate:new_incoming_message', { detail: newMsg }));
+      // Dispatch notification event ONLY if:
+      // 1. Current user is not the sender
+      // 2. If it is a DM, current user IS the intended recipient
+      if (typeof window !== 'undefined' && sessionUserId && newMsg.senderId !== sessionUserId) {
+        const isEligibleNotification = newMsg.channelId || newMsg.recipientId === sessionUserId;
+        if (isEligibleNotification) {
+          window.dispatchEvent(new CustomEvent('classmate:new_incoming_message', { detail: newMsg }));
+        }
       }
     };
 
@@ -161,8 +167,11 @@ export function useRealtimeSync({
         })
         .on('broadcast', { event: 'new_message' }, ({ payload }) => {
           const msg = payload as ChatMessage;
-          // Public classroom channel receives both group and direct messages with client-side isolation
+          // Public classroom channel strictly processes group messages; ignore any stray direct messages
           if (msg && isMounted) {
+            if (!msg.channelId && msg.recipientId) {
+              return;
+            }
             handleIncomingMessage(msg);
           }
         })
@@ -272,6 +281,7 @@ export function useRealtimeSync({
           if (!payload || !isMounted) return;
           const { messageId } = payload as { messageId: string };
           if (messageId) {
+            recordDeletedMessageId(messageId);
             setMessages((prev) => {
               const updated: Record<string, ChatMessage[]> = {};
               Object.entries(prev).forEach(([k, list]) => {
@@ -304,6 +314,7 @@ export function useRealtimeSync({
           (payload) => {
             const deletedId = (payload.old as any)?.id;
             if (deletedId && isMounted) {
+              recordDeletedMessageId(deletedId);
               setMessages((prev) => {
                 const updated: Record<string, ChatMessage[]> = {};
                 Object.entries(prev).forEach(([k, list]) => {
@@ -428,22 +439,63 @@ export function useRealtimeSync({
           setMessages((prev) => {
             let hasChanges = false;
             const merged = { ...prev };
+
+            // 1. Prune expired, deleted-for-me, or tombstoned messages from current state
             Object.entries(merged).forEach(([convKey, list]) => {
-              const unexpired = list.filter((m) => !m.expiresAt || new Date(m.expiresAt).getTime() > nowTime);
-              if (unexpired.length !== list.length) {
-                merged[convKey] = unexpired;
+              const filtered = list.filter(
+                (m) =>
+                  (!m.expiresAt || new Date(m.expiresAt).getTime() > nowTime) &&
+                  !deletedForMeSet.has(m.id) &&
+                  !isMessageDeleted(m.id)
+              );
+              if (filtered.length !== list.length) {
+                merged[convKey] = filtered;
                 hasChanges = true;
               }
             });
+
+            // 2. Reconcile with database messages
             Object.entries(dbMsgs).forEach(([convKey, list]) => {
               const currentList = merged[convKey] || [];
-              const currentIds = new Set(currentList.map((m) => m.id));
-              const newItems = list.filter((m) => !currentIds.has(m.id) && !deletedForMeSet.has(m.id));
-              if (newItems.length > 0) {
-                merged[convKey] = [...currentList, ...newItems];
+
+              // Exclude tombstoned, deleted-for-me, or expired records from database results
+              const validDbList = list.filter(
+                (m) =>
+                  !deletedForMeSet.has(m.id) &&
+                  !isMessageDeleted(m.id) &&
+                  (!m.expiresAt || new Date(m.expiresAt).getTime() > nowTime)
+              );
+              const validDbIds = new Set(validDbList.map((m) => m.id));
+
+              // Reconcile current messages: prune messages removed from Supabase,
+              // while preserving in-flight optimistic messages sent within the last 15 seconds
+              const reconciledCurrent = currentList.filter((m) => {
+                if (deletedForMeSet.has(m.id) || isMessageDeleted(m.id)) {
+                  return false;
+                }
+                if (validDbIds.has(m.id)) {
+                  return true;
+                }
+                // Check if message was recently generated (< 15s) and still writing to Supabase
+                if (m.id.startsWith('msg_')) {
+                  const parts = m.id.split('_');
+                  const ts = parseInt(parts[1], 10);
+                  if (!isNaN(ts) && nowTime - ts < 15000) {
+                    return true;
+                  }
+                }
+                return false;
+              });
+
+              const reconciledIds = new Set(reconciledCurrent.map((m) => m.id));
+              const newItems = validDbList.filter((m) => !reconciledIds.has(m.id));
+
+              if (newItems.length > 0 || reconciledCurrent.length !== currentList.length) {
+                merged[convKey] = [...reconciledCurrent, ...newItems];
                 hasChanges = true;
               }
             });
+
             return hasChanges ? merged : prev;
           });
         } catch {

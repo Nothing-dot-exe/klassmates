@@ -17,7 +17,7 @@ export const ProfileSettingsSection: React.FC<ProfileSettingsSectionProps> = ({
   currentUser,
   students = [],
   currentAutoDelete,
-  onUpdateCurrentUser,
+  onUpdateCurrentUser: _onUpdateCurrentUser,
   onUpdateAutoDelete,
   onClearAllChat,
   onSignOut,

@@ -1,6 +1,6 @@
 'use client';
 
-import { Hash, Phone, Trash2, Image as ImageIcon, ArrowLeft, QrCode } from 'lucide-react';
+import { Hash, Phone, Trash2, Image as ImageIcon, ArrowLeft } from 'lucide-react';
 import { Channel, User } from '@/types';
 import { getSafeAvatar } from '@/lib/avatarUtils';
 
@@ -14,7 +14,6 @@ interface ChatHeaderProps {
   onOpenProfileById?: (userId: string) => void;
   onOpenClearChat: () => void;
   onOpenWallpaper?: () => void;
-  onOpenShare?: () => void;
   onBack?: () => void;
 }
 
@@ -28,7 +27,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onOpenProfileById,
   onOpenClearChat,
   onOpenWallpaper,
-  onOpenShare,
   onBack,
 }) => {
   return (
@@ -81,10 +79,16 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               <h2 className="text-xs sm:text-base font-bold text-slate-900 dark:text-white truncate font-display">{title}</h2>
             )}
 
-            {currentRecipient && currentRecipient.rollNo && (
-              <span className="text-[10px] font-mono bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.5 rounded flex-shrink-0">
-                {currentRecipient.rollNo}
-              </span>
+            {currentRecipient && (
+              currentRecipient.role === 'admin' || (adminUser && currentRecipient.id === adminUser.id) ? (
+                <span className="text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-1.5 py-0.2 rounded flex-shrink-0">
+                  👑 CR
+                </span>
+              ) : currentRecipient.rollNo && !currentRecipient.rollNo.includes('@') ? (
+                <span className="text-[10px] font-mono bg-slate-100 dark:bg-card-muted text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700/60 px-1.5 py-0.5 rounded flex-shrink-0">
+                  {currentRecipient.rollNo}
+                </span>
+              ) : null
             )}
           </div>
 
@@ -96,21 +100,19 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           ) : currentRecipient ? (
             <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-zinc-400">
               <span
-                className={`w-2 h-2 rounded-full ${
+                className={`w-1.5 h-1.5 rounded-full ${
                   currentRecipient.status === 'online'
                     ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.7)]'
-                    : 'bg-rose-500 shadow-[0_0_5px_rgba(244,63,94,0.4)]'
+                    : 'bg-zinc-400 dark:bg-zinc-500'
                 }`}
               />
               <span className="capitalize font-medium">
                 {currentRecipient.status === 'online' ? 'Online' : 'Offline'}
               </span>
-              <span>•</span>
-              <span className="text-slate-600 dark:text-zinc-300 font-medium">Private Direct Chat</span>
             </div>
           ) : currentChannel ? (
             <p className="text-[11px] text-slate-500 dark:text-zinc-400 truncate">
-              Official Classroom Discussion • Visible to all enrolled classmates
+              {currentChannel.description || 'Classroom channel'}
             </p>
           ) : subtitle ? (
             <p className="text-xs text-slate-500 dark:text-zinc-400 truncate">{subtitle}</p>
@@ -137,22 +139,14 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           </div>
         )}
 
-        {onOpenShare && (
-          <button
-            type="button"
-            onClick={onOpenShare}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition cursor-pointer"
-            title="Classroom QR Code & Share"
-          >
-            <QrCode className="w-4 h-4" />
-          </button>
-        )}
+
 
         <button
           type="button"
           onClick={onOpenWallpaper}
-          className="p-1.5 rounded-xl text-slate-400 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition cursor-pointer"
+          className="min-h-8 min-w-8 flex items-center justify-center p-1.5 rounded-xl text-slate-400 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition cursor-pointer"
           title="Change Chat Wallpaper & Background"
+          aria-label="Change Wallpaper"
         >
           <ImageIcon className="w-4 h-4" />
         </button>
@@ -160,8 +154,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         <button
           type="button"
           onClick={onOpenClearChat}
-          className="p-1.5 rounded-xl text-slate-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition cursor-pointer"
+          className="min-h-8 min-w-8 flex items-center justify-center p-1.5 rounded-xl text-slate-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition cursor-pointer"
           title="Clear Chat History (with Backup)"
+          aria-label="Clear Chat History"
         >
           <Trash2 className="w-4 h-4" />
         </button>

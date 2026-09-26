@@ -3,100 +3,75 @@ import { User, Classroom } from '@/types';
 import { verifyPassword } from '@/lib/security/passwordUtils';
 import { signUserSession } from '@/lib/security/sessionSecurity';
 
+function getInitialUser(): User | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('reset') === 'true' || params.get('fresh') === 'true' || params.get('logout') === 'true') {
+      try {
+        localStorage.removeItem('classmate_current_user');
+        localStorage.removeItem('classmate_session_token');
+        localStorage.removeItem('classmate_classroom');
+        sessionStorage.clear();
+      } catch {}
+      return null;
+    }
+
+    const adminSessionStr = sessionStorage.getItem('classmate_admin_session');
+    if (adminSessionStr) {
+      const parsed = JSON.parse(adminSessionStr);
+      if (parsed && parsed.id) return parsed;
+    }
+    const tabUserStr = sessionStorage.getItem('classmate_current_user');
+    if (tabUserStr) {
+      const parsed = JSON.parse(tabUserStr);
+      if (parsed && parsed.id) return parsed;
+    }
+    const savedUserStr = localStorage.getItem('classmate_current_user');
+    if (savedUserStr) {
+      const parsed = JSON.parse(savedUserStr);
+      if (parsed && parsed.id) return parsed;
+    }
+  } catch {}
+  return null;
+}
+
+function getInitialCode(): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('code')?.toUpperCase() || '';
+  } catch {
+    return '';
+  }
+}
+
 export function useUserSession(classroom: Classroom, students: User[], isDataLoaded?: boolean) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isSessionLoaded, setIsSessionLoaded] = useState(false);
-  const [prefilledCode, setPrefilledCode] = useState('');
+  const [prefilledCode, setPrefilledCode] = useState<string>('');
 
-  // Restore session from localStorage & check ?code= or ?reset= URL parameter
+  // Hydrate session and query parameters cleanly on client mount
   useEffect(() => {
-    // Watchdog fallback: Guarantee session is marked loaded within 200ms no matter what
-    const watchdog = setTimeout(() => {
-      setIsSessionLoaded(true);
-    }, 200);
-
     try {
-      if (typeof window !== 'undefined') {
-        let params: URLSearchParams | null = null;
-        try {
-          params = new URLSearchParams(window.location.search);
-        } catch {
-          // ignore search params error
-        }
-
-        if (params) {
-          // Support complete reset to first-time visitor mode via URL query parameter
-          if (params.get('reset') === 'true' || params.get('fresh') === 'true' || params.get('logout') === 'true') {
-            try {
-              localStorage.removeItem('classmate_current_user');
-              localStorage.removeItem('classmate_session_token');
-              localStorage.removeItem('classmate_classroom');
-              sessionStorage.clear();
-            } catch {}
-            setCurrentUser(null);
-            setIsSessionLoaded(true);
-            try {
-              window.history.replaceState({}, document.title, window.location.pathname);
-            } catch {}
-            return;
-          }
-
-          const codeParam = params.get('code');
-          if (codeParam) {
-            setPrefilledCode(codeParam.toUpperCase());
-          }
-        }
-
-        // 1. Check active admin tab session
-        try {
-          const adminSessionStr = sessionStorage.getItem('classmate_admin_session');
-          if (adminSessionStr) {
-            const parsed = JSON.parse(adminSessionStr);
-            if (parsed && parsed.id) {
-              setCurrentUser(parsed);
-              setIsSessionLoaded(true);
-              return;
-            }
-          }
-        } catch (e) {
-          console.warn('Failed to parse admin session:', e);
-        }
-
-        // 2. Check active tab session (for shared lab PCs where Remember Me is off)
-        try {
-          const tabUserStr = sessionStorage.getItem('classmate_current_user');
-          if (tabUserStr) {
-            const parsed = JSON.parse(tabUserStr);
-            if (parsed && parsed.id) {
-              setCurrentUser(parsed);
-              setIsSessionLoaded(true);
-              return;
-            }
-          }
-        } catch (e) {
-          console.warn('Failed to parse tab session:', e);
-        }
-
-        // 3. Check persistent device storage (for personal devices with Remember Me)
-        try {
-          const savedUserStr = localStorage.getItem('classmate_current_user');
-          if (savedUserStr) {
-            const parsed = JSON.parse(savedUserStr);
-            if (parsed && parsed.id) {
-              setCurrentUser(parsed);
-            }
-          }
-        } catch (e) {
-          console.warn('Failed to parse saved session:', e);
-        }
+      const user = getInitialUser();
+      if (user) {
+        setCurrentUser(user);
       }
-    } catch (err) {
-      console.warn('Exception during session restoration:', err);
-    } finally {
-      setIsSessionLoaded(true);
-      clearTimeout(watchdog);
-    }
-  }, []); // Run once on client mount
+
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code')?.toUpperCase() || '';
+      if (code) {
+        setPrefilledCode(code);
+      }
+
+      if (params.get('reset') === 'true' || params.get('fresh') === 'true' || params.get('logout') === 'true') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } catch {}
+
+    setIsSessionLoaded(true);
+  }, []);
 
   const handleUserLoggedIn = async (user: User, rememberMe: boolean = true) => {
     setCurrentUser(user);
@@ -235,7 +210,7 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
 
     // If no classroom exists in database, sign out stale local session
     if (!classroom?.id) {
-      handleSignOut();
+      setTimeout(() => handleSignOut(), 0);
       return;
     }
 
@@ -256,14 +231,14 @@ export function useUserSession(classroom: Classroom, students: User[], isDataLoa
 
       if (!legitimateAdmin) {
         console.warn('Session security: Admin user not matched to current classroom roster. Signing out...');
-        handleSignOut();
+        setTimeout(() => handleSignOut(), 0);
       }
     } else {
       // Validate that the student exists in the classroom's roster
       const isEnrolled = students.some((s) => s.id === currentUser.id);
       if (!isEnrolled) {
         console.warn(`Student ${currentUser.name} (${currentUser.id}) not found in current classroom roster. Signing out...`);
-        handleSignOut();
+        setTimeout(() => handleSignOut(), 0);
       }
     }
   }, [isSessionLoaded, isDataLoaded, currentUser, classroom.id, classroom.adminId, classroom.adminEmail, students]);

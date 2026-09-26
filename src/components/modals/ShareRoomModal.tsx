@@ -54,8 +54,8 @@ export const ShareRoomModal: React.FC<ShareRoomModalProps> = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Join ${classroom.name} on Classmate`,
-          text: `Join our classroom ${classroom.name} (${classroom.section}) on Classmate!\nClass Code: ${classroom.code}\nLink: ${joinUrl}`,
+          title: `Join ${classroom.name} on iClassmates`,
+          text: `Join our classroom ${classroom.name} (${classroom.section}) on iClassmates!\nClass Code: ${classroom.code}\nLink: ${joinUrl}`,
           url: joinUrl,
         });
       } catch {

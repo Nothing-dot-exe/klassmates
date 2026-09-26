@@ -23,8 +23,8 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
       : (currentUser.name || 'User');
 
   return (
-    <div className="p-3 border-t border-card-border dark:border-zinc-800/80 bg-card dark:bg-card transition-colors">
-      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-card-muted border border-card-border dark:border-zinc-800/80 gap-2 shadow-sm">
+    <div className="p-3 border-t border-card-border bg-card transition-colors">
+      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-card-muted border border-card-border gap-2 shadow-sm">
         <button
           type="button"
           onClick={onOpenSettings}
@@ -35,9 +35,9 @@ export const SidebarUserFooter: React.FC<SidebarUserFooterProps> = ({
             <img
               src={getSafeAvatar(currentUser.avatar, displayName)}
               alt={displayName}
-              className="w-9 h-9 rounded-xl object-cover bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700"
+              className="w-9 h-9 rounded-xl object-cover bg-slate-200 dark:bg-zinc-800 border border-card-border"
             />
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#10172A]" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-card" />
           </div>
 
           <div className="min-w-0 flex-1">

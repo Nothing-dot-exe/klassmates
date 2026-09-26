@@ -15,7 +15,6 @@ interface SidebarDirectMessagesProps {
   messages?: Record<string, ChatMessage[]>;
   currentUserId?: string;
   onlineUserIds?: Set<string>;
-  onOpenShare?: () => void;
 }
 
 export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
@@ -28,7 +27,6 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
   messages = {},
   currentUserId = '',
   onlineUserIds,
-  onOpenShare,
 }) => {
   const [copied, setCopied] = useState(false);
   const [readTimestamps, setReadTimestamps] = useState<Record<string, number>>(() => {
@@ -82,14 +80,14 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
             Add via Admin Panel or share Class Code with your batchmates.
           </p>
           <button
-            onClick={onOpenShare ? onOpenShare : handleCopyCode}
+            onClick={handleCopyCode}
             type="button"
             className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 active:scale-95 text-indigo-600 dark:text-indigo-300 text-[11px] font-semibold tracking-wide border border-slate-200 dark:border-zinc-700 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span>{onOpenShare ? 'Share & QR Code' : copied ? 'Code Copied!' : 'Share Class Code'}</span>
+            <span>{copied ? 'Code Copied!' : 'Copy Class Code'}</span>
           </button>
         </div>
       ) : (
@@ -102,8 +100,8 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
             : st.status === 'online';
 
           // Retrieve messages for this DM conversation
-          const conversationKey = currentUserId ? getDmConversationKey(currentUserId, st.id) : `dm_${st.id}`;
-          const dmMessages = messages[conversationKey] || messages[`dm_${st.id}`] || [];
+          const conversationKey = currentUserId ? getDmConversationKey(currentUserId, st.id) : null;
+          const dmMessages = conversationKey ? (messages[conversationKey] || []) : [];
           const lastMsg = dmMessages.length > 0 ? dmMessages[dmMessages.length - 1] : null;
 
           // Compute unread count from this student
@@ -163,7 +161,7 @@ export const SidebarDirectMessages: React.FC<SidebarDirectMessagesProps> = ({
                   />
                   {/* Status Indicator Dot: Green if Online, Red if Offline */}
                   <span
-                    className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-white dark:ring-[#121214] transition-colors ${
+                    className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-card transition-colors ${
                       isOnline
                         ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]'
                         : 'bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.4)]'

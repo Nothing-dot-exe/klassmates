@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Phone, Mail, MessageSquare, Crown } from 'lucide-react';
+import { Phone, MessageSquare, Crown } from 'lucide-react';
 import { User } from '@/types';
 import { getSafeAvatar } from '@/lib/avatarUtils';
 
@@ -20,8 +20,8 @@ export const ClassRepBanner: React.FC<ClassRepBannerProps> = ({
   const crName = admin.nickname?.trim() || admin.name;
 
   return (
-    <div className="relative rounded-2xl bg-gradient-to-b from-[#FAF7FD] to-[#F1EBF5] dark:from-[#222226] dark:to-[#0E1528] border border-amber-500/30 p-3.5 shadow-xl shadow-black/20 dark:shadow-black/40 overflow-hidden transition-colors">
-      {/* Decorative amber corner glow from Stitch */}
+    <div className="relative rounded-2xl bg-gradient-to-b from-card to-card-muted border border-amber-500/30 p-3.5 shadow-lg shadow-black/5 dark:shadow-black/30 overflow-hidden transition-colors">
+      {/* Decorative amber corner glow */}
       <div className="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
 
       {/* Header: Title & Badges */}
@@ -52,7 +52,7 @@ export const ClassRepBanner: React.FC<ClassRepBannerProps> = ({
               />
             </div>
           </div>
-          <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#FAF7FD] dark:border-[#0E1528] rounded-full" />
+          <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-card rounded-full" />
         </div>
 
         <div className="min-w-0 flex-1">
@@ -78,21 +78,6 @@ export const ClassRepBanner: React.FC<ClassRepBannerProps> = ({
             </span>
             <span className="text-[11px] font-mono font-medium tracking-wide text-slate-900 dark:text-zinc-200 truncate">
               {admin.phone}
-            </span>
-          </a>
-        )}
-
-        {admin.email && (
-          <a
-            href={`mailto:${admin.email}`}
-            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl bg-card dark:bg-zinc-900/60 hover:bg-card-muted dark:hover:bg-zinc-800/80 border border-card-border dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:text-slate-950 dark:hover:text-white transition-all group shadow-2xs"
-            title="Email Class Representative"
-          >
-            <span className="w-6 h-6 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-500 dark:text-indigo-400 group-hover:bg-indigo-500/25 transition-colors flex-shrink-0">
-              <Mail className="w-3 h-3" />
-            </span>
-            <span className="text-[11px] font-medium tracking-wide uppercase text-slate-900 dark:text-zinc-200 truncate">
-              {admin.email}
             </span>
           </a>
         )}

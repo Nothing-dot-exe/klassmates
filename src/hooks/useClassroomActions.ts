@@ -32,7 +32,7 @@ export function useClassroomActions({
   setStudents,
   pendingRequests,
   setPendingRequests,
-  passwordResetRequests,
+  passwordResetRequests: _passwordResetRequests,
   setPasswordResetRequests,
   documents,
   setDocuments,

@@ -9,7 +9,7 @@ import {
   dbFetchPasswordResetRequests,
 } from '@/lib/databaseService';
 import { Classroom, User, DocumentItem, ChatMessage, PendingRequest, PasswordResetRequest } from '@/types';
-import { getCurrentSessionUserId } from '@/lib/chatUtils';
+import { getCurrentSessionUserId, isMessageDeleted } from '@/lib/chatUtils';
 
 export interface LoadedClassroomData {
   activeClass: Classroom | null;
@@ -64,17 +64,15 @@ export async function loadInitialClassroomData(
     if (typeof window !== 'undefined' && dbMsgs) {
       try {
         const currentSessionUserId = getCurrentSessionUserId();
-        if (currentSessionUserId) {
-          const saved: string[] = JSON.parse(localStorage.getItem(`classmate_deleted_for_me_${currentSessionUserId}`) || '[]');
-          if (saved.length > 0) {
-            const delSet = new Set(saved);
-            const filtered: Record<string, ChatMessage[]> = {};
-            Object.entries(dbMsgs).forEach(([k, list]) => {
-              filtered[k] = list.filter((m) => !delSet.has(m.id));
-            });
-            cleanedMessages = filtered;
-          }
-        }
+        const saved: string[] = currentSessionUserId
+          ? JSON.parse(localStorage.getItem(`classmate_deleted_for_me_${currentSessionUserId}`) || '[]')
+          : [];
+        const delSet = new Set(saved);
+        const filtered: Record<string, ChatMessage[]> = {};
+        Object.entries(dbMsgs).forEach(([k, list]) => {
+          filtered[k] = list.filter((m) => !delSet.has(m.id) && !isMessageDeleted(m.id));
+        });
+        cleanedMessages = filtered;
       } catch {}
     }
 

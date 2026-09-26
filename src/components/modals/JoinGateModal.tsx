@@ -44,7 +44,6 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
 
   const publicAdminName = classroom.adminName || adminUser.name;
   const publicAdminPhone = classroom.adminPhone || adminUser.phone || '';
-  const publicAdminEmail = classroom.adminEmail || adminUser.email || '';
 
   const otp = useJoinGateOtp(s.newAdminEmail, s.studentEmail, s.setErrorMessage, s.setSuccessMessage);
 
@@ -101,46 +100,62 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
     <div className="fixed inset-0 z-50 flex items-stretch sm:items-center justify-center p-0 sm:p-5 overflow-y-auto no-scrollbar animate-in fade-in">
       <div className="bg-card/90 sm:bg-card/80 border-0 sm:border border-white/40 dark:border-white/10 rounded-none sm:rounded-[1.75rem] w-full max-w-lg overflow-hidden shadow-none sm:shadow-[0_30px_80px_-20px_rgba(88,70,245,0.45)] backdrop-blur-2xl flex flex-col my-0 sm:my-auto min-h-[100dvh] sm:min-h-0 max-h-[100dvh] sm:max-h-[96dvh] transition-colors">
         {/* Header */}
-        <div className="p-5 sm:p-7 pb-5 pt-[max(3.25rem,env(safe-area-inset-top))] sm:pt-7 border-b border-card-border/80 text-center space-y-2.5 flex-shrink-0 relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(88,70,245,0.16),transparent_58%)] dark:bg-[radial-gradient(circle_at_top,rgba(124,108,255,0.22),transparent_58%)]" />
-          {s.navMode !== 'welcome' && !s.isWaitingApproval && !s.forceNewPasswordStudent && (
-            <button
-              onClick={() => {
-                s.setNavMode('welcome');
-                s.setErrorMessage('');
-                s.setSuccessMessage('');
-                s.setIsForgotPassword(false);
-              }}
-              className="btn btn-secondary absolute left-4 top-[max(1rem,env(safe-area-inset-top))] sm:left-5 sm:top-5 min-h-9 px-2.5 py-1.5 z-10"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back</span>
-            </button>
-          )}
+        <div className="px-4 py-3 sm:px-6 sm:py-5 pt-[max(0.85rem,env(safe-area-inset-top))] border-b border-card-border/80 text-center flex-shrink-0 relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(88,70,245,0.15),transparent_58%)] dark:bg-[radial-gradient(circle_at_top,rgba(124,108,255,0.2),transparent_58%)]" />
 
-          {/* Theme Toggle (Day / Dark) */}
-          <div className="absolute right-4 top-4 sm:right-5 sm:top-5 z-10">
-            <ThemeToggle />
+          {/* Top Bar: Back Action, Academic Hub Pill, and Theme Switcher */}
+          <div className="relative flex items-center justify-between gap-2 mb-2 sm:mb-2.5">
+            <div className="w-20 flex items-center justify-start">
+              {s.navMode !== 'welcome' && !s.isWaitingApproval && !s.forceNewPasswordStudent ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (s.isForgotPassword) {
+                      s.setIsForgotPassword(false);
+                    } else {
+                      s.setNavMode('welcome');
+                    }
+                    s.setErrorMessage('');
+                    s.setSuccessMessage('');
+                  }}
+                  className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-xl border border-card-border bg-card hover:bg-card-muted dark:bg-[#1a2332]/90 dark:hover:bg-[#222e42] text-foreground text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer backdrop-blur-md"
+                  title="Go back"
+                  aria-label="Go back"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span>Back</span>
+                </button>
+              ) : null}
+            </div>
+
+            {/* Academic Hub Pill */}
+            <div className="relative inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50/90 dark:bg-indigo-950/60 text-primary border border-indigo-200/80 dark:border-indigo-500/30 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.12em] shadow-2xs">
+              <School className="w-3 h-3 text-indigo-500 dark:text-indigo-400" />
+              <span>iClassmates Hub</span>
+            </div>
+
+            {/* Theme Toggle */}
+            <div className="w-20 flex items-center justify-end">
+              <ThemeToggle className="h-8 px-2 rounded-xl" />
+            </div>
           </div>
 
-          <div className="relative inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50/90 dark:bg-indigo-950/50 text-primary border border-indigo-200/80 dark:border-indigo-500/30 text-[10px] font-bold uppercase tracking-[0.14em]">
-            <School className="w-3.5 h-3.5" />
-            Built for class batches
+          {/* Modal Title & Subtitle */}
+          <div className="space-y-1 relative">
+            <h2 className="text-xl sm:text-2xl font-bold font-display text-foreground tracking-tight">
+              {s.navMode === 'welcome' && 'Your class, one space'}
+              {s.navMode === 'create_room' && 'Create a Classroom'}
+              {s.navMode === 'join_room' && 'Join Classroom'}
+              {s.navMode === 'signin' && 'Welcome back'}
+            </h2>
+
+            <p className="text-xs sm:text-sm text-muted max-w-sm mx-auto leading-normal sm:leading-relaxed">
+              {s.navMode === 'welcome' && 'Create a private classroom for your batch, or join with a class code.'}
+              {s.navMode === 'create_room' && 'Set up a private space and register as the classroom administrator.'}
+              {s.navMode === 'join_room' && 'Enter your class code and request enrollment from your Class Representative.'}
+              {s.navMode === 'signin' && 'Open your channels, notes, and study threads.'}
+            </p>
           </div>
-
-          <h2 className="relative text-[1.7rem] sm:text-[2rem] font-display text-foreground">
-            {s.navMode === 'welcome' && 'Your class, one space'}
-            {s.navMode === 'create_room' && 'Create a Classroom'}
-            {s.navMode === 'join_room' && 'Join Classroom'}
-            {s.navMode === 'signin' && 'Welcome back'}
-          </h2>
-
-          <p className="relative text-sm text-muted max-w-sm mx-auto leading-relaxed">
-            {s.navMode === 'welcome' && 'Create a private classroom for your batch, or join with a class code.'}
-            {s.navMode === 'create_room' && 'Set up a private space and register as the classroom administrator.'}
-            {s.navMode === 'join_room' && 'Enter your class code and request enrollment from your Class Representative.'}
-            {s.navMode === 'signin' && 'Open your channels, notes, and study threads.'}
-          </p>
         </div>
 
         {/* Body */}
@@ -253,7 +268,6 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
               pendingRollNo={s.pendingRollNo}
               adminName={publicAdminName}
               adminPhone={publicAdminPhone}
-              adminEmail={publicAdminEmail}
               onCancel={() => s.setIsWaitingApproval(false)}
             />
           )}

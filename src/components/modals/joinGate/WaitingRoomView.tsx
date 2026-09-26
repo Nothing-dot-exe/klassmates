@@ -1,11 +1,10 @@
 import React from 'react';
-import { Clock, ShieldCheck, Phone, Mail } from 'lucide-react';
+import { Clock, ShieldCheck, Phone } from 'lucide-react';
 
 interface WaitingRoomViewProps {
   pendingRollNo: string;
   adminName: string;
   adminPhone?: string;
-  adminEmail?: string;
   onCancel: () => void;
 }
 
@@ -13,7 +12,6 @@ export const WaitingRoomView: React.FC<WaitingRoomViewProps> = ({
   pendingRollNo,
   adminName,
   adminPhone,
-  adminEmail,
   onCancel,
 }) => {
   return (
@@ -53,14 +51,7 @@ export const WaitingRoomView: React.FC<WaitingRoomViewProps> = ({
               <Phone className="w-3.5 h-3.5 text-indigo-500" /> {adminPhone}
             </a>
           )}
-          {adminEmail && (
-            <a
-              href={`mailto:${adminEmail}`}
-              className="text-zinc-800 dark:text-zinc-300 hover:text-indigo-500 dark:hover:text-indigo-400 truncate flex items-center gap-1 transition"
-            >
-              <Mail className="w-3.5 h-3.5 text-indigo-500" /> {adminEmail}
-            </a>
-          )}
+
         </div>
       </div>
 

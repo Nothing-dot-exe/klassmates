@@ -87,7 +87,7 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
         isHighExamValue: isHighExamValue,
         source: 'direct_upload',
         downloadUrl: `data:text/markdown;charset=utf-8,${encodeURIComponent(newContent || `# ${newTitle}\n\nStudy Notes`)}`,
-        tags: newTags ? newTags.split(',').map((t) => t.trim()).filter(Boolean) : ['Classmate', 'Notes'],
+        tags: newTags ? newTags.split(',').map((t) => t.trim()).filter(Boolean) : ['iClassmates', 'Notes'],
         content: newContent || `# ${newTitle}\n\nNotes created directly in Document Vault.`,
       };
       onAddDocument(newDoc);
@@ -124,7 +124,7 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
         isHighExamValue: isHighExamValue,
         source: 'direct_upload',
         downloadUrl,
-        tags: newTags ? newTags.split(',').map((t) => t.trim()).filter(Boolean) : ['Classmate', 'PDF'],
+        tags: newTags ? newTags.split(',').map((t) => t.trim()).filter(Boolean) : ['iClassmates', 'PDF'],
         content: contentVal,
       };
       onAddDocument(newDoc);

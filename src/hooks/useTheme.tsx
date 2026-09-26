@@ -30,21 +30,21 @@ function applyThemeToDocument(nextTheme: Theme) {
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('dark');
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          return savedTheme;
+        }
+      } catch {}
+    }
+    return 'dark';
+  });
 
   useEffect(() => {
-    try {
-      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
-      if (savedTheme === 'light' || savedTheme === 'dark') {
-        setThemeState(savedTheme);
-        applyThemeToDocument(savedTheme);
-      } else {
-        applyThemeToDocument('dark');
-      }
-    } catch {
-      applyThemeToDocument('dark');
-    }
-  }, []);
+    applyThemeToDocument(theme);
+  }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

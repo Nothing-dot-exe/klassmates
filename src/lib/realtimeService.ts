@@ -103,26 +103,33 @@ export function removeRealtimeChannel() {
 export function broadcastNewMessage(message: ChatMessage, classroomId: string) {
   if (!isSupabaseConfigured() || !supabase) return;
 
-  // Ultra-fast primary delivery via existing persistent room WebSocket
-  const channel = getRealtimeChannel(classroomId);
-  if (channel) {
-    if (channel.state !== 'joined' && channel.state !== 'joining') {
-      channel.subscribe();
+  // Case 1: Group Channel message -> Broadcast to shared classroom channel
+  if (message.channelId) {
+    const channel = getRealtimeChannel(classroomId);
+    if (channel) {
+      if (channel.state !== 'joined' && channel.state !== 'joining') {
+        channel.subscribe();
+      }
+      channel
+        .send({
+          type: 'broadcast',
+          event: 'new_message',
+          payload: message,
+        })
+        .catch((err) => console.warn('Realtime message broadcast failed:', err));
     }
-    channel
-      .send({
-        type: 'broadcast',
-        event: 'new_message',
-        payload: message,
-      })
-      .catch((err) => console.warn('Realtime message broadcast failed:', err));
+    return;
   }
 
-  // Dual-dispatch: If direct message and recipient has an open user channel, also deliver directly
+  // Case 2: 1-on-1 Direct Message -> Strictly dispatch ONLY to recipient and sender personal channels
+  // NEVER broadcast DMs to the public classroom channel to guarantee 100% privacy!
   if (message.recipientId) {
-    const userChan = getUserRealtimeChannel(message.recipientId);
-    if (userChan && userChan.state === 'joined') {
-      userChan
+    const recipientChan = getUserRealtimeChannel(message.recipientId);
+    if (recipientChan) {
+      if (recipientChan.state !== 'joined' && recipientChan.state !== 'joining') {
+        recipientChan.subscribe();
+      }
+      recipientChan
         .send({
           type: 'broadcast',
           event: 'new_message',
@@ -130,14 +137,48 @@ export function broadcastNewMessage(message: ChatMessage, classroomId: string) {
         })
         .catch(() => {});
     }
+
+    if (message.senderId && message.senderId !== message.recipientId) {
+      const senderChan = getUserRealtimeChannel(message.senderId);
+      if (senderChan) {
+        if (senderChan.state !== 'joined' && senderChan.state !== 'joining') {
+          senderChan.subscribe();
+        }
+        senderChan
+          .send({
+            type: 'broadcast',
+            event: 'new_message',
+            payload: message,
+          })
+          .catch(() => {});
+      }
+    }
   }
 }
 
 /**
  * Broadcasts user typing status across active participants in real-time (< 10ms).
+ * DMs are strictly routed to the recipient's personal channel to avoid leaking conversation activity.
  */
 export function broadcastTyping(payload: TypingPayload, classroomId: string, recipientId?: string) {
   if (!isSupabaseConfigured() || !supabase) return;
+
+  if (recipientId) {
+    const userChan = getUserRealtimeChannel(recipientId);
+    if (userChan) {
+      if (userChan.state !== 'joined' && userChan.state !== 'joining') {
+        userChan.subscribe();
+      }
+      userChan
+        .send({
+          type: 'broadcast',
+          event: 'typing_status',
+          payload: { ...payload, recipientId },
+        })
+        .catch(() => {});
+    }
+    return;
+  }
 
   const channel = getRealtimeChannel(classroomId);
   if (channel) {
@@ -148,7 +189,7 @@ export function broadcastTyping(payload: TypingPayload, classroomId: string, rec
       .send({
         type: 'broadcast',
         event: 'typing_status',
-        payload: { ...payload, recipientId },
+        payload,
       })
       .catch((err) => console.warn('Realtime typing broadcast failed:', err));
   }

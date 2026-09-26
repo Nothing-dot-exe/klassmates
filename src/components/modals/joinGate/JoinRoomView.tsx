@@ -85,7 +85,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
         <PublicAdminCard classroom={resolvedClassroom} />
       ) : joinCode.length >= 4 ? (
         <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-300 text-xs flex items-center gap-2 animate-in fade-in">
-          <span>No classroom found with code <strong className="font-mono text-indigo-600 dark:text-indigo-400">{joinCode}</strong>. Please check the code with your Class Representative.</span>
+          <span>No classroom found with code <strong className="font-mono text-indigo-600 dark:text-indigo-400 break-all">{joinCode}</strong>. Please check the code with your Class Representative.</span>
         </div>
       ) : (
         <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-card-muted border border-zinc-200 dark:border-card-border text-zinc-600 dark:text-zinc-400 text-xs text-center font-medium">

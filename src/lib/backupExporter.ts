@@ -8,13 +8,17 @@ export function exportAndDownloadRoomBackup(
   pendingRequests: PendingRequest[],
   passwordResetRequests: PasswordResetRequest[]
 ) {
+  const sanitizedClassroom = { ...classroom, adminPassword: '' };
+  const sanitizedRoster = students.map((s) => ({ ...s, password: '' }));
+  const sanitizedPendingRequests = pendingRequests.map((r) => ({ ...r, password: '' }));
+
   const backupArchive = {
     exportTimestamp: new Date().toISOString(),
-    classroomInfo: classroom,
-    roster: students,
+    classroomInfo: sanitizedClassroom,
+    roster: sanitizedRoster,
     chatHistory: messages,
     documentsCatalog: documents,
-    pendingJoinRequests: pendingRequests,
+    pendingJoinRequests: sanitizedPendingRequests,
     passwordResetRequests: passwordResetRequests,
   };
 

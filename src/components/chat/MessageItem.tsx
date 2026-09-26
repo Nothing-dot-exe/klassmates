@@ -68,6 +68,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       currentUserRole={currentUserRole}
       isHighlighted={isHighlighted}
       isFirst={isFirst}
+      isLast={isLast}
       onOpenDocument={onOpenDocument}
       onReact={onReact}
       onDeleteMessage={onDeleteMessage}

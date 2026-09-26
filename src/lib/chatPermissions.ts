@@ -38,13 +38,9 @@ export function evaluateCanDeleteForEveryone(params: CanDeleteForEveryoneParams)
   if (!params.currentUser || !params.targetMessage) return false;
 
   const isAuthor = Boolean(
-    params.targetMessage.senderId === params.currentUser.id ||
-    (Boolean(params.targetMessage.senderRollNo) &&
-      Boolean(params.currentUser.rollNo) &&
-      params.targetMessage.senderRollNo?.toLowerCase() === params.currentUser.rollNo?.toLowerCase()) ||
-    (Boolean(params.targetMessage.senderName) &&
-      Boolean(params.currentUser.name) &&
-      params.targetMessage.senderName?.toLowerCase() === params.currentUser.name?.toLowerCase())
+    params.targetMessage.senderId &&
+    params.currentUser.id &&
+    params.targetMessage.senderId === params.currentUser.id
   );
 
   const isAdmin = Boolean(

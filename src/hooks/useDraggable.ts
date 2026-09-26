@@ -10,11 +10,13 @@ export function useDraggable(isOpen: boolean) {
     startY: 0,
   });
 
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setPosition({ x: 0, y: 0 });
     }
-  }, [isOpen]);
+  }
 
   useEffect(() => {
     if (!isDragging) return;

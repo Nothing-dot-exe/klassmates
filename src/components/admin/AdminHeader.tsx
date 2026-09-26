@@ -231,7 +231,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           {/* Card 1: Enrolled */}
           <div
             onClick={() => setActiveTab('roster')}
-            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-card hover:bg-slate-50 dark:hover:bg-[#1f2c28] border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center gap-2.5 group shadow-xs"
+            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-card hover:bg-slate-50 dark:hover:bg-card-muted/80 border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center gap-2.5 group shadow-xs"
           >
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-indigo-50 dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-zinc-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <Users className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -264,7 +264,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             className={`p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border transition duration-200 cursor-pointer flex items-center gap-2.5 group shadow-xs ${
               pendingCount > 0
                 ? 'bg-amber-50/70 dark:bg-amber-950/20 border-amber-300 dark:border-amber-800/60 hover:border-amber-400 shadow-glow-gold'
-                : 'bg-card border-slate-200 dark:border-zinc-800/80 hover:bg-slate-50 dark:hover:bg-[#1f2c28]'
+                : 'bg-card border-slate-200 dark:border-zinc-800/80 hover:bg-slate-50 dark:hover:bg-card-muted/80'
             }`}
           >
             <div
@@ -288,7 +288,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           {/* Card 4: Invite Code */}
           <div
             onClick={onCopyCode}
-            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-card hover:bg-slate-50 dark:hover:bg-[#1f2c28] border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center justify-between gap-1.5 group shadow-xs"
+            className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-card hover:bg-slate-50 dark:hover:bg-card-muted/80 border border-slate-200 dark:border-zinc-800/80 transition duration-200 cursor-pointer flex items-center justify-between gap-1.5 group shadow-xs"
             title="Click to copy Class Code"
           >
             <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">

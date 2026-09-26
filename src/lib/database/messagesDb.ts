@@ -32,9 +32,12 @@ export const dbFetchMessages = async (classroomId: string): Promise<Record<strin
       .select('*')
       .eq('classroom_id', classroomId);
 
-    // Privacy at query level: Only download channel messages or DMs involving the current student
+    // Privacy at query level: Only download group channel messages or DMs involving the verified student
     if (sessionUserId) {
       query = query.or(`channel_id.not.is.null,sender_id.eq.${sessionUserId},recipient_id.eq.${sessionUserId}`);
+    } else {
+      // Without an authenticated session user, strictly restrict query to group channels (never download DMs)
+      query = query.not('channel_id', 'is', null);
     }
 
     const { data, error } = await query.order('created_at', { ascending: true });
@@ -73,28 +76,20 @@ export const dbFetchMessages = async (classroomId: string): Promise<Record<strin
         replyTo: row.reply_to || undefined,
       };
 
-      // Defense-in-depth: Double check DM privacy
+      // Defense-in-depth: Strict DM privacy guard
       if (!msg.channelId && msg.recipientId) {
-        if (sessionUserId && msg.senderId !== sessionUserId && msg.recipientId !== sessionUserId) {
+        if (!sessionUserId || (msg.senderId !== sessionUserId && msg.recipientId !== sessionUserId)) {
           return;
         }
       }
 
+      // Index strictly by canonical key (e.g., 'chn_general' or 'dm_minId_maxId')
+      // DMs must never be indexed under single-user alias keys to eliminate chat leaks
       const key = getConversationKey(msg.channelId, msg.senderId, msg.recipientId);
-      const targetKeys = [key];
-
-      // Support legacy alias lookups (e.g., dm_${otherUserId})
-      if (!msg.channelId) {
-        if (msg.recipientId) targetKeys.push(`dm_${msg.recipientId}`);
-        if (msg.senderId) targetKeys.push(`dm_${msg.senderId}`);
+      if (!grouped[key]) grouped[key] = [];
+      if (!grouped[key].some((m) => m.id === msg.id)) {
+        grouped[key].push(msg);
       }
-
-      targetKeys.forEach((k) => {
-        if (!grouped[k]) grouped[k] = [];
-        if (!grouped[k].some((m) => m.id === msg.id)) {
-          grouped[k].push(msg);
-        }
-      });
     });
 
     return grouped;
@@ -200,6 +195,11 @@ export const dbClearConversationMessages = async (
   dmSenderId?: string
 ): Promise<boolean> => {
   if (!isSupabaseConfigured() || !supabase) return false;
+
+  if (!channelId && (!dmRecipientId || !dmSenderId)) {
+    console.warn('dbClearConversationMessages aborted: Missing channelId or direct message identifiers.');
+    return false;
+  }
 
   try {
     let query = supabase.from('messages').delete().eq('classroom_id', classroomId);

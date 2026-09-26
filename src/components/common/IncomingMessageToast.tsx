@@ -21,38 +21,6 @@ interface IncomingMessageToastProps {
   onOpenConversation: (notification: IncomingNotificationData) => void;
 }
 
-/**
- * Plays a pleasant, subtle two-tone audio notification using Web Audio API.
- * Works seamlessly in all modern browsers without loading external audio assets.
- */
-function playNotificationChime() {
-  try {
-    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-
-    const now = ctx.currentTime;
-    const osc1 = ctx.createOscillator();
-    const gain1 = ctx.createGain();
-
-    osc1.type = 'sine';
-    osc1.frequency.setValueAtTime(587.33, now); // D5
-    osc1.frequency.exponentialRampToValueAtTime(880, now + 0.12); // A5
-
-    gain1.gain.setValueAtTime(0.001, now);
-    gain1.gain.linearRampToValueAtTime(0.12, now + 0.02);
-    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-
-    osc1.connect(gain1);
-    gain1.connect(ctx.destination);
-
-    osc1.start(now);
-    osc1.stop(now + 0.3);
-  } catch {
-    // Graceful fallback if audio context blocked by autoplay policy
-  }
-}
-
 export const IncomingMessageToast: React.FC<IncomingMessageToastProps> = ({
   notification,
   onDismiss,
@@ -61,8 +29,7 @@ export const IncomingMessageToast: React.FC<IncomingMessageToastProps> = ({
   useEffect(() => {
     if (!notification) return;
 
-    playNotificationChime();
-
+    // Toast remains purely visual and silent without intrusive audio beeps
     const timer = setTimeout(() => {
       onDismiss();
     }, 4500);

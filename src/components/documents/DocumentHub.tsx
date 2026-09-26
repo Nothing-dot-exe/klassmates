@@ -59,13 +59,13 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
                   <button
                     type="button"
                     onClick={onBack}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-card-muted dark:bg-card-muted text-slate-700 dark:text-zinc-200 hover:text-slate-950 dark:hover:text-white border border-card-border dark:border-zinc-800 text-xs font-bold transition active:scale-95 cursor-pointer"
+                    className="btn btn-secondary py-1 px-3 min-h-8 text-xs"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to Chat</span>
                   </button>
                 )}
-                <span className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-card-muted dark:bg-zinc-800 text-slate-900 dark:text-zinc-200 border border-card-border dark:border-zinc-700 flex-shrink-0 shadow-2xs">
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-card-muted text-foreground border border-card-border flex-shrink-0 shadow-2xs">
                   📚 Student Knowledge Vault
                 </span>
                 <span className="text-[11px] sm:text-xs text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5 font-semibold bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 rounded-full">
@@ -83,7 +83,7 @@ export const DocumentHub: React.FC<DocumentHubProps> = ({ documents, onAddDocume
 
             <button
               onClick={() => setIsNewDocModalOpen(true)}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:opacity-95 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-glow-purple transition active:scale-95 cursor-pointer flex-shrink-0"
+              className="btn btn-primary w-full sm:w-auto"
             >
               <Plus className="w-4 h-4" />
               <span>Add Document / Note</span>

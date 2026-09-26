@@ -84,3 +84,49 @@ export function getCurrentSessionUserId(): string | null {
   }
   return null;
 }
+
+const inMemoryDeletedIds = new Set<string>();
+
+/**
+ * Records a message ID into a deletion tombstone register.
+ * Prevents in-flight polling, background syncs, and late-arriving events
+ * from resurrecting a deleted message on the screen.
+ */
+export function recordDeletedMessageId(messageId: string): void {
+  if (!messageId) return;
+  inMemoryDeletedIds.add(messageId);
+  if (typeof window !== 'undefined') {
+    try {
+      const key = 'classmate_tombstone_deleted_ids';
+      const existing: string[] = JSON.parse(sessionStorage.getItem(key) || '[]');
+      if (!existing.includes(messageId)) {
+        existing.push(messageId);
+        if (existing.length > 500) existing.shift();
+        sessionStorage.setItem(key, JSON.stringify(existing));
+      }
+    } catch {
+      // quiet
+    }
+  }
+}
+
+/**
+ * Checks whether a message ID has been marked as deleted.
+ */
+export function isMessageDeleted(messageId: string): boolean {
+  if (!messageId) return false;
+  if (inMemoryDeletedIds.has(messageId)) return true;
+  if (typeof window !== 'undefined') {
+    try {
+      const key = 'classmate_tombstone_deleted_ids';
+      const existing: string[] = JSON.parse(sessionStorage.getItem(key) || '[]');
+      if (existing.includes(messageId)) {
+        inMemoryDeletedIds.add(messageId);
+        return true;
+      }
+    } catch {
+      // quiet
+    }
+  }
+  return false;
+}

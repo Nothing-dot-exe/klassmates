@@ -51,10 +51,10 @@ export const MessageReplyQuote: React.FC<MessageReplyQuoteProps> = ({
           >
             {replyTo.senderName}
           </span>
-          {replyTo.senderRollNo && (
+          {replyTo.senderRollNo && !replyTo.senderRollNo.includes('@') && (
             <span
               className={`text-[9px] font-mono px-1 py-0.2 rounded ${
-                isMine ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-700 border border-zinc-300'
+                isMine ? 'bg-white/20 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700'
               }`}
             >
               {replyTo.senderRollNo}
@@ -62,7 +62,7 @@ export const MessageReplyQuote: React.FC<MessageReplyQuoteProps> = ({
           )}
         </div>
 
-        <div className={`flex items-center gap-1.5 text-[11px] truncate mt-0.5 ${isMine ? 'text-zinc-300' : 'text-zinc-600'}`}>
+        <div className={`flex items-center gap-1.5 text-[11px] truncate mt-0.5 ${isMine ? 'text-zinc-300' : 'text-zinc-600 dark:text-zinc-400'}`}>
           {replyTo.imageUrl && (
             <span className="inline-flex items-center gap-0.5 font-medium">
               <ImageIcon className="w-3 h-3" /> Photo {cleanContent ? '•' : ''}

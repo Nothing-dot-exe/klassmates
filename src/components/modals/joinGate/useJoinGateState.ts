@@ -38,7 +38,7 @@ export const useJoinGateState = (prefilledCode: string, classroom: Classroom) =>
   const [newRoomSection, setNewRoomSection] = useState('');
   const [newRoomSemester, setNewRoomSemester] = useState('');
   const [newRoomInstitution, setNewRoomInstitution] = useState('');
-  const [newRoomCode, setNewRoomCode] = useState('CS-' + Math.floor(1000 + Math.random() * 9000));
+  const [newRoomCode, setNewRoomCode] = useState(() => 'CS-' + Math.floor(1000 + Math.random() * 9000));
 
   // Sign In Form State
   const [loginIdentifier, setLoginIdentifier] = useState('');

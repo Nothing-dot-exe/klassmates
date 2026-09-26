@@ -18,7 +18,6 @@ import { JoinGateModal } from '@/components/modals/JoinGateModal';
 import { MarkdownViewerModal } from '@/components/documents/MarkdownViewerModal';
 import { PdfViewerModal } from '@/components/documents/PdfViewerModal';
 import { StudentProfileModal } from '@/components/modals/StudentProfileModal';
-import { ShareRoomModal } from '@/components/modals/ShareRoomModal';
 import { IncomingMessageToast, IncomingNotificationData } from '@/components/common/IncomingMessageToast';
 import { ChatMessage } from '@/types';
 
@@ -79,7 +78,6 @@ export default function Home() {
   const [profileModalUser, setProfileModalUser] = useState<User | null>(null);
   const [activeMarkdownDoc, setActiveMarkdownDoc] = useState<DocumentItem | null>(null);
   const [activePdfDoc, setActivePdfDoc] = useState<DocumentItem | null>(null);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const handleOpenDocument = (doc: DocumentItem) => {
@@ -111,7 +109,7 @@ export default function Home() {
   const currentMessages =
     activeView === 'channel'
       ? (messages[selectedChannelId] || [])
-      : (messages[currentConversationKey] || (selectedDmUserId ? messages[`dm_${selectedDmUserId}`] : []) || []);
+      : (messages[currentConversationKey] || []);
 
   const [incomingNotification, setIncomingNotification] = useState<IncomingNotificationData | null>(null);
 
@@ -119,6 +117,8 @@ export default function Home() {
     const handleIncoming = (e: CustomEvent<ChatMessage>) => {
       const msg = e.detail;
       if (!msg || !currentUser || msg.senderId === currentUser.id) return;
+      // Direct messages must ONLY be delivered/notified to the targeted recipient
+      if (!msg.channelId && msg.recipientId !== currentUser.id) return;
 
       const isCurrentlyInThisChat =
         (msg.channelId && activeView === 'channel' && selectedChannelId === msg.channelId) ||
@@ -257,7 +257,6 @@ export default function Home() {
         isMobileSidebarOpen={isMobileSidebarOpen}
         onToggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
         onOpenProfile={(u) => setProfileModalUser(u)}
-        onOpenShare={() => setIsShareModalOpen(true)}
         onSignOut={handleSignOut}
       />
 
@@ -281,7 +280,6 @@ export default function Home() {
           onSelectDm={(userId) => { setSelectedDmUserId(userId); setActiveView('dm'); setIsMobileSidebarOpen(false); }}
           onSelectView={(view) => { setActiveView(view); setIsMobileSidebarOpen(false); }}
           onOpenSettings={() => setProfileModalUser(currentUser)}
-          onOpenShare={() => setIsShareModalOpen(true)}
           onOpenProfile={(u) => setProfileModalUser(u)}
           onSignOut={handleSignOut}
           messages={messages}
@@ -323,7 +321,6 @@ export default function Home() {
             onTyping={(isTyping) =>
               sendTypingStatus(isTyping, currentConversationKey, currentUser, activeView === 'dm' ? selectedDmUserId : undefined)
             }
-            onOpenShare={() => setIsShareModalOpen(true)}
           />
         )}
 
@@ -479,12 +476,7 @@ export default function Home() {
         />
       )}
 
-      {/* Share Classroom & QR Code Modal */}
-      <ShareRoomModal
-        isOpen={isShareModalOpen}
-        onClose={() => setIsShareModalOpen(false)}
-        classroom={classroom}
-      />
+
 
       {/* Social Media Style Incoming Message Toast Notification */}
       <IncomingMessageToast

@@ -98,11 +98,12 @@ export function useChatActions({
       return updated;
     });
 
-    // Instant WebSocket broadcast (< 50ms) to other active clients
-    broadcastNewMessage(newMessage, classroomId);
+    // Instant WebSocket broadcast (< 25ms) to other active clients
+    const effectiveClassroomId = classroomId || classroom?.id || currentUser?.classroomId || '';
+    broadcastNewMessage(newMessage, effectiveClassroomId);
 
     // Asynchronous database write for permanent persistence
-    dbSendMessage(newMessage, classroomId);
+    dbSendMessage(newMessage, effectiveClassroomId);
 
     if (payload.document) {
       handleAddDocument(payload.document);

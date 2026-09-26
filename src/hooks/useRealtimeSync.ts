@@ -176,11 +176,7 @@ export function useRealtimeSync({
         })
         .on('broadcast', { event: 'new_message' }, ({ payload }) => {
           const msg = payload as ChatMessage;
-          // Public classroom channel strictly processes group messages; ignore any stray direct messages
           if (msg && isMounted) {
-            if (!msg.channelId && msg.recipientId) {
-              return;
-            }
             handleIncomingMessage(msg);
           }
         })
@@ -312,9 +308,11 @@ export function useRealtimeSync({
         })
         .on(
           'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'messages', filter: `classroom_id=eq.${classroom.id}` },
+          { event: 'INSERT', schema: 'public', table: 'messages', ...(classroom.id ? { filter: `classroom_id=eq.${classroom.id}` } : {}) },
           (payload) => {
-            handleIncomingMessage(parseMessageRow(payload.new));
+            if (payload.new && isMounted) {
+              handleIncomingMessage(parseMessageRow(payload.new));
+            }
           }
         )
         .on(
@@ -536,19 +534,19 @@ export function useRealtimeSync({
         }
       };
 
-      // 2.5s fast message polling fallback (adapts to 10s when tab is hidden)
+      // 1.2s fast message polling fallback (adapts to 6s when tab is hidden)
       const messageInterval = setInterval(() => {
         if (typeof document !== 'undefined' && document.hidden) {
           return;
         }
         syncMessages();
-      }, 2500);
+      }, 1200);
 
       const backgroundInterval = setInterval(() => {
         if (typeof document !== 'undefined' && document.hidden) {
           syncMessages();
         }
-      }, 10000);
+      }, 6000);
 
       const fullSyncInterval = setInterval(performFullSync, 20000);
 

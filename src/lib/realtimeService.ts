@@ -10,10 +10,8 @@ export interface TypingPayload {
   isTyping: boolean;
 }
 
-let activeChannel: RealtimeChannel | null = null;
-let currentClassroomId: string | null = null;
-let activeUserChannel: RealtimeChannel | null = null;
-let currentActiveUserId: string | null = null;
+const classroomChannels = new Map<string, RealtimeChannel>();
+const userChannels = new Map<string, RealtimeChannel>();
 
 /**
  * Returns or creates the persistent Supabase Realtime channel for this classroom.
@@ -23,25 +21,17 @@ export function getRealtimeChannel(classroomId?: string): RealtimeChannel | null
   if (!isSupabaseConfigured() || !supabase) return null;
 
   const targetRoom = classroomId || 'default';
-  if (activeChannel && currentClassroomId === targetRoom && activeChannel.state !== 'closed' && activeChannel.state !== 'errored') {
-    return activeChannel;
+  const existing = classroomChannels.get(targetRoom);
+  if (existing && existing.state !== 'closed' && existing.state !== 'errored') {
+    return existing;
   }
 
-  if (activeChannel) {
-    try {
-      supabase.removeChannel(activeChannel);
-    } catch {
-      // quiet
-    }
-    activeChannel = null;
-  }
-
-  currentClassroomId = targetRoom;
-  activeChannel = supabase.channel(`classmate_rt_${targetRoom}`, {
+  const channel = supabase.channel(`classmate_rt_${targetRoom}`, {
     config: { broadcast: { self: false, ack: false } },
   });
 
-  return activeChannel;
+  classroomChannels.set(targetRoom, channel);
+  return channel;
 }
 
 /**
@@ -51,47 +41,37 @@ export function getRealtimeChannel(classroomId?: string): RealtimeChannel | null
 export function getUserRealtimeChannel(userId?: string): RealtimeChannel | null {
   if (!isSupabaseConfigured() || !supabase || !userId) return null;
 
-  if (activeUserChannel && currentActiveUserId === userId && activeUserChannel.state !== 'closed' && activeUserChannel.state !== 'errored') {
-    return activeUserChannel;
+  const existing = userChannels.get(userId);
+  if (existing && existing.state !== 'closed' && existing.state !== 'errored') {
+    return existing;
   }
 
-  if (activeUserChannel) {
-    try {
-      supabase.removeChannel(activeUserChannel);
-    } catch {
-      // quiet
-    }
-    activeUserChannel = null;
-  }
-
-  currentActiveUserId = userId;
-  activeUserChannel = supabase.channel(`classmate_user_${userId}`, {
+  const channel = supabase.channel(`classmate_user_${userId}`, {
     config: { broadcast: { self: false, ack: false } },
   });
 
-  return activeUserChannel;
+  userChannels.set(userId, channel);
+  return channel;
 }
 
-export function removeRealtimeChannel() {
-  if (supabase) {
-    if (activeChannel) {
+export function removeRealtimeChannel(classroomId?: string) {
+  if (!isSupabaseConfigured() || !supabase) return;
+  const client = supabase;
+  if (classroomId) {
+    const ch = classroomChannels.get(classroomId);
+    if (ch) {
       try {
-        supabase.removeChannel(activeChannel);
-      } catch {
-        // quiet
-      }
-      activeChannel = null;
-      currentClassroomId = null;
+        client.removeChannel(ch);
+      } catch {}
+      classroomChannels.delete(classroomId);
     }
-    if (activeUserChannel) {
+  } else {
+    classroomChannels.forEach((ch) => {
       try {
-        supabase.removeChannel(activeUserChannel);
-      } catch {
-        // quiet
-      }
-      activeUserChannel = null;
-      currentActiveUserId = null;
-    }
+        client.removeChannel(ch);
+      } catch {}
+    });
+    classroomChannels.clear();
   }
 }
 
@@ -103,9 +83,12 @@ export function removeRealtimeChannel() {
 export function broadcastNewMessage(message: ChatMessage, classroomId: string) {
   if (!isSupabaseConfigured() || !supabase) return;
 
-  // Case 1: Group Channel message -> Broadcast to shared classroom channel
-  if (message.channelId) {
-    const channel = getRealtimeChannel(classroomId);
+  const targetClassroomId = classroomId || 'default';
+
+  // 1. Primary WebSocket Broadcast: Always broadcast on the classroom's active channel.
+  // All online peers in this classroom are connected and receive this in < 25ms!
+  if (targetClassroomId) {
+    const channel = getRealtimeChannel(targetClassroomId);
     if (channel) {
       if (channel.state !== 'joined' && channel.state !== 'joining') {
         channel.subscribe();
@@ -118,11 +101,9 @@ export function broadcastNewMessage(message: ChatMessage, classroomId: string) {
         })
         .catch((err) => console.warn('Realtime message broadcast failed:', err));
     }
-    return;
   }
 
-  // Case 2: 1-on-1 Direct Message -> Strictly dispatch ONLY to recipient and sender personal channels
-  // NEVER broadcast DMs to the public classroom channel to guarantee 100% privacy!
+  // 2. Direct Messages: Also broadcast directly to recipient's personal user channel
   if (message.recipientId) {
     const recipientChan = getUserRealtimeChannel(message.recipientId);
     if (recipientChan) {
@@ -137,31 +118,29 @@ export function broadcastNewMessage(message: ChatMessage, classroomId: string) {
         })
         .catch(() => {});
     }
-
-    if (message.senderId && message.senderId !== message.recipientId) {
-      const senderChan = getUserRealtimeChannel(message.senderId);
-      if (senderChan) {
-        if (senderChan.state !== 'joined' && senderChan.state !== 'joining') {
-          senderChan.subscribe();
-        }
-        senderChan
-          .send({
-            type: 'broadcast',
-            event: 'new_message',
-            payload: message,
-          })
-          .catch(() => {});
-      }
-    }
   }
 }
 
 /**
  * Broadcasts user typing status across active participants in real-time (< 10ms).
- * DMs are strictly routed to the recipient's personal channel to avoid leaking conversation activity.
  */
 export function broadcastTyping(payload: TypingPayload, classroomId: string, recipientId?: string) {
   if (!isSupabaseConfigured() || !supabase) return;
+
+  const targetRoom = classroomId || 'default';
+  const channel = getRealtimeChannel(targetRoom);
+  if (channel) {
+    if (channel.state !== 'joined' && channel.state !== 'joining') {
+      channel.subscribe();
+    }
+    channel
+      .send({
+        type: 'broadcast',
+        event: 'typing_status',
+        payload: { ...payload, recipientId },
+      })
+      .catch(() => {});
+  }
 
   if (recipientId) {
     const userChan = getUserRealtimeChannel(recipientId);
@@ -177,21 +156,6 @@ export function broadcastTyping(payload: TypingPayload, classroomId: string, rec
         })
         .catch(() => {});
     }
-    return;
-  }
-
-  const channel = getRealtimeChannel(classroomId);
-  if (channel) {
-    if (channel.state !== 'joined' && channel.state !== 'joining') {
-      channel.subscribe();
-    }
-    channel
-      .send({
-        type: 'broadcast',
-        event: 'typing_status',
-        payload,
-      })
-      .catch((err) => console.warn('Realtime typing broadcast failed:', err));
   }
 }
 

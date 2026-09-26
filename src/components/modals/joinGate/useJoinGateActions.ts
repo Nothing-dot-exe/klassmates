@@ -1,6 +1,6 @@
 import React from 'react';
 import { Classroom, User, PendingRequest, PasswordResetRequest } from '@/types';
-import { dbLookupStudentByIdentifier, dbUpdateStudent } from '@/lib/databaseService';
+import { dbLookupStudentByIdentifier, dbUpdateStudent, dbFetchClassroom } from '@/lib/databaseService';
 import { DEFAULT_TEMP_PASSWORD } from '@/lib/privacyUtils';
 import { verifyPassword } from '@/lib/security/passwordUtils';
 import { generateUniqueId } from '@/lib/security/idUtils';
@@ -16,9 +16,10 @@ export interface JoinGateActionProps {
   onLoginAdmin: (adminPasswordInput: string, rememberMe?: boolean) => boolean | Promise<boolean>;
   onCreateClassroom?: (classroom: Classroom, admin: User) => void;
   onJoinSubmitted: (req: PendingRequest, classroomId?: string) => void;
-  onJoinDirect: (student: User) => void;
+  onJoinDirect: (student: User, targetClassroomId?: string) => void;
   onRequestPasswordReset: (req: PasswordResetRequest) => void;
   onUpdateStudentPassword: (studentId: string, newPassword: string) => Promise<boolean>;
+  onSwitchClassroom?: (classroom: Classroom) => void;
 }
 
 export const useJoinGateActions = (
@@ -168,7 +169,8 @@ export const useJoinGateActions = (
         joinedAt: new Date().toISOString().split('T')[0],
         bio: 'Enrolled via Class Code',
       };
-      props.onJoinDirect(newStudent);
+      newStudent.classroomId = targetClassroom.id;
+      props.onJoinDirect(newStudent, targetClassroom.id);
       props.onLoginStudent(newStudent);
       return;
     }
@@ -211,10 +213,31 @@ export const useJoinGateActions = (
 
     if (!student) return s.setErrorMessage(`No account found for "${cleanId}". Please register with your Class Code.`);
 
+    let activeClass = props.classroom;
+    const targetClassroomId = dbMatch?.classroomId || student.classroomId;
+    if (targetClassroomId && targetClassroomId !== props.classroom.id) {
+      try {
+        const matchedClass = await dbFetchClassroom(targetClassroomId);
+        if (matchedClass) {
+          activeClass = matchedClass;
+          if (props.onSwitchClassroom) {
+            props.onSwitchClassroom(matchedClass);
+          }
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('classmate_classroom_id', matchedClass.id);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not switch to student classroom:', err);
+      }
+    }
+
+    student.classroomId = activeClass.id || targetClassroomId || props.classroom.id;
+
     const isAdminAccount =
       student.role === 'admin' ||
-      student.id === props.classroom.adminId ||
-      (!!props.classroom.adminEmail && student.email.toLowerCase() === props.classroom.adminEmail.toLowerCase());
+      student.id === activeClass.adminId ||
+      (!!activeClass.adminEmail && student.email?.toLowerCase() === activeClass.adminEmail.toLowerCase());
 
     const inputPassword = s.loginPassword.trim();
     let isValid = false;
@@ -230,8 +253,8 @@ export const useJoinGateActions = (
     }
 
     // 2. Check classroom master admin password if admin account
-    if (!isValid && isAdminAccount && props.classroom.adminPassword) {
-      const adminCheck = await verifyPassword(inputPassword, props.classroom.adminPassword);
+    if (!isValid && isAdminAccount && activeClass.adminPassword) {
+      const adminCheck = await verifyPassword(inputPassword, activeClass.adminPassword);
       if (adminCheck.isValid) isValid = true;
     }
 
@@ -240,7 +263,7 @@ export const useJoinGateActions = (
     }
 
     if (needsRehash) {
-      dbUpdateStudent(student.id, { password: inputPassword });
+      dbUpdateStudent(student.id, { password: inputPassword }, student.classroomId);
     }
 
     if (student.mustChangePassword) {
@@ -257,23 +280,34 @@ export const useJoinGateActions = (
     if (!success) s.setErrorMessage('Access Denied: Incorrect Master Admin Password.');
   };
 
-  const handleResetRequestSubmit = (e: React.FormEvent) => {
+  const handleResetRequestSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     s.setErrorMessage('');
     const cleanRoll = s.resetRollNo.trim().toUpperCase();
     const cleanContact = s.resetContact.trim();
 
-    const student = props.existingStudents.find(
+    let student = props.existingStudents.find(
       (st) =>
         st.rollNo.toUpperCase() === cleanRoll ||
         st.email.toLowerCase() === cleanContact.toLowerCase() ||
         (st.phone && st.phone.replace(/\D/g, '') === cleanContact.replace(/\D/g, ''))
     );
+
+    let targetClassroomId = props.classroom.id;
+
+    if (!student) {
+      const lookup = await dbLookupStudentByIdentifier(cleanRoll || cleanContact);
+      if (lookup) {
+        student = lookup.student;
+        targetClassroomId = lookup.classroomId || targetClassroomId;
+      }
+    }
+
     if (!student) return s.setErrorMessage(`Could not find a student matching Roll Number "${cleanRoll}".`);
 
     const resetReq: PasswordResetRequest = {
       id: generateUniqueId('pwreq'),
-      classroomId: props.classroom.id,
+      classroomId: targetClassroomId,
       studentId: student.id,
       studentName: student.name,
       rollNo: student.rollNo,

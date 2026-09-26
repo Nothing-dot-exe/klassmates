@@ -5,7 +5,7 @@ import { MessageSquare, FileText, ShieldCheck, User as UserIcon } from 'lucide-r
 import { DocumentItem, User } from '@/types';
 import { CURRENT_USER } from '@/lib/mockData';
 import { getDmConversationKey } from '@/lib/chatUtils';
-import { dbCreatePendingRequest, dbCreateStudent, dbUpdateClassroom } from '@/lib/databaseService';
+import { dbFetchClassroom, dbCreatePendingRequest, dbCreateStudent, dbUpdateClassroom } from '@/lib/databaseService';
 import { useClassroomData } from '@/hooks/useClassroomData';
 import { useUserSession } from '@/hooks/useUserSession';
 import { useClassroomActions } from '@/hooks/useClassroomActions';
@@ -70,6 +70,23 @@ export default function Home() {
       clearTimeout(timeoutMsg);
     };
   }, [setIsSessionLoaded, setIsDataLoaded]);
+
+  // Synchronize active classroom whenever user session or local storage points to another classroom
+  useEffect(() => {
+    const targetClassroomId = currentUser?.classroomId;
+    if (targetClassroomId && classroom?.id && targetClassroomId !== classroom.id) {
+      dbFetchClassroom(targetClassroomId).then((cls) => {
+        if (cls) {
+          setClassroom(cls);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('classmate_classroom_id', cls.id);
+            } catch {}
+          }
+        }
+      });
+    }
+  }, [currentUser?.classroomId, classroom?.id, setClassroom]);
 
   // Navigation state
   const [activeView, setActiveView] = useState<'channel' | 'dm' | 'documents' | 'admin'>('channel');
@@ -234,16 +251,21 @@ export default function Home() {
           onLoginStudent={handleUserLoggedIn}
           onLoginAdmin={handleAdminLogin}
           onCreateClassroom={actions.handleCreateClassroom}
+          onSwitchClassroom={setClassroom}
           onJoinSubmitted={(req, targetClassroomId) => {
             const targetId = targetClassroomId || classroom.id;
             setPendingRequests((prev) => [...prev, req]);
             if (targetId) dbCreatePendingRequest(req, targetId);
           }}
-          onJoinDirect={(student) => {
+          onJoinDirect={(student, targetClassroomId) => {
+            const targetId = targetClassroomId || student.classroomId || classroom.id;
+            student.classroomId = targetId;
             setStudents((prev) => [...prev, student]);
             setClassroom((prev) => ({ ...prev, membersCount: prev.membersCount + 1 }));
-            dbCreateStudent(student, classroom.id);
-            dbUpdateClassroom(classroom.id, { membersCount: classroom.membersCount + 1 });
+            if (targetId) {
+              dbCreateStudent(student, targetId);
+              dbUpdateClassroom(targetId, { membersCount: classroom.membersCount + 1 });
+            }
             handleUserLoggedIn(student);
           }}
           onRequestPasswordReset={actions.handleRequestPasswordReset}

@@ -20,6 +20,7 @@ export const useForgotPasswordState = ({
   const [identifier, setIdentifier] = useState('');
   const [targetEmail, setTargetEmail] = useState('');
   const [matchedUser, setMatchedUser] = useState<User | null>(null);
+  const [matchedClassroomId, setMatchedClassroomId] = useState<string>('');
   const [isAdminAccount, setIsAdminAccount] = useState(false);
 
   const [otpCode, setOtpCode] = useState('');
@@ -58,6 +59,7 @@ export const useForgotPasswordState = ({
     try {
       let user: User | null = null;
       let isAdmin = false;
+      let foundClassroomId = classroom?.id || '';
 
       user =
         existingStudents.find(
@@ -69,7 +71,12 @@ export const useForgotPasswordState = ({
 
       if (!user) {
         const lookup = await dbLookupStudentByIdentifier(cleanId);
-        if (lookup) user = lookup.student;
+        if (lookup) {
+          user = lookup.student;
+          if (lookup.classroomId) {
+            foundClassroomId = lookup.classroomId;
+          }
+        }
       }
 
       if (!user && classroom) {
@@ -110,6 +117,7 @@ export const useForgotPasswordState = ({
       }
 
       setMatchedUser(user);
+      setMatchedClassroomId(foundClassroomId);
       setIsAdminAccount(isAdmin || user.role === 'admin');
       setTargetEmail(emailToSend);
 
@@ -164,12 +172,26 @@ export const useForgotPasswordState = ({
         return setErrorMessage('Target user account not found.');
       }
 
-      if (isAdminAccount && classroom.id) {
-        await dbUpdateClassroom(classroom.id, { adminPassword: newPassword });
-      }
-      await dbUpdateStudent(matchedUser.id, { password: newPassword, mustChangePassword: false });
+      const targetClassroomId = matchedClassroomId || matchedUser.classroomId || classroom.id;
 
-      const updatedUser: User = { ...matchedUser, password: newPassword, mustChangePassword: false };
+      if (isAdminAccount && targetClassroomId) {
+        await dbUpdateClassroom(targetClassroomId, { adminPassword: newPassword });
+      }
+      await dbUpdateStudent(matchedUser.id, { password: newPassword, mustChangePassword: false }, targetClassroomId);
+
+      const updatedUser: User = {
+        ...matchedUser,
+        classroomId: targetClassroomId,
+        password: newPassword,
+        mustChangePassword: false,
+      };
+
+      if (targetClassroomId && typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('classmate_classroom_id', targetClassroomId);
+        } catch {}
+      }
+
       setSuccessMessage('Password reset successfully! Signing you in...');
       setTimeout(() => onPasswordResetSuccess(updatedUser), 1200);
     } catch {

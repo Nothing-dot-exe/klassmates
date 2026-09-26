@@ -64,6 +64,7 @@ export const parseStudentRow = (d: any): User => {
     status: d.status,
     joinedAt: d.joined_at,
     bio: meta.userBio !== undefined ? meta.userBio : (isJsonBio ? '' : (d.bio || '')),
+    classroomId: d.classroom_id || undefined,
   };
 };
 
@@ -325,6 +326,14 @@ export const dbLookupStudentByIdentifier = async (
             return { student: parsed, classroomId: row.classroom_id };
           }
         }
+      }
+    }
+
+    // Fallback: If not found in the current classroomId, search across all classrooms
+    if (classroomId) {
+      const fallback = await dbLookupStudentByIdentifier(identifier);
+      if (fallback) {
+        return fallback;
       }
     }
 

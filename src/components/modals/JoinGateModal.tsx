@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { School, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { Classroom, User, PendingRequest, PasswordResetRequest } from '@/types';
 import { CURRENT_USER } from '@/lib/mockData';
-import { dbFetchClassroomByCode } from '@/lib/databaseService';
+import { dbFetchClassroom, dbFetchClassroomByCode } from '@/lib/databaseService';
 
 import { WelcomeView } from './joinGate/WelcomeView';
 import { CreateRoomView } from './joinGate/CreateRoomView';
@@ -19,7 +19,7 @@ import { useJoinGateActions } from './joinGate/useJoinGateActions';
 
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
-interface JoinGateModalProps {
+export interface JoinGateModalProps {
   classroom: Classroom;
   existingStudents: User[];
   pendingRequests?: PendingRequest[];
@@ -29,9 +29,10 @@ interface JoinGateModalProps {
   onRegisterTeacher?: (teacher: User) => void;
   onCreateClassroom?: (classroom: Classroom, admin: User) => void;
   onJoinSubmitted: (req: PendingRequest, classroomId?: string) => void;
-  onJoinDirect: (student: User) => void;
+  onJoinDirect: (student: User, targetClassroomId?: string) => void;
   onRequestPasswordReset: (req: PasswordResetRequest) => void;
   onUpdateStudentPassword: (studentId: string, newPassword: string) => Promise<boolean>;
+  onSwitchClassroom?: (classroom: Classroom) => void;
 }
 
 export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
@@ -288,8 +289,16 @@ export const JoinGateModal: React.FC<JoinGateModalProps> = (props) => {
               onAdminLoginSubmit={act.handleAdminLoginSubmit}
               existingStudents={existingStudents}
               classroom={classroom}
-              onPasswordResetSuccess={(resetUser) => {
+              onPasswordResetSuccess={async (resetUser) => {
                 s.setIsForgotPassword(false);
+                if (resetUser.classroomId && resetUser.classroomId !== classroom.id) {
+                  try {
+                    const cls = await dbFetchClassroom(resetUser.classroomId);
+                    if (cls && props.onSwitchClassroom) {
+                      props.onSwitchClassroom(cls);
+                    }
+                  } catch {}
+                }
                 props.onLoginStudent(resetUser);
               }}
               setErrorMessage={s.setErrorMessage}

@@ -20,6 +20,7 @@ export interface User {
   status: PresenceStatus;
   joinedAt: string;
   bio?: string;
+  classroomId?: string;
 }
 
 export interface PendingRequest {

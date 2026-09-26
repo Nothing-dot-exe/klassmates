@@ -40,6 +40,7 @@ export default function Home() {
     sendTypingStatus,
     onlineUserIds,
     isDataLoaded,
+    setIsDataLoaded,
   } = useClassroomData();
 
   const {
@@ -59,15 +60,16 @@ export default function Home() {
   useEffect(() => {
     const watchdog = setTimeout(() => {
       setIsSessionLoaded(true);
-    }, 350);
+      setIsDataLoaded(true);
+    }, 700);
     const timeoutMsg = setTimeout(() => {
       setLoadTimedOut(true);
-    }, 1200);
+    }, 1500);
     return () => {
       clearTimeout(watchdog);
       clearTimeout(timeoutMsg);
     };
-  }, [setIsSessionLoaded]);
+  }, [setIsSessionLoaded, setIsDataLoaded]);
 
   // Navigation state
   const [activeView, setActiveView] = useState<'channel' | 'dm' | 'documents' | 'admin'>('channel');
@@ -207,7 +209,10 @@ export default function Home() {
           {loadTimedOut && (
             <button
               type="button"
-              onClick={() => setIsSessionLoaded(true)}
+              onClick={() => {
+                setIsSessionLoaded(true);
+                setIsDataLoaded(true);
+              }}
               className="mt-2 text-xs text-primary underline font-medium cursor-pointer py-1.5 px-3.5 bg-card hover:bg-card-muted rounded-xl border border-card-border shadow-sm active:scale-95 transition"
             >
               Continue to Classroom →

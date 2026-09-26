@@ -80,5 +80,6 @@ export function useClassroomData() {
     sendTypingStatus,
     onlineUserIds,
     isDataLoaded,
+    setIsDataLoaded,
   };
 }

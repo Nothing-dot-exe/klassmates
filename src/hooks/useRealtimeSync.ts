@@ -47,23 +47,32 @@ export function useRealtimeSync({
     let isMounted = true;
 
     const initData = async () => {
-      const data = await loadInitialClassroomData(classroom.id);
-      if (!isMounted) return;
+      try {
+        const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
+        const data = await Promise.race([loadInitialClassroomData(classroom.id), timeoutPromise]);
+        if (!isMounted) return;
 
-      if (data.activeClass) {
-        setClassroom(data.activeClass);
+        if (data) {
+          if (data.activeClass) {
+            setClassroom(data.activeClass);
+          }
+          if (data.students && data.students.length > 0) {
+            setStudents(data.students);
+          }
+          if (data.messages && Object.keys(data.messages).length > 0) {
+            setMessages(data.messages);
+          }
+          if (data.documents) setDocuments(data.documents);
+          if (data.pendingRequests) setPendingRequests(data.pendingRequests);
+          if (data.passwordResetRequests) setPasswordResetRequests(data.passwordResetRequests);
+        }
+      } catch (err) {
+        console.warn('initData error or timeout:', err);
+      } finally {
+        if (isMounted) {
+          setIsDataLoaded(true);
+        }
       }
-
-      if (data.students && data.students.length > 0) {
-        setStudents(data.students);
-      }
-      if (data.messages && Object.keys(data.messages).length > 0) {
-        setMessages(data.messages);
-      }
-      if (data.documents) setDocuments(data.documents);
-      if (data.pendingRequests) setPendingRequests(data.pendingRequests);
-      if (data.passwordResetRequests) setPasswordResetRequests(data.passwordResetRequests);
-      setIsDataLoaded(true);
     };
 
     initData();
